@@ -1,0 +1,13 @@
+one:
+  user_name: MyString
+  email: MyString
+  poems_evaluated: 1
+  posts: 1
+  points: 1
+
+two:
+  user_name: MyString
+  email: MyString
+  poems_evaluated: 1
+  posts: 1
+  points: 1

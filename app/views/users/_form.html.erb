@@ -1,0 +1,24 @@
+<%= form_for @user do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :user_name %><br />
+    <%= f.text_field :user_name %>
+  </p>
+  <p>
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </p>
+  <p>
+    <%= f.label :poems_evaluated %><br />
+    <%= f.text_field :poems_evaluated %>
+  </p>
+  <p>
+    <%= f.label :posts %><br />
+    <%= f.text_field :posts %>
+  </p>
+  <p>
+    <%= f.label :points %><br />
+    <%= f.text_field :points %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

@@ -1,0 +1,26 @@
+<% title "User" %>
+
+<p>
+  <strong>User Name:</strong>
+  <%= @user.user_name %>
+</p>
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+<p>
+  <strong>Poems Evaluated:</strong>
+  <%= @user.poems_evaluated %>
+</p>
+<p>
+  <strong>Posts:</strong>
+  <%= @user.posts %>
+</p>
+<p>
+  <strong>Points:</strong>
+  <%= @user.points %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_user_path(@user) %> |
+</p>

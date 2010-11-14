@@ -8,6 +8,8 @@ gem 'rails', '3.0.0'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'nifty-generators', '>= 0.4.0'
 gem 'authlogic'
+gem "rails3-generators"
+
 
 
 group :development do
@@ -21,3 +23,4 @@ group :test do
   gem 'webrat'
   gem 'factory_girl_rails'
 end
+gem "mocha", :group => :test
