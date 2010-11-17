@@ -25,6 +25,11 @@ describe User do
     user.should_not be_valid
   end
 
+  it "should reject a name with the '@' symbol in it" do 
+    user = User.create(@attr.merge({:username => "funny@thing"}) )
+    user.should_not be_valid
+  end
+
   it "should reject a name that is too long" do
     long_name = "a" * 51
     user = User.create(@attr.merge({:username => long_name }) )

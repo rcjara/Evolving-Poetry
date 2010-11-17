@@ -1,12 +1,16 @@
 EvolvingPoetry::Application.routes.draw do
+  get "pages/home"
+
+  get "pages/about"
+
   root :to => 'pages#home'
 
   resources :users
-  resources :sessions, :only => [:new, :create, :destroy]
+  resources :user_sessions, :only => [:new, :create, :destroy]
 
   match "/signup",  :to => 'users#new'
-  match "/signin",  :to => 'users_sessions#new'
-  match "/signout", :to => 'users_sessions#destroy'
+  match "/signin",  :to => 'user_sessions#new'
+  match "/signout", :to => 'user_sessions#destroy'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

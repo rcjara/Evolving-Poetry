@@ -1,9 +1,9 @@
 <h1>Login</h1>
 
-<%= form_for :users_session, :url => users_session_path) do |f| %>
+<%= form_for @user_session, :url => {:action => "create"} do |f| %>
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.text_field :email %>
+    <%= f.label :user_name_or_email %><br />
+    <%= f.text_field :username %>
   </div>
   <div class="field">
     <%= f.label :password %><br />
