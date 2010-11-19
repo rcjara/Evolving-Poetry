@@ -1,9 +1,12 @@
 class User < ActiveRecord::Base
   attr_accessible :poems_evaluated, :posts, :points, :username, :email, :password, :password_confirmation
 
-  validates :username,     :presence => true,
-                           :length => { :maximum => 50 },
-                           :format => { :with => /^[^@]+$/}
+  validates :username, :presence => true,
+                       :uniqueness => true,
+                       :length => { :maximum => 50 },
+                       :format => { :with => /^[^@]+$/}
+
+  validates :email,    :confirmation => true
 
   acts_as_authentic
 
