@@ -6,8 +6,6 @@ class ApplicationController < ActionController::Base
     current_user
   end
 
-  private
-
   def current_user_session
     logger.debug "ApplicationController::current_user_session"
     return @current_user_session if defined?(@current_user_session)
@@ -35,7 +33,7 @@ class ApplicationController < ActionController::Base
     if current_user
       store_location
       flash[:notice] = "You must be logged out to access this page"
-      redirect_to account_url
+      redirect_to root_path
       return false
     end
   end

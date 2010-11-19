@@ -1,6 +1,7 @@
 <h1>Login</h1>
 
 <%= form_for @user_session, :url => {:action => "create"} do |f| %>
+  <%= render 'shared/errors', :object => f.object %>
   <div class="field">
     <%= f.label :user_name_or_email %><br />
     <%= f.text_field :username %>
