@@ -2,7 +2,7 @@
 
 <%= form_for @user_session, :url => {:action => "create"} do |f| %>
   <div class="field">
-    <%= f.label :user_name_or_email %><br />
+    <%= f.label :user_name_or_email, "User name or email." %><br />
     <%= f.text_field :username %>
   </div>
   <div class="field">
