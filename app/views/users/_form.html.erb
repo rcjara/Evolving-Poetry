@@ -1,4 +1,5 @@
 <%= form_for @user do |f| %>
+  <%= render 'shared/errors', :object => @user %>
   <p>
     <%= f.label :username %><br />
     <%= f.text_field :username %>
