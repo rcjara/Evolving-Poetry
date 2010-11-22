@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :poems_evaluated, :posts, :points, :username, :email, :password, :password_confirmation
+  attr_accessible :poems_evaluated, :posts, :points, :username, :email, :email_confirmation, :password, :password_confirmation
 
   validates :username, :presence => true,
                        :uniqueness => true,
