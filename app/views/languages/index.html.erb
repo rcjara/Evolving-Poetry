@@ -1,0 +1,27 @@
+<h1>Listing languages</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Total votes</th>
+    <th>Max poems</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @languages.each do |language| %>
+  <tr>
+    <td><%= language.name %></td>
+    <td><%= language.total_votes %></td>
+    <td><%= language.max_poems %></td>
+    <td><%= link_to 'Show', language %></td>
+    <td><%= link_to 'Edit', edit_language_path(language) %></td>
+    <td><%= link_to 'Destroy', language, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Language', new_language_path %>

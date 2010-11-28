@@ -1,4 +1,6 @@
 EvolvingPoetry::Application.routes.draw do
+  resources :languages
+
   get "pages/home"
 
   get "pages/about"

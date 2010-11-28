@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @language.name %>
+</p>
+
+<p>
+  <b>Total votes:</b>
+  <%= @language.total_votes %>
+</p>
+
+<p>
+  <b>Max poems:</b>
+  <%= @language.max_poems %>
+</p>
+
+
+<%= link_to 'Edit', edit_language_path(@language) %> |
+<%= link_to 'Back', languages_path %>
