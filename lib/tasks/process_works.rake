@@ -1,18 +1,21 @@
-WORKS_FILES_REGEX /^\@(.+?)\n(.+?)(?=^\@)/m
+WORKS_FILES_REGEX = /^\@(.+?)\n(.+?)(?=^\@)/m
 
 namespace :db do 
   desc "Create a fresh database"
-  task :populate => :environment do 
+  task :process_works => :environment do 
     Rake::Task['db:reset'].invoke
+    puts "Now onto process_works_files"
     process_works_files
   end
 end
 
 def process_works_files
-  path = File.dirname(File.expand_path(__FILE)) + '/../works/'
+  path = File.dirname(File.expand_path(__FILE__)) + '/../works/'
   dir = Dir.new(path)
   file_names = dir.select {|f| f =~ /.*\.txt$/}
+  puts "#{file_names.length} files."
   file_names.each do |fn| 
+    puts "processing.. #{fn}"
     author_names = fn.scan(/(.+?)(\.txt)/)[0][0].split("_")
     author_names.each { |an| an.capitalize! }
     first_name = author_names.first
@@ -27,8 +30,9 @@ def process_works_files
     works = text.scan WORKS_FILES_REGEX
     works.each do |regex_result|
       title = regex_result[0]
+      puts ".. #{title}"
       text = regex_result[1]
-      author.works.build(:title => title, :text => text)
+      author.works.create!(:title => title, :content => text)
     end
   end
 end
