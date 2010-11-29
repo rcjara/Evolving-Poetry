@@ -10,7 +10,51 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101114171831) do
+ActiveRecord::Schema.define(:version => 20101129001844) do
+
+  create_table "auth_lang_relations", :force => true do |t|
+    t.integer  "author_id"
+    t.integer  "language_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "auth_lang_relations", ["author_id"], :name => "index_auth_lang_relations_on_author_id"
+  add_index "auth_lang_relations", ["language_id"], :name => "index_auth_lang_relations_on_language_id"
+
+  create_table "authors", :force => true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "full_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "authors", ["first_name"], :name => "index_authors_on_first_name"
+  add_index "authors", ["full_name"], :name => "index_authors_on_full_name"
+
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.integer  "total_votes"
+    t.integer  "max_poems"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "poems", :force => true do |t|
+    t.text     "full_text"
+    t.text     "programmatic_text"
+    t.integer  "language_id"
+    t.integer  "votes_for"
+    t.integer  "votes_against"
+    t.integer  "score"
+    t.boolean  "alive"
+    t.datetime "died_on"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "poems", ["language_id"], :name => "index_poems_on_language_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"
@@ -26,5 +70,15 @@ ActiveRecord::Schema.define(:version => 20101114171831) do
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+
+  create_table "works", :force => true do |t|
+    t.integer  "author_id"
+    t.string   "content"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "works", ["author_id"], :name => "index_works_on_author_id"
 
 end

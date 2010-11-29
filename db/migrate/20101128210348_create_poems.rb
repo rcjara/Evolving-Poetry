@@ -7,7 +7,7 @@ class CreatePoems < ActiveRecord::Migration
       t.integer :votes_for
       t.integer :votes_against
       t.integer :score
-      t.bool :alive
+      t.boolean :alive
       t.datetime :died_on
 
       t.timestamps
