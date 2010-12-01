@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101129001844) do
+ActiveRecord::Schema.define(:version => 20101130234700) do
 
   create_table "auth_lang_relations", :force => true do |t|
     t.integer  "author_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20101129001844) do
     t.string   "full_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "visible",    :default => true
   end
 
   add_index "authors", ["first_name"], :name => "index_authors_on_first_name"
@@ -35,23 +36,25 @@ ActiveRecord::Schema.define(:version => 20101129001844) do
 
   create_table "languages", :force => true do |t|
     t.string   "name"
-    t.integer  "total_votes"
-    t.integer  "max_poems"
+    t.integer  "total_votes", :default => 0
+    t.integer  "max_poems",   :default => 20
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active",      :default => true
   end
 
   create_table "poems", :force => true do |t|
     t.text     "full_text"
     t.text     "programmatic_text"
     t.integer  "language_id"
-    t.integer  "votes_for"
-    t.integer  "votes_against"
-    t.integer  "score"
-    t.boolean  "alive"
+    t.integer  "votes_for",         :default => 0
+    t.integer  "votes_against",     :default => 0
+    t.integer  "score",             :default => 0
+    t.boolean  "alive",             :default => true
     t.datetime "died_on"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "num_children",      :default => 0
   end
 
   add_index "poems", ["language_id"], :name => "index_poems_on_language_id"
