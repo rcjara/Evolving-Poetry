@@ -68,8 +68,10 @@ class MarkovLanguage
       sentence_array = sentence_array[0..end_point]
       sentence = sentence_array.collect{ |word| word.display }.join
     end
+
+    programmatic_array = sentence_array.collect { |w| w.identifier }
     
-    sentence.strip
+    {:display => sentence.strip, :array => programmatic_array}
   end
   
   def fetch_word(ident)

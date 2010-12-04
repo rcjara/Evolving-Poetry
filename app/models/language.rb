@@ -16,7 +16,7 @@ class Language < ActiveRecord::Base
     auth_lang_relations.find_by_author_id(author)
   end
 
-  def get_line
+  def gen_line
     language.gen_snippet
   end
 

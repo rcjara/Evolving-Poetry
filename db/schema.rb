@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101130234700) do
+ActiveRecord::Schema.define(:version => 20101203013128) do
 
   create_table "auth_lang_relations", :force => true do |t|
     t.integer  "author_id"
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(:version => 20101130234700) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active",      :default => true
+    t.integer  "min_lines",   :default => 4
+    t.integer  "max_lines",   :default => 15
   end
 
   create_table "poems", :force => true do |t|
