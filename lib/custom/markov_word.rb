@@ -4,10 +4,10 @@ class MarkovWord
   PUNCTUATION_REGEX = /[\.\,\:\;\!\?]/
   SENTENCE_END_REGEX = /\.\s|\?\s|\!\s/
   
-  def initialize(identifier, parent)
-    @identifier = MarkovWord.downcase(identifier)
-    @punctuation = MarkovWord.is_punctuation_test?(identifier)
-    @sentence_end = MarkovWord.is_sentence_end_test?(identifier)
+  def initialize(ident, parent)
+    @identifier = MarkovWord.downcase(ident)
+    @punctuation = MarkovWord.is_punctuation_test?(ident)
+    @sentence_end = MarkovWord.is_sentence_end_test?(ident)
     
     @count, @parents_count, @children_count, @shout_count = 0, 0, 0, 0
     @parents = Hash.new(0)
@@ -18,7 +18,7 @@ class MarkovWord
     @speakable = false
     @terminates = false
     
-    add_parent(parent, identifier)
+    add_parent(parent, ident)
   end
   
   def dup
@@ -65,10 +65,10 @@ class MarkovWord
     @children.length
   end
   
-  def add_identifier(identifier = @identifier)
+  def add_identifier(ident)
     @count += 1
-    @proper &&= MarkovWord.proper_test? identifier
-    if MarkovWord.shoutable_test?(identifier)
+    @proper &&= MarkovWord.proper_test? ident
+    if MarkovWord.shoutable_test?(ident)
       @shoutable = true
       @shout_count += 1
     else 
@@ -76,15 +76,11 @@ class MarkovWord
     end
   end
   
-  def add_parent(parent, identifier)
+  def add_parent(parent, ident)
     parent = MarkovWord.downcase(parent)
     @parents_count += 1
     @parents[parent] = @parents[parent] + 1
-    add_identifier(identifier)
-  end
-  
-  def get_random_parent
-    get_random_relative(@parents, @parents_count)
+    add_identifier(ident)
   end
   
   def add_child(child = nil)
@@ -101,22 +97,29 @@ class MarkovWord
     get_random_relative(@children, @children_count)
   end
   
-  def display(first = false)
-    display_word = identifier.to_s
-    display_word.capitalize! if first | proper?
-    display_word = " " + display_word unless punctuation?
-    return display_word unless shoutable?
-    display_word.upcase! if rand(count) < shout_count
-    display_word
+  def get_random_parent
+    get_random_relative(@parents, @parents_count)
   end
   
+  def display(options = {}, first = false)
+    display_word = @identifier.dup
+    display_word.capitalize! if first | proper?
+    display_word = " " + display_word unless punctuation?
+    display_word.upcase! if options[:shout]
+
+    display_word
+  end
+
+  def should_shout?
+    rand(count) < shout_count
+  end
   
   class << self
-    def downcase(identifier)
-      if identifier.respond_to?(:downcase)
-        identifier.downcase
+    def downcase(ident)
+      if ident && !ident.is_a?(Symbol)
+        ident.downcase
       else
-        identifier
+        ident
       end
     end
     
@@ -125,7 +128,7 @@ class MarkovWord
     end
     
     def shoutable_test?(word)
-      word == word.upcase
+      word.is_a?(String) && word.strip.length > 1 && word == word.upcase
     end
     
     def speakable_test?(word)

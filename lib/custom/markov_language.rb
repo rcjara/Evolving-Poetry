@@ -3,7 +3,7 @@
 class MarkovLanguage
   attr_accessor :limit
   
-  def initialize(limit = 140)
+  def initialize(limit = 120)
     @limit = limit
     @words = {:begin => MarkovWord.new(:begin, nil)}
   end
@@ -32,10 +32,9 @@ class MarkovLanguage
   end
   
   def add_snippet(snippet)
-    pieces = (snippet + " ").scan(/\S+\b|\.\.+|\:\S+|\.\s|\?\s|\!\s|\S/u)
+    pieces = (snippet.to_s + " ").scan(/\S+\b|\.\.+|\:\S+|\.\s|\?\s|\!\s|\S/u)
     
-    return unless pieces
-    return unless pieces.length > 0
+    return unless pieces && pieces.length > 0
     
     handle_word_pair(:begin, pieces[0])
     
@@ -46,32 +45,25 @@ class MarkovLanguage
     @words[pieces[-1].downcase].add_child(nil)
   end
   
-  def gen_snippet
-    sentence = ""
-    sentence_array = []
+  def gen_line
+    line = MarkovLine.new
     current_word = @words[:begin]
-    new_sentence = true
     
     while current_word = @words[current_word.get_random_child]
-      sentence_array << current_word
-      sentence << current_word.display(new_sentence)
-      new_sentence = current_word.sentence_end?
-      break if sentence.length > @limit + 1
+      line.add_word(current_word)
+      break if line.num_chars > @limit + 1
     end
     
-    while sentence.length > @limit + 1
-      end_point = -2
-      while sentence_array[end_point].terminates? != true && -end_point >= sentence_array.length
-        end_point -= 1
+    while line.num_chars > @limit + 1
+      stop = false
+      until stop.nil? || stop
+        stop = line.remove_last_word
       end
-      return gen_snippet if -end_point >= sentence_array.length
-      sentence_array = sentence_array[0..end_point]
-      sentence = sentence_array.collect{ |word| word.display }.join
+
+      return gen_line if stop.nil?
     end
 
-    programmatic_array = sentence_array.collect { |w| w.identifier }
-    
-    {:display => sentence.strip, :array => programmatic_array}
+    line
   end
   
   def fetch_word(ident)

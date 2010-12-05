@@ -16,12 +16,14 @@ class Language < ActiveRecord::Base
     auth_lang_relations.find_by_author_id(author)
   end
 
-  def gen_line
-    language.gen_snippet
+  def gen_poem
+    num_lines = rand(max_lines - min_lines + 1) + min_lines
+    lines = num_lines.times.collect { gen_line }
+    full_text = lines.collect { |l| l.display }.join("<br \>\n")
+    prog_text = lines.collect { |l| l.to_prog_text }.join(" BREAK ")
+
+    poems.build(:full_text => full_text, :programmatic_text => prog_text)
   end
-
-
-  private 
 
   def language
     @@languages ||= {}
@@ -31,16 +33,23 @@ class Language < ActiveRecord::Base
     @@languages[name]
   end
 
+  def gen_line
+    language.gen_line
+  end
+
   def reload_language
     @@languages[name] = MarkovLanguage.new
 
     authors.each do |author|
       author.works.each do |work|
-        work.content.split(/\n/).each do |line| 
-          @@languages[name].add_snippet(line) 
-        end
+        text = work.content.gsub(/\n/, " ")
+        text = text.gsub(/["\[\]\(\)\{\}]/, "")
+        @@languages[name].add_snippet(text) 
       end
     end
   end
+
+  private 
+
 
 end
