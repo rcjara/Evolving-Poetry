@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101203013128) do
+ActiveRecord::Schema.define(:version => 20101205160835) do
 
   create_table "auth_lang_relations", :force => true do |t|
     t.integer  "author_id"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20101203013128) do
     t.boolean  "active",      :default => true
     t.integer  "min_lines",   :default => 4
     t.integer  "max_lines",   :default => 15
+    t.text     "description"
   end
 
   create_table "poems", :force => true do |t|
@@ -66,15 +67,18 @@ ActiveRecord::Schema.define(:version => 20101203013128) do
     t.string   "email"
     t.integer  "poems_evaluated",   :default => 0
     t.integer  "posts",             :default => 0
-    t.integer  "points",            :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
+    t.boolean  "admin"
+    t.integer  "points_used",       :default => 0
+    t.integer  "total_points",      :default => 0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["username"], :name => "index_users_on_username"
 
   create_table "works", :force => true do |t|
     t.integer  "author_id"

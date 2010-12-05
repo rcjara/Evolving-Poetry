@@ -1,5 +1,6 @@
 class Language < ActiveRecord::Base
-  attr_accessible :name, :total_votes, :max_poems, :created_at, :updated_at, :active
+  attr_accessible :name, :total_votes, :max_poems, :created_at, :updated_at, :active, :description, :min_lines, :max_lines
+
   has_many :auth_lang_relations, :dependent => :destroy
   has_many :authors, :through => :auth_lang_relations
   has_many :poems
@@ -19,7 +20,7 @@ class Language < ActiveRecord::Base
   def gen_poem
     num_lines = rand(max_lines - min_lines + 1) + min_lines
     lines = num_lines.times.collect { gen_line }
-    full_text = lines.collect { |l| l.display }.join("<br \>\n")
+    full_text = lines.collect { |l| l.display }.join("<br \\>\n")
     prog_text = lines.collect { |l| l.to_prog_text }.join(" BREAK ")
 
     poems.build(:full_text => full_text, :programmatic_text => prog_text)

@@ -6,7 +6,6 @@ class LanguagesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @languages }
     end
   end
 
@@ -17,7 +16,6 @@ class LanguagesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @language }
     end
   end
 
@@ -28,7 +26,6 @@ class LanguagesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @language }
     end
   end
 
@@ -45,10 +42,8 @@ class LanguagesController < ApplicationController
     respond_to do |format|
       if @language.save
         format.html { redirect_to(@language, :notice => 'Language was successfully created.') }
-        format.xml  { render :xml => @language, :status => :created, :location => @language }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @language.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -61,10 +56,8 @@ class LanguagesController < ApplicationController
     respond_to do |format|
       if @language.update_attributes(params[:language])
         format.html { redirect_to(@language, :notice => 'Language was successfully updated.') }
-        format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @language.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -77,7 +70,6 @@ class LanguagesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(languages_url) }
-      format.xml  { head :ok }
     end
   end
 end

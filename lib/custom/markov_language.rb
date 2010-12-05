@@ -1,5 +1,3 @@
-#require File.expand_path(File.dirname(__FILE__) + '/MarkovWord')
-
 class MarkovLanguage
   attr_accessor :limit
   
