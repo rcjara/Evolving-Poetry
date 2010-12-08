@@ -4,7 +4,7 @@ describe UserSessionsController do
   render_views
 
   before(:each) do
-    :activate_authlogic 
+    activate_authlogic 
   end
   
   describe "GET 'new'" do

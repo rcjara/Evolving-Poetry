@@ -1,4 +1,6 @@
 class Language < ActiveRecord::Base
+  include LanguagesHelper
+
   attr_accessible :name, :total_votes, :max_poems, :created_at, :updated_at, :active, :description, :min_lines, :max_lines
 
   has_many :auth_lang_relations, :dependent => :destroy

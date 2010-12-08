@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def admin_user
+    redirect_to(root_path) unless current_user.admin?
+  end
+ 
   def require_no_user
     logger.debug "ApplicationController::require_no_user"
     if current_user

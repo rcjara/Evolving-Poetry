@@ -9,6 +9,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'nifty-generators', '>= 0.4.0'
 gem 'authlogic'
 gem "rails3-generators"
+gem 'will_paginate', '3.0.pre2'
 
 
 

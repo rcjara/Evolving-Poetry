@@ -1,5 +1,6 @@
 EvolvingPoetry::Application.routes.draw do
   resources :languages
+  resources :authors
 
   get "pages/home"
 
