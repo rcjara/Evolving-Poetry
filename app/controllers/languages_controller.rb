@@ -7,14 +7,4 @@ class LanguagesController < ApplicationController
       format.html # index.html.erb
     end
   end
-
-  # GET /languages/1
-  def show
-    @language = Language.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-    end
-  end
-
 end

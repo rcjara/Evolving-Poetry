@@ -1,15 +1,7 @@
 class AuthorsController < ApplicationController
   # GET /authors
   def index
-    @authors = Author.paginate(:page => params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-    end
-  end
-
-  def show
-    @author = Author.find(params[:id])
+    @authors = Author.where('visible = ?', true).paginate(:page => params[:page], :order => 'last_name')
 
     respond_to do |format|
       format.html # index.html.erb

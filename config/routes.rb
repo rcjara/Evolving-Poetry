@@ -1,9 +1,9 @@
 EvolvingPoetry::Application.routes.draw do
   resources :languages
   resources :authors
+  resources :works
 
   get "pages/home"
-
   get "pages/about"
 
   root :to => 'pages#home'
