@@ -1,15 +1,15 @@
 EvolvingPoetry::Application.routes.draw do
-  resources :languages
-  resources :authors
-  resources :works
+  resources :languages,     :only => [:index]
+  resources :authors,       :only => [:index]
+  resources :works,         :only => [:show]
+  resources :user_sessions, :only => [:new, :create, :destroy]
+  resources :users
 
   get "pages/home"
   get "pages/about"
 
   root :to => 'pages#home'
 
-  resources :users
-  resources :user_sessions, :only => [:new, :create, :destroy]
 
   match "/signup",  :to => 'users#new'
   match "/signin",  :to => 'user_sessions#new'
