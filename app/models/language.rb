@@ -1,7 +1,7 @@
 class Language < ActiveRecord::Base
   include LanguagesHelper
 
-  attr_accessible :name, :total_votes, :max_poems, :created_at, :updated_at, :active, :description, :min_lines, :max_lines
+  attr_accessible :name, :total_votes, :max_poems, :created_at, :updated_at, :active, :description, :min_lines, :max_lines, :cur_family
 
   has_many :auth_lang_relations, :dependent => :destroy
   has_many :authors, :through => :auth_lang_relations
@@ -19,16 +19,41 @@ class Language < ActiveRecord::Base
     auth_lang_relations.find_by_author_id(author)
   end
 
-  def gen_poem
+  def gen_poem!
     num_lines = rand(max_lines - min_lines + 1) + min_lines
-    lines = num_lines.times.collect { gen_line }
-    full_text = lines.collect { |l| l.display }.join("<br \\>\n")
-    prog_text = lines.collect { |l| l.to_prog_text }.join(" BREAK ")
+    p = markov.gen_poem(num_lines)
 
-    poems.build(:full_text => full_text, :programmatic_text => prog_text)
+    new_poem = poems.build(:full_text => p.display, :programmatic_text => p.to_prog_text, :family => self.cur_family)
+    increment_family!
+    new_poem.save
+    new_poem
   end
 
-  def language
+  def increment_family!
+    self.cur_family += 1
+    save
+  end
+
+  def poems_for_voting
+    possibilities = alive_poems
+    max = possibilities.length
+    poem1 = poem2 = possibilities[rand(max)]
+    while poem2 == poem1
+      poem2 = possibilities[rand(max)]
+    end
+    [poem1, poem2]
+  end
+
+  def alive_poems
+    self.poems.where("alive = ?", true)
+  end
+
+  def add_vote!
+    self.total_votes += 1
+    save
+  end
+
+  def markov
     @@languages ||= {}
     return @@languages[name] if @@languages[name]
     
@@ -37,7 +62,7 @@ class Language < ActiveRecord::Base
   end
 
   def gen_line
-    language.gen_line
+    markov.gen_line
   end
 
   def reload_language

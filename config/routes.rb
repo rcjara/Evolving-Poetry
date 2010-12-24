@@ -1,12 +1,15 @@
 EvolvingPoetry::Application.routes.draw do
-  resources :languages,     :only => [:index]
-  resources :authors,       :only => [:index]
-  resources :works,         :only => [:show]
-  resources :user_sessions, :only => [:new, :create, :destroy]
+  resources :languages,         :only => [:index, :show]
+  resources :authors,           :only => [:index]
+  resources :evolution_chamber, :only => [:show]
+  resources :works,             :only => [:show]
+  resources :user_sessions,     :only => [:new, :create, :destroy]
   resources :users
 
   get "pages/home"
   get "pages/about"
+
+  post "evolution_chamber/vote"
 
   root :to => 'pages#home'
 

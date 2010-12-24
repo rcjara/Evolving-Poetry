@@ -10,8 +10,7 @@ class MarkovLine
     @num_chars == 0 ? 0 : @num_chars - 1
   end
 
-  def add_word(word)
-    attr = {}
+  def add_word(word, attr = {})
     attr[:shout] = word.should_shout?
 
     @words << {:word => word, :attr => attr}
@@ -56,10 +55,6 @@ class MarkovLine
     end.join(" ")
   end
 
-  def self.from_prog_text(text, lang)
-    text.split(/\sBREAK\s/).collect { |t| line_from_prog_text(t, lang) }
-  end
-
   def self.line_from_prog_text(text, lang)
     line = MarkovLine.new
     attr = {}
@@ -68,6 +63,8 @@ class MarkovLine
       if word =~ /^[A-Z]+$/
         attr[word.downcase.to_sym] = true
       else
+        mark_word = lang.fetch_word(word)
+        raise "Word not found: '#{word}'" unless mark_word
         line.add_word_hash :word => lang.fetch_word(word), :attr => attr 
         attr = {}
       end

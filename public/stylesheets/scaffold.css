@@ -54,3 +54,13 @@ div.field, div.actions {
   font-size: 12px;
   list-style: square;
 }
+
+div.left_chamber {
+  width: 50%;
+  float: left;
+}
+
+div.right_chamber {
+  width: 50%;
+  float: right;
+}

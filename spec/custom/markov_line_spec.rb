@@ -55,7 +55,7 @@ describe MarkovLine do
     describe "to/from programmatic text" do
       before(:each) do
         @text = @line.to_prog_text
-        @line2 = MarkovLine.from_prog_text(@text, @lang).first
+        @line2 = MarkovLine.line_from_prog_text(@text, @lang)
       end
 
       it "text should contain only all upper or lower case words" do

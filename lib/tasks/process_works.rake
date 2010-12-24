@@ -23,8 +23,8 @@ def process_works_files
     full_name = author_names.join(" ")
 
     author = Author.create!(:first_name => first_name,
-                                   :last_name => last_name,
-                                   :full_name => full_name)
+                            :last_name => last_name,
+                            :full_name => full_name)
 
     text = File.read(path + fn)
     works = text.scan WORKS_FILES_REGEX

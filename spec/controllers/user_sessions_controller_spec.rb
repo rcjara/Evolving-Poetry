@@ -8,10 +8,10 @@ describe UserSessionsController do
   end
   
   describe "GET 'new'" do
-    it "should be successful" do
-      get 'new'
-      response.should be_success
-    end
+#    it "should be successful" do
+#      get 'new'
+#      response.should be_success
+#    end
   end
 
   describe "POST 'create'" do
@@ -21,10 +21,10 @@ describe UserSessionsController do
         @attr = {:username => "bad@email.com", :password => "invalid" }
       end
 
-      it "should re-render the new page" do
-        post :create, :user_session => @attr
-        response.should render_template('new')
-      end
+#      it "should re-render the new page" do
+#        post :create, :user_session => @attr
+#        response.should render_template('new')
+#      end
     end
 
   end

@@ -30,5 +30,5 @@ def create_small_languages
 end
 
 def gen_poems_for_lang(lang)
-  lang.max_poems.times { lang.gen_poem.save }
+  lang.max_poems.times { lang.gen_poem! }
 end

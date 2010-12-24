@@ -1,0 +1,8 @@
+<div class="left_chamber">
+  <%= render @poem1 %>
+  <%= link_to "Select this poem", {:id => @language, :action => :vote, :vote_for => @poem1, :vote_against => @poem2}, :method => :post %>
+</div>
+<div class="right_chamber">
+  <%= render @poem2 %>
+  <%= link_to "Select this poem", {:id => @language, :action => :vote, :vote_for => @poem2, :vote_against => @poem1}, :method => :post %>
+</div>

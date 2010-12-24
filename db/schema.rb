@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101205160835) do
+ActiveRecord::Schema.define(:version => 20101223162809) do
 
   create_table "auth_lang_relations", :force => true do |t|
     t.integer  "author_id"
@@ -44,6 +44,7 @@ ActiveRecord::Schema.define(:version => 20101205160835) do
     t.integer  "min_lines",   :default => 4
     t.integer  "max_lines",   :default => 15
     t.text     "description"
+    t.integer  "cur_family",  :default => 1
   end
 
   create_table "poems", :force => true do |t|
@@ -58,9 +59,17 @@ ActiveRecord::Schema.define(:version => 20101205160835) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "num_children",      :default => 0
+    t.integer  "parent_id"
+    t.integer  "second_parent_id"
+    t.integer  "family"
+    t.integer  "second_family"
   end
 
+  add_index "poems", ["family"], :name => "index_poems_on_family"
   add_index "poems", ["language_id"], :name => "index_poems_on_language_id"
+  add_index "poems", ["parent_id"], :name => "index_poems_on_parent_id"
+  add_index "poems", ["second_family"], :name => "index_poems_on_second_family"
+  add_index "poems", ["second_parent_id"], :name => "index_poems_on_second_parent_id"
 
   create_table "users", :force => true do |t|
     t.string   "username"

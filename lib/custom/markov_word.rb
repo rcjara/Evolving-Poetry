@@ -107,6 +107,10 @@ class MarkovWord
     display_word = " " + display_word unless punctuation?
     display_word.upcase! if options[:shout]
 
+    display_word.insert(0, %{<span class="new_text">}) if options[:beginnewtext]
+    display_word.insert(0, %{<span class="deleted_text">}) if options[:begindeleted]
+    display_word.insert(-1, %{</span>}) if options[:endspan]
+
     display_word
   end
 

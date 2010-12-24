@@ -1,5 +1,7 @@
 class MarkovLanguage
   attr_accessor :limit
+
+  WORD_REGEX = /\S+\b|\.\.+|\:\S+|\.(?=\s)|\?(?=\s)|\!(?=\s)|\S/u
   
   def initialize(limit = 120)
     @limit = limit
@@ -30,7 +32,7 @@ class MarkovLanguage
   end
   
   def add_snippet(snippet)
-    pieces = (snippet.to_s + " ").scan(/\S+\b|\.\.+|\:\S+|\.\s|\?\s|\!\s|\S/u)
+    pieces = (snippet.to_s + " ").scan(WORD_REGEX)
     
     return unless pieces && pieces.length > 0
     
@@ -62,6 +64,10 @@ class MarkovLanguage
     end
 
     line
+  end
+
+  def gen_poem(num_lines)
+    MarkovPoem.new( num_lines.times.collect{ gen_line } )
   end
   
   def fetch_word(ident)
