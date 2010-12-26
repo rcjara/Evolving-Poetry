@@ -1,5 +1,5 @@
 class MarkovPoem
-  TAGS_TO_STRIP = %w[BEGINNEWTEXT BEGINDELETED ENDSPAN]
+  TAGS_TO_STRIP = %w[BEGINNEWTEXT ENDSPAN BEGINDELETED.*?ENDSPAN\s\S+\s?]
 
   def initialize(lines = [])
     @lines = lines
@@ -14,7 +14,7 @@ class MarkovPoem
   end
 
   def display
-    @lines.collect(&:display).join("<br \\>\n")
+    @lines.collect(&:display).join("<br />\n")
   end
 
   def delete_line
@@ -22,9 +22,21 @@ class MarkovPoem
   end
 
   def self.from_prog_text(pre_text, lang, options = {})
-    text = options[:strip] ? pre_text.gsub(strip_tags_regex, "") : pre_text
+    text = options[:strip] ? strip_tags(pre_text) : pre_text
     lines = text.split(/\sBREAK\s/).collect { |t| MarkovLine.line_from_prog_text(t, lang) }
     MarkovPoem.new(lines)
+  end
+
+  def self.strip_tags(text)
+    new_text = text.gsub(strip_tags_regex, "")
+    #strip out leading breaks
+    new_text.gsub!(/^\s?BREAK\s?/, "")
+    #strip out trailing breaks
+    new_text.gsub!(/\s?BREAK\s?$/, "")
+    #strip out consecutive breaks
+    nil while new_text.gsub!(/BREAK\sBREAK/, "BREAK")
+
+    new_text
   end
 
   def self.strip_tags_regex

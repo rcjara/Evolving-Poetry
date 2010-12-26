@@ -24,7 +24,7 @@ describe Poem do
   end
   
   it "should have full text with multiple lines" do
-    @poem.full_text.split("<br \\>").length.should > 1
+    @poem.full_text.split("<br />").length.should > 1
   end
 
   it "should have no votes for" do
