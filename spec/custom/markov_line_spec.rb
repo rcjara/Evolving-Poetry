@@ -108,6 +108,51 @@ describe MarkovLine do
     end
     
   end
+
+  describe "altering a tail" do
+    before(:each) do
+      @line = @lang.gen_line
+      @orig_display = @line.display
+      @orig_first_word = @line.words.first
+      @line.alter_tail!(@lang)
+    end
+
+    it "should have a new display" do
+      @line.display.should_not == @orig_display
+    end
+    
+    it "should have the same first word" do
+      @line.words.first.should == @orig_first_word
+    end
+
+    it "should have a last word that ends the sentence" do
+      w = @line.words.last[:word]
+      (w.terminates? || w.sentence_end?).should be_true
+    end
+    
+  end
+  
+  describe "altering a front" do
+    before(:each) do
+      @line = @lang.gen_line
+      @orig_display = @line.display
+      @orig_last_word = @line.words.last
+      @line.alter_front!(@lang)
+    end
+
+    it "should have a new display" do
+      @line.display.should_not == @orig_display
+    end
+    
+    it "should have the same last word" do
+      @line.words.last.should == @orig_last_word
+    end
+
+    it "should have a first word that could begin the sentence" do
+      w = @line.words.first[:word]
+      w.sentence_begin?.should be_true
+    end
+  end
   
   
 end

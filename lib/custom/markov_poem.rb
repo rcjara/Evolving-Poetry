@@ -21,6 +21,37 @@ class MarkovPoem
     @lines.slice!(rand(length))
   end
 
+  def alter_a_tail!(lang)
+    alter!(lang, :alter_tail!)
+  end
+
+  def alter_a_front!(lang)
+    alter!(lang, :alter_front!)
+  end
+
+  def alter!(lang, method = :alter_front!)
+    success = false
+    attempts = 0
+
+    until success || attempts > Constants::MAX_ALTERING_ATTEMPTS
+      line = @lines[rand(@lines.length)]
+      success = line.send(method, lang)
+      attempts += 1
+    end
+  end
+
+  def add_line!(lang)
+    new_line = lang.gen_line
+    new_line.mark_as_new!
+
+    index = rand(length + 1)
+    if index == length
+      @lines << new_line
+    else
+      @lines.insert(index, new_line)
+    end
+  end
+
   def self.from_prog_text(pre_text, lang, options = {})
     text = options[:strip] ? strip_tags(pre_text) : pre_text
     lines = text.split(/\sBREAK\s/).collect { |t| MarkovLine.line_from_prog_text(t, lang) }

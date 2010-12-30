@@ -7,6 +7,18 @@ describe MarkovLanguage do
   it "should have the word 'you'" do
     @lang.fetch_word("you").should_not be_nil
   end
+
+  it "you should not be the begin" do
+    @lang.fetch_word("you").should_not be_is_begin
+  end
+
+  it "should have a :begin" do
+    @lang.fetch_word(:begin).should_not be_nil
+  end
+  
+  it ":begin should be the begin" do
+    @lang.fetch_word(:begin).should be_is_begin
+  end
   
   it "should have the word ','" do
     @lang.fetch_word(",").should_not be_nil
@@ -20,8 +32,22 @@ describe MarkovLanguage do
     @lang.fetch_word("?").should_not be_nil
   end
   
-  it "should have the word 'take'" do
-    @lang.fetch_word("take").should_not be_nil
+  describe "the word take" do
+    before(:each) do
+      @word = @lang.fetch_word("take")
+    end
+    
+    it "should not be nil" do
+      @word.should_not be_nil
+    end
+
+    it "should be a sentence begin" do
+      @word.should be_sentence_begin
+    end
+
+    it "should not be the begin" do
+      @word.should_not be_is_begin
+    end
   end
   
   it "should have the word 'god'" do

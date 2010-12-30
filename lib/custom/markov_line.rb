@@ -17,19 +17,55 @@ class MarkovLine
     @num_chars += word.display.length
   end
 
+  def push_word(word, attr = {})
+    attr[:shout] = word.should_shout?
+
+    @words.insert(0, {:word => word, :attr => attr})
+    @num_chars += word.display.length
+  end
+
+  def length
+    @words.length
+  end
+
+  def mark_as_new!
+    @words.first[:attr][:beginnewtext] = true
+    @words.last[:attr][:endspan] = true
+  end
+
   def add_word_hash(hash)
     @words << hash
   end
+
 
   #Removed the last word hash from @words
   #Return whether the remaining word is a valid sentence end
   def remove_last_word
     return nil unless @words.length > 1
     removed = @words.pop
+    
+    #question, do I remove the attr from the display?  
+    #Right now this could only make more characters than it should remove, 
+    #but in the future, I might have attr for which this makes sense
     @num_chars -= removed[:word].display(removed[:attr]).length
 
-    new_end_word = @words.last[:word]
-    new_end_word.terminates? || new_end_word.sentence_end?
+    new_last_word = @words.last[:word]
+    new_last_word.terminates? || new_last_word.sentence_end?
+  end
+
+  #Removed the first word hash from @words
+  #Return whether the remaining word is a valid sentence end
+  def remove_first_word
+    return nil unless @words.length > 1
+    removed = @words.slice!(0)
+    
+    #question, do I remove the attr from the display?  
+    #Right now this could only make more characters than it should remove, 
+    #but in the future, I might have attr for which this makes sense
+    @num_chars -= removed[:word].display(removed[:attr]).length
+
+    new_first_word = @words.first[:word]
+    new_first_word.sentence_begin?
   end
 
   def display(sentence_begin = true)
@@ -53,6 +89,69 @@ class MarkovLine
 
       key_words + h[:word].identifier
     end.join(" ")
+  end
+
+  def alter_tail!(lang)
+    possible_indices = multiple_children_indices
+    return false if possible_indices.empty?
+
+    orig_words = @words.dup
+
+    index = possible_indices[rand(possible_indices.length)]
+    orig_child = @words[index + 1]
+    done_looking = false
+    new_child = false
+    attempts = 0
+
+    until done_looking 
+      @words = orig_words[0..index]
+      lang.walk(@words.last[:word], self, :forward)
+      new_child = @words[index + 1] != orig_child
+      done_looking =  new_child || attempts > Constants::MAX_ALTERING_ATTEMPTS
+      attempts += 1
+    end
+    
+    @words = orig_words unless new_child #restore original words unless the change was a good one
+    new_child
+  end
+
+  def alter_front!(lang)
+    possible_indices = multiple_parents_indices
+    return false if possible_indices.empty?
+
+    orig_words = @words.dup
+    
+    index = possible_indices[rand(possible_indices.length)]
+    orig_parent = index - 1
+    done_looking = false
+    new_parent = false
+    attempts = 0
+
+    until done_looking
+      @words = orig_words[index..-1]
+      lang.walk(@words.first[:word], self, :backward)
+      new_parent = @words[index - 1] != orig_parent
+      done_looking = new_parent || attempts > Constants::MAX_ALTERING_ATTEMPTS
+      attempts += 1
+    end
+
+    @words = orig_words unless new_parent
+  end
+
+  def multiple_children_indices
+    possible_indices = []
+    @words[1..-1].each_with_index do |word_hash, i|
+      possible_indices << (i + 1) if word_hash[:word].num_children > 1
+    end
+    possible_indices
+  end
+
+  def multiple_parents_indices
+    possible_indices = []
+    @words[0..-2].each_with_index do |word_hash, i|
+      possible_indices << i if word_hash[:word].num_parents > 1
+    end
+    possible_indices
   end
 
   def self.line_from_prog_text(text, lang)

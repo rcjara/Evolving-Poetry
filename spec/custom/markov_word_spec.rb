@@ -88,7 +88,7 @@ describe MarkovWord do
       before(:each) do
         @parents = [:begin, "a", "the"]
         @added_words = [ [:begin, "Test"],["a", "TEST"],["the","Test"] ]
-        @added_words.each { |word_pair| @word.add_parent(*word_pair) }
+        @added_words.each { |word_pair| @word.add_parent(*word_pair, false) }
       end
       
       it "should show a count of four" do

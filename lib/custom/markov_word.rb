@@ -4,10 +4,11 @@ class MarkovWord
   PUNCTUATION_REGEX = /[\.\,\:\;\!\?]/
   SENTENCE_END_REGEX = /\.\s|\?\s|\!\s/
   
-  def initialize(ident, parent)
+  def initialize(ident, parent, sentence_begin = false)
     @identifier = MarkovWord.downcase(ident)
     @punctuation = MarkovWord.is_punctuation_test?(ident)
     @sentence_end = MarkovWord.is_sentence_end_test?(ident)
+    @begin = ident == :begin
     
     @count, @parents_count, @children_count, @shout_count = 0, 0, 0, 0
     @parents = Hash.new(0)
@@ -18,7 +19,7 @@ class MarkovWord
     @speakable = false
     @terminates = false
     
-    add_parent(parent, ident)
+    add_parent(parent, ident, sentence_begin)
   end
   
   def dup
@@ -30,6 +31,8 @@ class MarkovWord
     other.speakable = @speakable
     other.terminates = @terminates
     other.punctuation = @punctuation
+    other.sentence_begin = @sentence_begin
+    other.begin = @begin
     other.sentence_end = @sentence_end
     other.identifier = @identifier.is_a?(String) ? @identifier.dup : @identifier
     other.count = @count
@@ -50,6 +53,10 @@ class MarkovWord
     return false unless @terminates == other.terminates?
     return false unless @children == other.children
     return false unless @parents == other.parents
+    return false unless @sentence_begin == other.sentence_begin?
+    return false unless @begin == other.is_begin?
+    return false unless @parents == other.parents
+
     true
   end
   
@@ -76,8 +83,9 @@ class MarkovWord
     end
   end
   
-  def add_parent(parent, ident)
+  def add_parent(parent, ident, sent_begin)
     parent = MarkovWord.downcase(parent)
+    @sentence_begin ||= sent_begin
     @parents_count += 1
     @parents[parent] = @parents[parent] + 1
     add_identifier(ident)
@@ -92,6 +100,10 @@ class MarkovWord
     @children_count += 1
     @children[child] = @children[child] + 1
   end
+
+  def child_can_begin?
+    @sentence_end || @begin
+  end
   
   def get_random_child
     get_random_relative(@children, @children_count)
@@ -102,6 +114,8 @@ class MarkovWord
   end
   
   def display(options = {}, first = false)
+    return "" if is_begin?
+
     display_word = @identifier.dup
     display_word.capitalize! if first | proper?
     display_word = " " + display_word unless punctuation?
@@ -145,6 +159,10 @@ class MarkovWord
       return false unless word.scan(/\.\.+/).length == 0  #this is for ellipses, e.g. "...."
       true
     end
+
+    def is_sentence_begin_test?(prev_word)
+      prev_word.is_begin? || MarkovWord.is_sentence_end_test?(prev_word)
+    end
     
     def is_punctuation_test?(word)
       word = word.to_s
@@ -177,6 +195,14 @@ class MarkovWord
   def sentence_end?
     @sentence_end
   end
+
+  def is_begin?
+    @begin
+  end
+
+  def sentence_begin?
+    @sentence_begin
+  end
   
   private
   
@@ -193,5 +219,7 @@ class MarkovWord
   protected
   
   attr_reader :parents, :children
-  attr_writer :parents, :children, :proper, :shoutable, :speakable, :terminates, :punctuation, :sentence_end, :identifier, :count, :parents_count, :children_count, :shout_count
+  attr_writer :parents, :children, :proper, :shoutable, :speakable, 
+    :terminates, :punctuation, :sentence_end, :identifier, :count, 
+    :parents_count, :children_count, :shout_count, :begin, :sentence_begin
 end

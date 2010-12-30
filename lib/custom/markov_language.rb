@@ -3,9 +3,9 @@ class MarkovLanguage
 
   WORD_REGEX = /\S+\b|\.\.+|\:\S+|\.(?=\s)|\?(?=\s)|\!(?=\s)|\S/u
   
-  def initialize(limit = 120)
+  def initialize(limit = Constants::MAX_NUM_CHARS)
     @limit = limit
-    @words = {:begin => MarkovWord.new(:begin, nil)}
+    @words = {:begin => MarkovWord.new(:begin, nil, false)}
   end
   
   def ==(other)
@@ -49,18 +49,33 @@ class MarkovLanguage
     line = MarkovLine.new
     current_word = @words[:begin]
     
-    while current_word = @words[current_word.get_random_child]
-      line.add_word(current_word)
-      break if line.num_chars > @limit + 1
+    walk(current_word, line, :forward)
+  end
+
+  def walk(orig_word, line, direction = :forward, attempts = 0)
+    orig_length = line.length
+    current_word = orig_word
+
+    get_command, add_command, remove_command = if direction == :forward
+      [:get_random_child, :add_word, :remove_last_word]
+    else
+      [:get_random_parent, :push_word, :remove_first_word]
+    end
+
+    while current_word = @words[current_word.send(get_command)]
+      line.send(add_command, current_word)
+      break if line.num_chars > @limit
     end
     
-    while line.num_chars > @limit + 1
+    while line.num_chars > @limit
       stop = false
       until stop.nil? || stop
-        stop = line.remove_last_word
+        stop = line.send(remove_command)
+        stop = nil if line.length <= orig_length
+        #stop with a bad sentence (that is short enough) if attempts are too high
+        stop = true if attempts > Constants::MAX_WALK_ATTEMPTS && line.num_chars <= @limit
       end
-
-      return gen_line if stop.nil?
+      return walk(orig_word, line, direction, attempts + 1) if stop.nil?
     end
 
     line
@@ -87,11 +102,13 @@ class MarkovLanguage
     second_markov_word = fetch_word(second_word)
     raise "Warning: This word really should exist by now" unless first_markov_word
     first_markov_word.add_child(second_word)
+
+    sentence_begin = first_markov_word.child_can_begin?
     
     if second_markov_word
-      second_markov_word.add_parent(first_word, second_word)
+      second_markov_word.add_parent(first_word, second_word, sentence_begin)
     else 
-      @words[second_word.downcase] = MarkovWord.new(second_word, first_word)
+      @words[second_word.downcase] = MarkovWord.new(second_word, first_word, sentence_begin)
     end
   end
   
