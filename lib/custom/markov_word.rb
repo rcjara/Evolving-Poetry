@@ -84,11 +84,13 @@ class MarkovWord
   end
   
   def add_parent(parent, ident, sent_begin)
-    parent = MarkovWord.downcase(parent)
     @sentence_begin ||= sent_begin
-    @parents_count += 1
-    @parents[parent] = @parents[parent] + 1
     add_identifier(ident)
+    unless parent == :begin
+      parent = MarkovWord.downcase(parent)
+      @parents_count += 1
+      @parents[parent] = @parents[parent] + 1
+    end
   end
   
   def add_child(child = nil)
@@ -123,7 +125,11 @@ class MarkovWord
 
     display_word.insert(0, %{<span class="new_text">}) if options[:beginnewtext]
     display_word.insert(0, %{<span class="deleted_text">}) if options[:begindeleted]
+    display_word.insert(0, %{<span class="from_first_parent">}) if options[:fromfirstparent]
+    display_word.insert(0, %{<span class="from_second_parent">}) if options[:fromsecondparent]
+
     display_word.insert(-1, %{</span>}) if options[:endspan]
+    display_word.insert(-1, %{</span>}) if options[:enddeleted]
 
     display_word
   end

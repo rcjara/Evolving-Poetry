@@ -41,7 +41,7 @@ describe MarkovPoem do
 
   describe "deleted text tags" do
     before(:each) do
-      @text_with_deleted_tags = "BEGINDELETED take ENDSPAN this BREAK kiss upon the brow !"
+      @text_with_deleted_tags = "BEGINDELETED take ENDDELETED this BREAK kiss upon the brow !"
     end
 
     describe "without stripping tags" do
@@ -75,9 +75,51 @@ describe MarkovPoem do
     end
   end
 
+  describe "sexual reproduction" do
+    before(:each) do
+      @p1 = @lang.gen_poem(6)
+      @p2 = @lang.gen_poem(4)
+      @new_poem = @p1.sexually_reproduce_with(@p2, @lang)
+    end
+
+    describe "@p1.half_lines" do
+      it "should have 3 lines" do
+        @p1.half_lines.length.should == 3
+      end
+    end
+    
+    describe "@p2.half_lines" do
+      it "should have 2 lines" do
+        @p2.half_lines.length.should == 2
+      end
+    end
+
+    it "should have 5 lines" do
+      @new_poem.length.should == 5
+    end
+    
+    it "should have 3 lines from p1 in its programmatic text" do
+      @new_poem.to_prog_text.scan(/FROMFIRSTPARENT/).length.should == 3
+    end
+    
+    it "should have 3 lines from p1 in its display text" do
+      @new_poem.display.scan(/\<span class\=\"from_first_parent\"\>/).length.should == 3
+    end
+    
+    it "should have 2 lines from p2 in its programmatic text" do
+      @new_poem.to_prog_text.scan(/FROMSECONDPARENT/).length.should == 2
+    end
+    
+    it "should have 2 lines from p2 in its display text" do
+      @new_poem.display.scan(/\<span class\=\"from_second_parent\"\>/).length.should == 2
+    end
+    
+  end
+  
+
   describe "multiline stripping" do
     before(:each) do
-      @text_to_strip = "take BEGINDELETED this kiss ENDSPAN upon BREAK BEGINDELETED the brow ENDSPAN BREAK BEGINNEWTEXT and ENDSPAN raven !"
+      @text_to_strip = "take BEGINDELETED this kiss ENDDELETED upon BREAK BEGINDELETED the brow ENDDELETED BREAK BEGINNEWTEXT and ENDSPAN raven !"
       @p = MarkovPoem.from_prog_text(@text_to_strip, @lang, :strip => true)
     end
 
@@ -91,7 +133,7 @@ describe MarkovPoem do
     
   end
 
-  describe "adding a line" do
+  describe "a five line poem" do
     before(:each) do
       @p = @lang.gen_poem(5)
     end
@@ -118,6 +160,38 @@ describe MarkovPoem do
         @p.length.should == 6
       end
     end
+
+    describe "on deleting a line" do
+      before(:each) do
+        @p.delete_line!
+      end
+      
+      it "should still have 5 lines" do
+        @p.length.should == 5
+      end
+
+      it "should have some deleted text" do
+        @p.to_prog_text.should =~ /BEGINDELETED.*?ENDDELETED/
+      end
+      
+      describe "and then stripping out tags" do
+        before(:each) do
+          @p = MarkovPoem.from_prog_text(@p.to_prog_text, @lang, :strip => true)
+        end
+        
+        it "should still have 4 lines" do
+          @p.length.should == 4
+        end
+
+        it "should not deleted text anymore" do
+          @p.to_prog_text.should_not =~ /BEGINDELETED.*?ENDDELETED/
+        end
+
+      end
+      
+      
+    end
+    
   end
 
   describe "altering the tail of a line" do

@@ -109,7 +109,7 @@ describe MarkovLine do
     
   end
 
-  describe "altering a tail" do
+  describe "when altering a tail" do
     before(:each) do
       @line = @lang.gen_line
       @orig_display = @line.display
@@ -131,6 +131,29 @@ describe MarkovLine do
     end
     
   end
+
+  describe "when marked as from first_parent" do
+    before(:each) do
+      @line = @lang.gen_line
+      @line.mark_as_from_first_parent!
+    end
+
+    it "should have a display with the right tags" do
+      @line.display.should =~ /^\<span class\="from_first_parent"\>.*?\<\/span\>$/
+    end
+  end
+  
+  describe "when marked as from second_parent" do
+    before(:each) do
+      @line = @lang.gen_line
+      @line.mark_as_from_second_parent!
+    end
+
+    it "should have a display with the right tags" do
+      @line.display.should =~ /^\<span class\="from_second_parent"\>.*?\<\/span\>$/
+    end
+  end
+  
   
   describe "altering a front" do
     before(:each) do

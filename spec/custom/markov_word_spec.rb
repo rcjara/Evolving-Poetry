@@ -39,11 +39,11 @@ describe MarkovWord do
   
   shared_examples_for "a word that hasn't had any parents added" do
     it "should show that it has 1 parent" do
-      @word.num_parents.should == 1
+      @word.num_parents.should == 0
     end
     
     it "should show a parents count of 1" do
-      @word.parents_count.should == 1
+      @word.parents_count.should == 0
     end
   end
   
@@ -86,8 +86,8 @@ describe MarkovWord do
     
     context "on adding some capitalized parent instances" do
       before(:each) do
-        @parents = [:begin, "a", "the"]
-        @added_words = [ [:begin, "Test"],["a", "TEST"],["the","Test"] ]
+        @parents = ["a", "the"]
+        @added_words = [ [:begin, "Test"], ["a", "TEST"],["the","Test"] ]
         @added_words.each { |word_pair| @word.add_parent(*word_pair, false) }
       end
       
@@ -103,12 +103,12 @@ describe MarkovWord do
         @word.proper?.should == true
       end
       
-      it "should have three parents" do
-        @word.num_parents.should == 3
+      it "should have two parents" do
+        @word.num_parents.should == 2
       end
       
-      it "should have a parents count of 4" do
-        @word.parents_count.should == 4
+      it "should have a parents count of 2" do
+        @word.parents_count.should == 2
       end
       
       it "should have a shout count of 2" do

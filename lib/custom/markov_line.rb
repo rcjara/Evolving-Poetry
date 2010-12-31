@@ -28,9 +28,25 @@ class MarkovLine
     @words.length
   end
 
+  def mark!(begin_tag, end_tag = :endspan)
+    @words.first[:attr][begin_tag] = true
+    @words.last[:attr][end_tag] = true
+  end
+
   def mark_as_new!
-    @words.first[:attr][:beginnewtext] = true
-    @words.last[:attr][:endspan] = true
+    mark!(:beginnewtext)
+  end
+
+  def mark_as_deleted!
+    mark!(:begindeleted, :enddeleted)
+  end
+
+  def mark_as_from_first_parent!
+    mark!(:fromfirstparent)
+  end
+
+  def mark_as_from_second_parent!
+    mark!(:fromsecondparent)
   end
 
   def add_word_hash(hash)
