@@ -56,8 +56,6 @@ describe Language do
       it "should have a poem with full text" do
         @l.poems.first.full_text.length.should > 0
       end
-      
-      
     end
 
     describe "generating a couple of poems" do
@@ -75,14 +73,38 @@ describe Language do
           poem.family.should == (i + 1)
         end
       end
-      
-      
-      
     end
     
-    
-    
-    
+
+    describe "after generating 20 poems" do
+      before(:each) do
+        20.times { @l.gen_poem! }
+        @l.reload
+        @l.poems.first.vote_against!
+        @l.poems.last.vote_for!
+      end
+
+      it "should have 20 poems" do
+        @l.poems.length.should == 20
+      end
+
+      describe "the top 5 poems" do
+        it "should have only 5 poems" do
+          @l.top_5.length.should == 5
+        end
+
+        it "should not include the first poem" do
+          @l.top_5.should_not include @l.poems.first
+        end
+
+        it "should include the last poem" do
+          @l.top_5.should include @l.poems.last
+        end
+        
+        
+      end
+      
+    end
   end
   
 end

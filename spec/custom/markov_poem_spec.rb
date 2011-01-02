@@ -170,6 +170,11 @@ describe MarkovPoem do
         @p.length.should == 5
       end
 
+      it "should have 4 undeleted lines" do
+        @p.undeleted_lines.should == 4
+      end
+      
+
       it "should have some deleted text" do
         @p.to_prog_text.should =~ /BEGINDELETED.*?ENDDELETED/
       end

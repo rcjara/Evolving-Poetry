@@ -107,6 +107,21 @@ describe MarkovLine do
       end
     end
     
+    it "should not be deleted" do
+      @line.should_not be_deleted
+    end
+    
+    describe "after being marked as deleted" do
+      before(:each) do
+        @line.mark_as_deleted!
+      end
+      
+      it "should be deleted" do
+        @line.should be_deleted
+      end
+      
+    end
+    
   end
 
   describe "when altering a tail" do

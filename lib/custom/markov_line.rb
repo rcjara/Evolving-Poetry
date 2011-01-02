@@ -28,6 +28,10 @@ class MarkovLine
     @words.length
   end
 
+  def deleted?
+    @words.first[:attr][:begindeleted] && @words.last[:attr][:enddeleted]
+  end
+
   def mark!(begin_tag, end_tag = :endspan)
     @words.first[:attr][begin_tag] = true
     @words.last[:attr][end_tag] = true

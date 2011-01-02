@@ -1,6 +1,29 @@
 require 'spec_helper'
 
 describe Poem do
+  shared_examples_for "any child of a poem" do
+    it "should have the first poem as its parent" do
+      @new_poem.parent.should == @poem
+    end
+    
+    it "should have no votes_for/against" do
+      @new_poem.votes_for.should == 0
+      @new_poem.votes_against.should == 0
+    end
+    
+    it "should have the same language as its parent" do
+      @new_poem.language.should == @poem.language
+    end
+    
+    it "the parent should have the second poem as its child" do
+      @poem.children.should include @new_poem
+    end
+    
+    it "should have the same family as its parent" do
+      @new_poem.family.should == @poem.family
+    end
+  end
+
   before(:each) do
     @author, @work, @language = author_work_language_combo
     @poem = @language.gen_poem!
@@ -34,6 +57,11 @@ describe Poem do
   it "should have a programmatic text" do
     @poem.programmatic_text.split(/\s/).length.should > 1
   end
+
+  it "shouldn't have any children" do
+    @poem.children.should be_empty
+  end
+  
 
   describe "programmatic text stuff" do
     before(:each) do
@@ -102,7 +130,34 @@ describe Poem do
     end
     
   end
-  
+
+  describe "after voting for it enough to reproduce" do
+    before(:each) do
+      5.times { @language.gen_poem! }
+      @language.reload
+
+      @num_poems = @language.poems.length
+      (1 + Constants::BEAR_CHILD_CUTOFF).times{ @poem.vote_for! }
+      @poem.reload
+      @language.reload
+    end
+    
+    it "should have a score of zero" do
+      @poem.score == 0
+    end
+    
+    it "should have a child" do
+      @poem.children.length.should == 1
+    end
+    
+    describe "the language" do
+      it "should have one more poem than it did before" do
+        @language.poems.length.should == @num_poems + 1
+      end
+      
+    end
+    
+  end
   
   describe "after voting against a poem 4 times" do
     before(:each) do
@@ -121,30 +176,72 @@ describe Poem do
 
   describe "after creating an identical a child" do
     before(:each) do
-      @poem2 = @poem.create_identical_child
-      @poem2.save
+      @new_poem = @poem.create_identical_child
+      @new_poem.save
       @poem.reload
     end
     
-    it "the child should have the first poem as its parent" do
-      @poem2.parent.should == @poem
-    end
-
-    it "the child should have the same family as the first poem" do
-      @poem2.family.should == @poem.family
-    end
-    
-    it "the child should have the same language as the first poem" do
-      @poem2.language.should == @poem.language
-    end
-    
-    it "the parent should have the second poem as its child" do
-      @poem.children.should include @poem2
-    end
-    
+    it_should_behave_like "any child of a poem"
   end
   
+  describe "after asexually reproducing" do
+    before(:each) do
+      @new_poem = @poem.asexually_reproduce!
+      @new_poem.save
+      @poem.reload
+    end
+    
+    it "should have the new poem as a child" do
+      @poem.children.should include(@new_poem)
+    end
 
+    describe "its child" do
+      it_should_behave_like "any child of a poem"
+
+      it "should have a different programmatic text than its parent" do
+        @new_poem.programmatic_text.should_not == @poem.programmatic_text
+      end
+
+      it "should have a different full text than its parent" do
+        @new_poem.full_text.should_not == @poem.full_text
+      end
+    end
+  end
+
+  describe "after sexually reproducing" do
+    before(:each) do
+      @poem2 = @language.gen_poem!
+      @new_poem = @poem.sexually_reproduce_with!(@poem2)
+      @new_poem.save
+      @poem.reload
+      @poem2.reload
+    end
+    
+    describe "the first poem" do
+      it "should have the new poem in its children" do
+        @poem.children.should include @new_poem
+      end
+    end
+
+    describe "the second poem" do
+      it "should have the new poem in its second children" do
+        @poem2.second_children.should include @new_poem
+      end
+    end
+    
+    
+    describe "the new poem" do
+      it_should_behave_like "any child of a poem"
+
+      it "should have the second family of poem2" do
+        @new_poem.second_family.should == @poem2.family
+      end
+
+      it "should have poem2 as a second parent" do
+        @new_poem.second_parent.should == @poem2
+      end
+    end
+  end
   
 end
 

@@ -1,7 +1,9 @@
 class Language < ActiveRecord::Base
   include LanguagesHelper
 
-  attr_accessible :name, :total_votes, :max_poems, :created_at, :updated_at, :active, :description, :min_lines, :max_lines, :cur_family
+  attr_accessible :name, :total_votes, :max_poems, :created_at, 
+    :updated_at, :active, :description, :min_lines, :max_lines, 
+    :cur_family
 
   has_many :auth_lang_relations, :dependent => :destroy
   has_many :authors, :through => :auth_lang_relations
@@ -42,6 +44,10 @@ class Language < ActiveRecord::Base
       poem2 = possibilities[rand(max)]
     end
     [poem1, poem2]
+  end
+
+  def top_5
+    alive_poems.order("(votes_for - votes_against) / (votes_against + 1.0) DESC").limit(5)
   end
 
   def alive_poems

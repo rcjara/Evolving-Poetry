@@ -18,11 +18,31 @@ class MarkovPoem
   def display
     @lines.collect(&:display).join("<br />\n")
   end
+  
+  def undeleted_lines
+    @lines.inject(0) do |sum, line|
+      line.deleted? ? sum : sum + 1
+    end
+  end
 
   #####################
   # Evolution methods #
   #####################
   
+  def mutate!(lang)
+    max_mutate_num = undeleted_lines > 1 ? 4 : 3
+    case rand(max_mutate_num)
+    when 0
+      add_line!(lang)
+    when 1
+      alter_a_tail!(lang)
+    when 2
+      alter_a_front!(lang)
+    when 3
+      delete_line!
+    end
+  end
+
   def add_line!(lang)
     new_line = lang.gen_line
     new_line.mark_as_new!
@@ -32,7 +52,12 @@ class MarkovPoem
   end
 
   def delete_line!
-    @lines[rand(length)].mark_as_deleted!
+    orig_undeleted_lines = undeleted_lines
+    return nil if orig_undeleted_lines < 2
+    while undeleted_lines == orig_undeleted_lines
+      line = @lines[rand(length)]
+      line.mark_as_deleted! unless line.deleted?
+    end
   end
 
   def alter_a_tail!(lang)
