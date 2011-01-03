@@ -26,14 +26,22 @@ class Poem < ActiveRecord::Base
     self.votes_against += 1
     self.score -= 1
 
-    if self.votes_for - self.votes_against < Constants::STILL_ALIVE_CUTOFF
-      self.alive = false
-    end
+    check_for_death!
 
     save
   end
+
+  def check_for_death!
+    if self.votes_for - self.votes_against < Constants::STILL_ALIVE_CUTOFF
+      self.alive = false
+      self.language.alert_of_death!
+    end
+  end
   
   def bear_child
+    self.score = 0
+    self.save
+
     if(rand(Constants::SEX_ODDS + Constants::MUTATE_ODDS) < Constants::MUTATE_ODDS)
       asexually_reproduce!
     else

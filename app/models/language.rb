@@ -36,6 +36,12 @@ class Language < ActiveRecord::Base
     save
   end
 
+  def alert_of_death!
+    if self.alive_poems.length < self.max_poems
+      gen_poem!
+    end
+  end
+
   def poems_for_voting
     possibilities = alive_poems
     max = possibilities.length

@@ -161,7 +161,10 @@ describe Poem do
   
   describe "after voting against a poem 4 times" do
     before(:each) do
+      @num_poems = @poem.language.alive_poems.length
       4.times{@poem.vote_against!}
+      @poem.reload
+      @poem.language.reload
     end
     
     it "should have 4 votes against it" do
@@ -171,6 +174,18 @@ describe Poem do
     it "should be dead" do
       @poem.alive?.should be_false
     end
+
+    describe "the poem's language" do
+      it "should have the same number of poems as before" do
+        @poem.language.alive_poems.length.should == @num_poems
+      end
+      
+      it "should no longer include the original poem in its alive poems" do
+        @poem.language.alive_poems.should_not include @poem
+      end
+      
+    end
+    
     
   end
 
