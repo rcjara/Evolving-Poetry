@@ -258,5 +258,71 @@ describe Poem do
     end
   end
   
+  describe "family trees" do
+    before(:each) do
+      @auth, @work, @lang = author_work_language_combo
+    end
+    
+    describe "basic family tree" do
+      before(:each) do
+        @p1 = @lang.gen_poem!
+        @p2 = @p1.asexually_reproduce!
+        @p3 = @p1.asexually_reproduce!
+        @p4 = @p1.asexually_reproduce!
+        @full_family = [@p1, @p2, @p3, @p4]
+        @other = @lang.gen_poem!
+      end
+
+      it "should be able to get it's children via magic" do
+        @p1.get_tree_children(@p1.family_members).should == [@p2, @p3, @p4]
+      end
+      
+      it "should have the right family tree structure" do
+        @p1.fam_tree_struct.should == [[@p1, nil, nil],
+                                       [@p2, @p3, @p4]]
+      end
+
+      it "should have the same structure regardless of the child" do
+        @full_family.each_cons(2) do |lft_p, rgt_p|
+          lft_p.fam_tree_struct.should == rgt_p.fam_tree_struct
+        end
+      end
+
+      describe "adding a third generation" do
+        before(:each) do
+          @p5 = @p3.asexually_reproduce!
+          @p6 = @p3.asexually_reproduce!
+          @p7 = @p4.asexually_reproduce!
+        end
+
+        it "should have the right family tree structure" do
+          @p1.fam_tree_struct.should == [[@p1, nil, nil, nil],
+                                         [@p2, @p3, nil, @p4],
+                                         [nil, @p5, @p6, @p7]]
+        end
+        
+        
+        describe "adding a fourth generation" do
+          before(:each) do
+            @p8 = @p5.asexually_reproduce!
+            @p9 = @p5.asexually_reproduce!
+            @p10 = @p7.asexually_reproduce!
+          end
+          
+          it "should have the right family tree structure" do
+            @p1.fam_tree_struct.should == [[@p1, nil, nil, nil, nil],
+                                           [@p2, @p3, nil, nil, @p4],
+                                           [nil, @p5, nil, @p6, @p7],
+                                           [nil, @p8, @p9, nil, @p10]]
+          end
+        end
+        
+      end
+      
+      
+    end
+    
+  end
+  
 end
 

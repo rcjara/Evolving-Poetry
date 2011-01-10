@@ -86,5 +86,46 @@ class Poem < ActiveRecord::Base
   def markov_form
     MarkovPoem.from_prog_text(self.programmatic_text, self.language.markov)
   end
+
+  def fam_tree_struct
+    fam_members = family_members
+    fam_members.values.first.sub_fam_tree(fam_members)
+  end
+
+  def sub_fam_tree(fam_members)
+    tree_children = get_tree_children(fam_members)
+    return [[self]] if tree_children.empty?
+    children_trees = tree_children.collect { |p| p.sub_fam_tree(fam_members) }
+    children_trees_array = collapse_child_trees(children_trees)
+    self_line = [self] + [nil] * (children_trees_array[0].length - 1)
+    [self_line] + children_trees_array
+  end
+
+  def get_tree_children(fam_members)
+    fam_members.values.select{ |p| p.parent == self || p.second_parent == self }
+  end
+
+  def collapse_child_trees(array_of_arrays)
+    max_depth = array_of_arrays.inject(0){|depth, array| array.length > depth ? array.length : depth }
+    final_array = max_depth.times.collect{ [] }
+    array_of_arrays.each do |array|
+      this_length = array[0].length
+      (0...max_depth).each do |i|
+        to_add = array[i] ? array[i] : [nil] * this_length
+        final_array[i] += to_add
+      end
+    end
+    
+    final_array
+  end
+
+  def family_members
+    array = self.language.poems.where('family = ? OR second_family = ?', self.family, self.family).order('id')
+    hash = {}
+    array.each do |p|
+      hash[p.id] = p
+    end
+    hash
+  end
 end
 
