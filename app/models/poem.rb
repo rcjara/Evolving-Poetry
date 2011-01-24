@@ -92,6 +92,10 @@ class Poem < ActiveRecord::Base
     fam_members.values.first.sub_fam_tree(fam_members)
   end
 
+  def fam_tree_struct_with_lines
+    fam_tree_struct
+  end
+
   def sub_fam_tree(fam_members)
     tree_children = get_tree_children(fam_members)
     return [[self]] if tree_children.empty?
