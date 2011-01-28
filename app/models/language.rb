@@ -53,7 +53,15 @@ class Language < ActiveRecord::Base
   end
 
   def top_5
-    alive_poems.order("(votes_for - votes_against) / (votes_against + 1.0) DESC").limit(5)
+    alive_ordered.limit(5)
+  end
+
+  def top_poem
+    alive_ordered.limit(1)
+  end
+
+  def alive_ordered
+    alive_poems.order(Constants::POEM_ORDERING)
   end
 
   def alive_poems

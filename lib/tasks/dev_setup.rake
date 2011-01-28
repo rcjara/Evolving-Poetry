@@ -3,6 +3,7 @@ namespace :db do
   task :dev_setup => :environment do 
     Rake::Task['db:process_works'].invoke
     create_languages
+    simulate_voting
   end
 end
 
@@ -31,4 +32,15 @@ end
 
 def gen_poems_for_lang(lang)
   lang.max_poems.times { lang.gen_poem! }
+end
+
+def simulate_voting
+  Language.all.each do |lang|
+    puts "Voting for #{lang.description}"
+    1000.times do
+      poem1, poem2 = lang.poems_for_voting
+      poem1.vote_for!
+      poem2.vote_against!
+    end
+  end
 end
