@@ -1,11 +1,12 @@
 <div class="language">
+  <h3><%= language.name %></h3>
   <div class="left-language">
-    <h3><%= language.name %></h3>
     <p class="language-description"><%= language.description %></p>
     <p class="language-description">Featuring works by <%= author_links(language) %>
-    with a total of <%=pluralize language.total_votes, "vote" %>
+    with a total of <%=pluralize language.total_votes, "vote" %></p>
   </div>
   <div class="right-language">
     <%= render language.top_poem %>
   </div>
+  <div class="clear"></div>
 </div>

@@ -13,7 +13,7 @@ def create_languages
 end
 
 def create_mega_language
-  lang = Language.create!(:name => "All authors", :description => "An amalgamation of all the authors")
+  lang = Language.create!(:name => "All authors", :description => "An amalgamation of all the authors.")
   puts "Creating language for all authors"
   Author.all.each do |auth|
     lang.add_author!(auth)
