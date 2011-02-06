@@ -2,7 +2,8 @@
 <html>
 <head>
   <title><%= page_title %></title>
-  <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag "reset" %>
+  <%= stylesheet_link_tag "main_style" %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
@@ -17,5 +18,6 @@
 <div class="main-body">
   <%= yield %>
 </div>
+<div class="clear"></div>
 </body>
 </html>
