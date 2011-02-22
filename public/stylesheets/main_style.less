@@ -8,17 +8,24 @@
 
 /* Colors */
 @white: #FFFFFF;
+@dif: #181818;
 @black: #000000;
-@main_color: #4A67BE;
-@sub_color_1: #4D5D8E;
-@sub_color_2: #18317B;
-@sub_color_3: #7892DE;
-@sub_color_4: #93A6DE;
+@main_color: #666666;
+@sub_color_1: @main_color + @dif;
+@sub_color_2: @main_color - @dif;
+@sub_color_3: @main_color - (2 * @dif);
+@sub_color_4: @main_color - (3 * @dif);
 
+@default_font_size: 13px;
+@default_line_height: 16px;
+@logo_font_size: 20px;
+@logo_line_height: 24px;
 @header_height: 100px;
 @header_padding: 20px;
-@overall_width: 784px;
+@padding: 20px;
+@overall_width: 80%;
 @minimum_height: 600px;
+@minimum_width: 784px;
 
 h1, h2, h3 {
   margin-left: auto;
@@ -27,14 +34,35 @@ h1, h2, h3 {
   width: 100%;
 }
 
+.logo-mixin {
+  font-size: @logo_font_size;
+  line-height: @default_line_height;
+  text-decoration: none;
+  color: @sub_color_2;
+  font-family: Arial Black, sans serif;
+}
+
+h1 {
+  .logo-mixin;
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+ul {
+  list-style-type: none;
+}
+
 div.clear {
   display: block;
   clear: both;
 }
 
 .top_bottom_gradient {
-  background: -moz-linear-gradient(top, @main_color, @main_color - #444);  
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@main_color), to(@main_color - #444));  
+  background: -moz-linear-gradient(top, @white, @main_color);  
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(@white), to(@main_color));  
 }
 
 .rounded-corners (@radius: 5px) {
@@ -48,42 +76,87 @@ div.clear {
  */
 
 body {
-  background: -webkit-gradient(linear, 0% 0%, 100% 100%, from(@sub_color_2), to(@sub_color_2), color-stop(0.5, @black) );
+  font-size: @default_font_size;
+  line-height: @default_line_height;
+  background: -webkit-gradient(linear, 0% 0%, 100% 100%, from(@sub_color_4), to(@sub_color_4), color-stop(0.5, @sub_color_2) );
+  background-color: @sub_color_4;
 }
 
 div.main-body {
   .rounded-corners;
-  opacity: 0.35;
-  width: @overall_width - 2 * 20px;
-  padding: 20px;
+  width: @overall_width;
   background-color: @white;
   min-height: @minimum_height;
-  margin-top: 30px;
+  min-width: @minimum_width;
+  border-width: 1px;
+  border-color: @black;
+  border-style: solid;
+  margin-top: @header_height - 2 * @header_padding + 10px;
   margin-bottom: 50px;
   margin-left: auto;
   margin-right: auto;
 }
 
+div.margin-box {
+  width: 95%;
+  min-width: @minimum_width - 2 * @padding;
+  margin: @padding;
+}
+
+a.logo-link {
+  float: left;
+  .logo-mixin;
+}
+
+a.logo-link:hover {
+  color: @main_color;
+}
+
 header {
   width: 100%;
   height: @header_height - 2 * @header_padding;
-  background-color: @main_color;
+  position: fixed;
+  top: 0px;
+  background-color: @white;
   .top_bottom_gradient;
+  border-width: 1px;
+  border-style: none none solid;
+  border-color: #222;
 }
 
 header div.centered {
-  width: 784px;
-  padding: @header_padding;
+  width: @overall_width;
+  padding-top: @header_padding;
+  padding-bottom: @header_padding;
   margin-left: auto;
   margin-right: auto;
 }
 
 header ul {
+  float: right;
+  margin-top: (@logo_line_height - @default_line_height) / 4;
   list-style-type: none;
 }
 
 header li {
   margin-left: 20px;
+  float: right;
+}
+
+div.page-title {
+  text-align: center;
+  margin-top: (@logo_line_height - @default_line_height) / 4;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.left-column {
+  width: 45%;
+  float: left;
+}
+
+div.right-column {
+  width: 45%;
   float: right;
 }
 
@@ -97,6 +170,31 @@ div.main-body {
   margin-right: auto;
 }
 
+div.main-left-column {
+  float: left;
+  width: 450px;
+}
+
+div.main-right-column {
+  float: right;
+  width: 45%;
+}
+
+div.home-links {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: @padding;
+  margin-bottom: @padding;
+}
+
+div.home-links ul {
+}
+
+div.home-links li {
+  margin-top: 15px;
+}
+
 /*
  * Language Styles
  */
@@ -108,7 +206,6 @@ div.language {
   border-color: #000;
   border-width: 5px;
   margin-top: 25px;
-  width: 784px;
 }
 
 div.left-language {
@@ -121,5 +218,21 @@ div.right-language {
   float: right;
 }
 
+/* Poem */
+div.poem {
+  margin-bottom: @padding;
+}
+
+/* Evolution Chamber */
 
 
+/* Works */
+
+div.author-name {
+  text-decoration: italic;
+  margin-bottom: 10px;
+}
+
+div.author {
+  margin-top: 25px;
+}

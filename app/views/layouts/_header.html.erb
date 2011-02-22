@@ -1,5 +1,6 @@
 <header>
   <div class="centered">
+    <%= link_to "Nonsense Engine", root_path, :class => "logo-link" %>
     <ul>
       <li><%= link_to "Home", root_path %></li>
       <% if signed_in? %>
@@ -9,5 +10,6 @@
         <li><%= link_to "Log in", signin_path %></li>
       <% end %>
     </ul>
+    <div class="page-title"><%= @title %></div>
   </div>
 </header>

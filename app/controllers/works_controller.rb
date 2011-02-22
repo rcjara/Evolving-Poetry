@@ -1,5 +1,6 @@
 class WorksController < ApplicationController
   def show
+    @title = @work.title
     @work = Work.find(params[:id])
     raise ActiveRecord::RecordNotFound unless @work.author.visible
 

@@ -9,6 +9,10 @@ class Language < ActiveRecord::Base
   has_many :authors, :through => :auth_lang_relations
   has_many :poems
 
+  def self.random
+    Language.where('active = ?', true).sample
+  end
+
   def add_author!(author)
     authors << author
   end

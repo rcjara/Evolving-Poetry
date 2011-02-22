@@ -1,2 +1,37 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="main-left-column">
+  <p>This will be an image some day.</p>
+</div>
+<div class="main-right-column">
+  <div class="home-links">
+    <h1>Nonsense Engine</h1>
+    <h2>computer generated poetry in a state of evolution</h2>
+    <ul>
+      <li>
+        <%= link_to "What is this nonsense?", :controller => :pages, :action => :about %>
+        &mdash; Basic information about Nonsense Engine. Helps make sense of it all.
+      </li>
+      <li>
+        <%= link_to "Evolution Chamber", :controller => :evolution_chamber, :action => :random %>
+        &mdash; Quickly take part in the evolution.
+      </li>
+      <li>
+        <%= link_to "Languages", languages_path %>
+        &mdash; Examine the languages before choosing which one to evolve.
+      </li>
+      <li>
+        <%= link_to "The original works", authors_path %>
+        &mdash; Nonsense Engine is driven by works that real poets and authors (as opposed to computers) have produced.  You can look at the works that we have permission to display (or are public domain) here.
+      </li>
+      <% unless signed_in? %>
+        <li>
+          <%= link_to "Log in", signin_path %> 
+          or 
+          <%= link_to "Sign up", signup_path %>
+          <br />
+          You don't have to have an account to use the site, but you gain access to more features.  You can read why you should sign up, 
+          <%= link_to "here", signup_path %>.
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

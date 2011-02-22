@@ -1,4 +1,6 @@
 EvolvingPoetry::Application.routes.draw do
+  get "evolution_chamber/random"
+
   resources :languages,         :only => [:index, :show]
   resources :authors,           :only => [:index]
   resources :evolution_chamber, :only => [:show]

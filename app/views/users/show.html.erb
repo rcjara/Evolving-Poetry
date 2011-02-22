@@ -17,10 +17,14 @@
   <%= @user.posts %>
 </p>
 <p>
-  <strong>Points:</strong>
-  <%= @user.points %>
+  <strong>Total Points:</strong>
+  <%= @user.total_points %>
+</p>
+<p>
+  <strong>Remaining Points:</strong>
+  <%= @user.total_points - @user.points_used %>
 </p>
 
 <p>
-  <%= link_to "Edit", edit_user_path(@user) %> |
+  <%= link_to "Edit", edit_user_path(@user) %> | <%= link_to "Home", root_path %>
 </p>
