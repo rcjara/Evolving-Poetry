@@ -17,9 +17,17 @@ class Poem < ActiveRecord::Base
     self.votes_for += 1
     self.score += 1
 
-    bear_child if self.score > Constants::BEAR_CHILD_CUTOFF
+    bear_child if votes_til_birth <= 0
 
     save
+  end
+
+  def votes_til_birth
+    Constants::BEAR_CHILD_CUTOFF - self.score
+  end
+
+  def votes_til_death
+    (self.votes_for - self.votes_against) - Constants::STILL_ALIVE_CUTOFF
   end
 
   def vote_against!
@@ -31,9 +39,14 @@ class Poem < ActiveRecord::Base
     save
   end
 
+  def all_children
+    children + second_children
+  end
+
   def check_for_death!
-    if self.votes_for - self.votes_against < Constants::STILL_ALIVE_CUTOFF
+    if votes_til_death <= 0
       self.alive = false
+      self.died_on = Time.now
       self.language.alert_of_death!
     end
   end
