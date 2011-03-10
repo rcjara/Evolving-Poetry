@@ -38,7 +38,7 @@ def simulate_voting
   Language.all.each do |lang|
     puts "Voting for #{lang.description}"
     1000.times do
-      poem1, poem2 = lang.poems_for_voting
+      poem1, poem2 = lang.poems_for_voting(true)
       poem1.vote_for!
       poem2.vote_against!
     end

@@ -15,7 +15,11 @@ a {
   text-decoration: none;
   font-weight: bold;
 }
-ul { list-style-type: none; }
+ul {
+  padding: 0px;
+  margin-left: 0px;
+  list-style-type: none;
+}
 div.clear {
   display: block;
   clear: both;
@@ -140,6 +144,46 @@ div.right-language {
   float: right;
 }
 div.poem { margin-bottom: 20px; }
+div.family-tree { overflow: scroll; }
+div.fam-tree-leaf {
+  float: left;
+  padding: 15px;
+  width: 270px;
+  font-size: 8.666666666666666px;
+  line-height: 10.666666666666666px;
+}
+div.fam-tree-row { min-height: 100px; }
+div.fam-tree-line-level {
+  width: 300px;
+  height: 50px;
+}
+div.fam-tree-line-container {
+  width: 300px;
+  height: 100px;
+  float: left;
+}
+.fam-tree-box { float: left; }
+div.fam-tree-unmarked {
+  float: left;
+  height: 50px;
+  width: 150px;
+}
+div.fam-tree-marked-right {
+  float: left;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #666666;
+  height: 50px;
+  width: 149px;
+}
+div.fam-tree-marked-bottom {
+  float: left;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #666666;
+  height: 49px;
+  width: 150px;
+}
 div.author-name {
   text-decoration: italic;
   margin-bottom: 10px;

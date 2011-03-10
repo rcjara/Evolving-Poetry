@@ -20,10 +20,95 @@ module PoemsHelper
       ""
     else
       links = poem.all_children.collect.with_index do |child, i|
-        link = link_to "Child #{i + 1}", poem_path(child)
-        "<li>" + link + "</li>"
+        link = link_to child.id, poem_path(child)
+
+        other_parent_link = if child.second_parent.nil?
+          " (mother)"
+        elsif child.second_parent == poem
+          " (father with " + link_to(child.parent.id, poem_path(child.parent) ) + " as the mother)"
+        else
+          " (mother with " + link_to(child.second_parent.id, poem_path(child.second_parent) ) + " as the father)"
+        end
+
+        "<li>" + link + other_parent_link + "</li>"
       end.join
       ("<ul><strong>Children:</strong>" + links + "</ul>").html_safe
     end
+  end
+
+  def family_tree(poem)
+    struct = poem.fam_tree_struct_with_lines
+    struct.collect do |line|
+      middle_text = line.collect { |elem| struct_elem(elem) }.join("\n")
+      line_width = line.length * 300;
+      %{<div class="fam-tree-row" style="width: #{line_width}px;">\n} + middle_text + clear + %{</div>}
+    end.join("\n").html_safe
+  end
+
+  def struct_elem(elem)
+    if elem.class == Poem
+      family_tree_leaf(elem)
+    elsif elem.nil?
+      line_template
+    else
+      case elem
+      when '['
+        left_edge_line
+      when ']'
+        right_edge_line
+      when 'T'
+        t_line
+      when '-'
+        horizontal_line
+      when '|'
+        vertical_line
+      end
+    end
+  end
+
+  def family_tree_leaf(poem)
+    render :partial => "poem_leaf", :locals => {:poem => poem}
+  end
+
+  def line_template(ul = nil, ur = nil, ll = nil, lr = nil)
+    ur ||= "unmarked"
+    ul ||= "unmarked"
+    lr ||= "unmarked"
+    ll ||= "unmarked"
+    html = <<-eol
+    <div class="fam-tree-line-container">
+      <div class="fam-tree-line-level">
+        <div class="fam-tree-#{ul}"></div>
+        <div class="fam-tree-#{ur}"></div>
+        #{clear}
+      </div>
+      <div class="fam-tree-line-level">
+        <div class="fam-tree-#{ll}"></div>
+        <div class="fam-tree-#{lr}"></div>
+        #{clear}
+      </div>
+    </div>
+    eol
+    html.html_safe
+  end
+
+  def left_edge_line
+    line_template("marked-right","marked-bottom","marked-right")
+  end
+
+  def right_edge_line
+    line_template("marked-bottom",nil,"marked-right")
+  end
+
+  def t_line
+    line_template("marked-bottom","marked-bottom","marked-right")
+  end
+
+  def horizontal_line
+    line_template("marked-bottom","marked-bottom")
+  end
+
+  def vertical_line
+    line_template("marked-right",nil, "marked-right")
   end
 end

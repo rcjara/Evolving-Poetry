@@ -1,27 +1,15 @@
 <div id="container">
   <div class="left-column">
-    <strong>Poem Id:</strong> <%= @poem.id %> <br />
-    <strong>Language:</strong> 
-      <%= link_to @poem.language.name, language_path(@poem.language) %> 
-      <br />
-    <strong>Born:</strong> <%= born_fmt(@poem) %> <br />
-    <strong>Died:</strong> <%= died_fmt(@poem) %> <br />
-    <strong>Votes for/against:</strong> <%= @poem.votes_for %> / <%= @poem.votes_against %> <br />
-    <% if @poem.alive? %>
-      <strong>Votes for until it bears a child:</strong> <%= @poem.votes_til_birth %><br />
-      <strong>Votes against until it dies:</strong> <%= @poem.votes_til_death %><br />
-    <% end %>
-    <% if @poem.parent %>
-      <strong>Parents:</strong> <%= link_to "Mother", poem_path(@poem.parent) %>
-      <% if @poem.second_parent %>
-        <%= link_to "Father", poem_path(@poem.parent) %>
-      <% end %>
-    <% end %>
-    <strong>Number of Children:</strong> <%= @poem.all_children.length %><br />
-    <%= children_links(@poem) %>
+    <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
   </div>
   <div class="right-column">
     <%= render @poem %>
   </div>
+  <div class="clear"></div>
+</div>
+<hr>
+<h3>Family Tree</h3>
+<div class="family-tree">
+  <%= family_tree(@poem) %>
   <div class="clear"></div>
 </div>

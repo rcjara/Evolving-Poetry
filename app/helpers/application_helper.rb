@@ -11,4 +11,8 @@ module ApplicationHelper
       array[0]
     end
   end
+
+  def clear
+    %{<div class="clear"></div>}.html_safe
+  end
 end

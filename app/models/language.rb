@@ -46,10 +46,11 @@ class Language < ActiveRecord::Base
     end
   end
 
-  def poems_for_voting
+  def poems_for_voting(rigged = false)
     possibilities = alive_poems
     max = possibilities.length
-    poem1 = poem2 = possibilities[rand(max)]
+    first_guess = rigged ? 4 : max
+    poem1 = poem2 = possibilities[first_guess]
     while poem2 == poem1
       poem2 = possibilities[rand(max)]
     end

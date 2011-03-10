@@ -1,0 +1,6 @@
+<div class="fam-tree-leaf">
+ <%= poem.full_text.html_safe %>
+ <br />
+ Born: <%= born_fmt(poem) %> | Died: <%= died_fmt(poem) %> <br />
+ <%= link_to "more info", poem_path(poem) %>
+</div>
