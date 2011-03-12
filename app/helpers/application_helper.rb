@@ -15,4 +15,8 @@ module ApplicationHelper
   def clear
     %{<div class="clear"></div>}.html_safe
   end
+
+  def date_fmt(time)
+    time.to_date.to_s(:long_ordinal)
+  end
 end

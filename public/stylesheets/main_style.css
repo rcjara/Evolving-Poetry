@@ -4,6 +4,16 @@ h1, h2, h3 {
   text-align: center;
   width: 100%;
 }
+hr.small {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+div.centered {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
 .logo-mixin, h1 {
   font-size: 20px;
   line-height: 16px;
@@ -144,13 +154,46 @@ div.right-language {
   float: right;
 }
 div.poem { margin-bottom: 20px; }
+span.new-text { background-color: #aaddaa; }
+span.deleted-text {
+  background-color: #777777;
+  text-color: #cccccc;
+}
+span.from-first-parent { background-color: #ddddaa; }
+span.from-second-parent { background-color: #aaaadd; }
+div.left-text {
+  width: 50%;
+  float: left;
+  text-align: right;
+}
+div.right-text {
+  width: 50%;
+  float: right;
+  text-align: left;
+}
 div.family-tree { overflow: scroll; }
+.fam-tree-leaf-mixin {
+  float: left;
+  padding: 15px;
+  font-size: 8.666666666666666px;
+  line-height: 10.666666666666666px;
+}
 div.fam-tree-leaf {
   float: left;
   padding: 15px;
-  width: 270px;
   font-size: 8.666666666666666px;
   line-height: 10.666666666666666px;
+  width: 270px;
+}
+div.fam-tree-leaf-self {
+  float: left;
+  padding: 15px;
+  font-size: 8.666666666666666px;
+  line-height: 10.666666666666666px;
+  width: 266px;
+  border-style: solid;
+  border-color: #333333;
+  border-width: 2px;
 }
 div.fam-tree-row { min-height: 100px; }
 div.fam-tree-line-level {

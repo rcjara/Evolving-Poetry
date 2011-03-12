@@ -123,10 +123,10 @@ class MarkovWord
     display_word = " " + display_word unless punctuation?
     display_word.upcase! if options[:shout]
 
-    display_word.insert(0, %{<span class="new_text">}) if options[:beginnewtext]
-    display_word.insert(0, %{<span class="deleted_text">}) if options[:begindeleted]
-    display_word.insert(0, %{<span class="from_first_parent">}) if options[:fromfirstparent]
-    display_word.insert(0, %{<span class="from_second_parent">}) if options[:fromsecondparent]
+    display_word.insert(0, %{<span class="new-text">}) if options[:beginnewtext]
+    display_word.insert(0, %{<span class="deleted-text">}) if options[:begindeleted]
+    display_word.insert(0, %{<span class="from-first-parent">}) if options[:fromfirstparent]
+    display_word.insert(0, %{<span class="from-second-parent">}) if options[:fromsecondparent]
 
     display_word.insert(-1, %{</span>}) if options[:endspan]
     display_word.insert(-1, %{</span>}) if options[:enddeleted]

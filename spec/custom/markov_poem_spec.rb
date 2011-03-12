@@ -14,7 +14,7 @@ describe MarkovPoem do
       end
 
       it "should display properly" do
-        @p.display.should == %{<span class="new_text"> Take this kiss</span> upon the brow!}
+        @p.display.should == %{<span class="new-text"> Take this kiss</span> upon the brow!}
       end
 
       it "should have the right programmatic text" do
@@ -50,7 +50,7 @@ describe MarkovPoem do
       end
 
       it "should display properly" do
-        @p.display.should == %{<span class="deleted_text"> Take this</span><br />\nKiss upon the brow!}
+        @p.display.should == %{<span class="deleted-text"> Take this</span><br />\nKiss upon the brow!}
       end
 
       it "should have the right programmatic text" do
@@ -103,7 +103,7 @@ describe MarkovPoem do
     end
     
     it "should have 3 lines from p1 in its display text" do
-      @new_poem.display.scan(/\<span class\=\"from_first_parent\"\>/).length.should == 3
+      @new_poem.display.scan(/\<span class\=\"from-first-parent\"\>/).length.should == 3
     end
     
     it "should have 2 lines from p2 in its programmatic text" do
@@ -111,7 +111,7 @@ describe MarkovPoem do
     end
     
     it "should have 2 lines from p2 in its display text" do
-      @new_poem.display.scan(/\<span class\=\"from_second_parent\"\>/).length.should == 2
+      @new_poem.display.scan(/\<span class\=\"from-second-parent\"\>/).length.should == 2
     end
     
   end
@@ -139,7 +139,7 @@ describe MarkovPoem do
     end
 
     it "should not contain any beginnewtext tags" do
-      @p.display.should_not =~ /\<span class\="new_text"\>/
+      @p.display.should_not =~ /\<span class\="new-text"\>/
     end
 
     it "should have 5 lines" do
@@ -153,7 +153,7 @@ describe MarkovPoem do
       end
 
       it "should include a new text tag" do
-        @p.display.should =~ /\<span class\="new_text"\>/
+        @p.display.should =~ /\<span class\="new-text"\>/
       end
 
       it "should have 6 lines" do

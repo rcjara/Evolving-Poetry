@@ -10,6 +10,7 @@
 @white: #FFFFFF;
 @dif: #181818;
 @black: #000000;
+@dark: #333;
 @main_color: #666666;
 @sub_color_1: @main_color + @dif;
 @sub_color_2: @main_color - @dif;
@@ -32,6 +33,18 @@ h1, h2, h3 {
   margin-right: auto;
   text-align: center;
   width: 100%;
+}
+
+hr.small {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.centered {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .logo-mixin {
@@ -225,21 +238,61 @@ div.poem {
   margin-bottom: @padding;
 }
 
+span.new-text {
+  background-color: #ada;
+}
+
+span.deleted-text {
+  background-color: #777;
+  text-color: #ccc;
+}
+
+span.from-first-parent {
+  background-color: #dda;
+}
+
+span.from-second-parent {
+  background-color: #aad;
+}
+
 /* Family Tree */
 @fam_tree_line_width: 300px;
 @fam_tree_line_height: 100px;
 @fam_tree_leaf_padding: 15px;
 
+div.left-text {
+  width: 50%;
+  float: left;
+  text-align: right;
+}
+
+div.right-text {
+  width: 50%;
+  float: right;
+  text-align: left;
+}
+
 div.family-tree {
   overflow: scroll;
 }
 
-div.fam-tree-leaf {
+.fam-tree-leaf-mixin {
   float: left;
   padding: @fam_tree_leaf_padding;
-  width: @fam_tree_line_width - 2 * @fam_tree_leaf_padding;
   font-size: 2 * @default_font_size / 3;
   line-height: 2 * @default_line_height / 3;
+}
+div.fam-tree-leaf {
+  .fam-tree-leaf-mixin;
+  width: @fam_tree_line_width - 2 * @fam_tree_leaf_padding;
+}
+
+div.fam-tree-leaf-self {
+  .fam-tree-leaf-mixin;
+  width: @fam_tree_line_width - 2 * @fam_tree_leaf_padding - 4px;
+  border-style: solid;
+  border-color: @dark;
+  border-width: 2px;
 }
 
 div.fam-tree-row{
@@ -294,6 +347,8 @@ div.fam-tree-marked-bottom {
   height: @fam_tree_line_height / 2 - 1;
   width: @fam_tree_line_width / 2;
 }
+
+
 /* Evolution Chamber */
 
 

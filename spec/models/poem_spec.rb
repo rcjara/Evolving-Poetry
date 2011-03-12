@@ -176,8 +176,8 @@ describe Poem do
     end
 
     describe "the poem's language" do
-      it "should have the same number of poems as before" do
-        @poem.language.alive_poems.length.should == @num_poems
+      it "should not have the same number of poems as before" do
+        @poem.language.alive_poems.length.should_not == @num_poems
       end
       
       it "should no longer include the original poem in its alive poems" do

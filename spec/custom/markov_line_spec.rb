@@ -154,7 +154,7 @@ describe MarkovLine do
     end
 
     it "should have a display with the right tags" do
-      @line.display.should =~ /^\<span class\="from_first_parent"\>.*?\<\/span\>$/
+      @line.display.should =~ /^\<span class\="from-first-parent"\>.*?\<\/span\>$/
     end
   end
   
@@ -165,7 +165,7 @@ describe MarkovLine do
     end
 
     it "should have a display with the right tags" do
-      @line.display.should =~ /^\<span class\="from_second_parent"\>.*?\<\/span\>$/
+      @line.display.should =~ /^\<span class\="from-second-parent"\>.*?\<\/span\>$/
     end
   end
   

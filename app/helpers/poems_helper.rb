@@ -1,19 +1,41 @@
 module PoemsHelper
-  def born_fmt(poem)
-    time_ago(poem.created_at)
-  end
 
-  def died_fmt(poem)
-    if poem.alive?
-      "Still Alive"
+#######################
+# Text helper methods #
+#######################
+  def born_fmt(poem, include_ago = true)
+    if include_ago
+      time_ago(poem.created_at)
     else
-      time_ago(poem.died_on)
+      date_fmt(poem.created_at)
     end
   end
 
-  def time_ago(time)
-    "#{time.to_date.to_s(:long_ordinal)} (#{time_ago_in_words(time)} ago)"
+  def died_fmt(poem, include_ago = true)
+    if poem.alive?
+      "Still Alive"
+    elsif include_ago
+      time_ago(poem.died_on)
+    else
+      date_fmt(poem.died_on)
+    end
   end
+
+  def alive_dates(poem)
+    if poem.alive?
+      "#{born_fmt(poem, false)} &ndash; present"
+    else
+      "#{born_fmt(poem, false)} &ndash; #{died_fmt(poem, false)}"
+    end.html_safe
+  end
+
+  def time_ago(time)
+    "#{date_fmt(time)} (#{time_ago_in_words(time)} ago)"
+  end
+
+#################
+# Misc. Methods #
+#################
 
   def children_links(poem)
     if poem.all_children.empty?
@@ -36,18 +58,22 @@ module PoemsHelper
     end
   end
 
+#######################
+# Family Tree Methods #
+#######################
+
   def family_tree(poem)
     struct = poem.fam_tree_struct_with_lines
     struct.collect do |line|
-      middle_text = line.collect { |elem| struct_elem(elem) }.join("\n")
+      middle_text = line.collect { |elem| struct_elem(elem, poem) }.join("\n")
       line_width = line.length * 300;
       %{<div class="fam-tree-row" style="width: #{line_width}px;">\n} + middle_text + clear + %{</div>}
     end.join("\n").html_safe
   end
 
-  def struct_elem(elem)
+  def struct_elem(elem, original_poem)
     if elem.class == Poem
-      family_tree_leaf(elem)
+      family_tree_leaf(elem, original_poem)
     elsif elem.nil?
       line_template
     else
@@ -66,9 +92,14 @@ module PoemsHelper
     end
   end
 
-  def family_tree_leaf(poem)
-    render :partial => "poem_leaf", :locals => {:poem => poem}
+  def family_tree_leaf(poem, original_poem)
+    mark_as_this_poem = poem.id == original_poem.id
+    render :partial => "poem_leaf", :locals => {:poem => poem, :mark_as_this_poem => mark_as_this_poem}
   end
+
+##############################
+# Lines for the family trees #
+##############################
 
   def line_template(ul = nil, ur = nil, ll = nil, lr = nil)
     ur ||= "unmarked"

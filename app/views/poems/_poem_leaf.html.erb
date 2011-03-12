@@ -1,6 +1,15 @@
-<div class="fam-tree-leaf">
- <%= poem.full_text.html_safe %>
- <br />
- Born: <%= born_fmt(poem) %> | Died: <%= died_fmt(poem) %> <br />
- <%= link_to "more info", poem_path(poem) %>
+<div class="<%= mark_as_this_poem ? "fam-tree-leaf-self" : "fam-tree-leaf" %>">
+  <% unless poem.alive? %>
+    <p><strong>Deceased</strong></p><br />
+  <% end %>
+  <%= poem.full_text.html_safe %>
+  <br />
+  <hr class="small">
+  <div class="centered">
+     <%= alive_dates(poem) %>
+  </div>
+  <br />
+  <p>
+    <%= link_to "more info", poem_path(poem) %>
+  </p>
 </div>

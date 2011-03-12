@@ -119,6 +119,7 @@ class MarkovLine
 
     index = possible_indices[rand(possible_indices.length)]
     orig_child = @words[index + 1]
+
     done_looking = false
     new_child = false
     attempts = 0
