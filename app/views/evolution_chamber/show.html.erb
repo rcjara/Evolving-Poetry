@@ -2,11 +2,11 @@
   <h3>Left Nameless Poem</h3>
   <%= render @poem1 %>
   <%= link_to "Select this poem", {:id => @language, :action => :vote, :vote_for => @poem1, :vote_against => @poem2}, :method => :post %>
-  | <%= link_to "details / family tree", poem_path(@poem1) %>
+  | <%= link_to "about this poem", poem_path(@poem1) %>
 </div>
 <div class="right-column">
   <h3>Right Nameless Poem</h3>
   <%= render @poem2 %>
   <%= link_to "Select this poem", {:id => @language, :action => :vote, :vote_for => @poem2, :vote_against => @poem1}, :method => :post %>
-  | <%= link_to "details / family tree", poem_path(@poem2) %>
+  | <%= link_to "about this poem", poem_path(@poem2) %>
 </div>

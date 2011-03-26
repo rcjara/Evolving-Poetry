@@ -25,7 +25,9 @@
 @header_padding: 20px;
 @padding: 20px;
 @overall_width: 80%;
+
 @minimum_height: 600px;
+@minimum_body_height: 800px;
 @minimum_width: 784px;
 
 h1, h2, h3 {
@@ -33,6 +35,10 @@ h1, h2, h3 {
   margin-right: auto;
   text-align: center;
   width: 100%;
+}
+
+h3 {
+  margin-bottom: @padding;
 }
 
 hr.small {
@@ -94,7 +100,7 @@ body {
   font-size: @default_font_size;
   line-height: @default_line_height;
   background: -webkit-gradient(linear, 0% 0%, 100% 100%, from(@sub_color_4), to(@sub_color_4), color-stop(0.5, @sub_color_2) );
-  background-color: @sub_color_4;
+  min-height: @minimum_body_height;
 }
 
 div.main-body {
