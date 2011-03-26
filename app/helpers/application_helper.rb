@@ -1,4 +1,11 @@
 module ApplicationHelper
+  def inheritence_view_setter
+    link_to_function("Enable", "nonsenseEngine.enableInheritenceView()") + 
+    " / " + 
+    link_to_function("Disable", "nonsenseEngine.disableInheritenceView()") +  
+    " inheritence view<br />".html_safe
+  end
+
   def page_title
     extra = @title ? " | " + @title : ""
     "Non-Sense Engine" + extra
