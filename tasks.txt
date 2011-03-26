@@ -1,5 +1,4 @@
 Family Trees
   Make sure that altering a line produces discernable output on a family tree
   +Make sure that text coloring only shows up on family trees
-    -make the <br>'s go inside of the span tags.
   Make family trees more compressed

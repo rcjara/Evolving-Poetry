@@ -89,7 +89,7 @@ class MarkovLine
   end
 
   def display(sentence_begin = true)
-    @words.collect do |hash| 
+    sentence = @words.collect do |hash| 
       w = hash[:word]
       a = hash[:attr]
 
@@ -98,6 +98,10 @@ class MarkovLine
 
       w.display(a, this_begin) 
     end.join.strip
+
+    span_tag = %{</span>}
+    insert_index = sentence =~ /#{span_tag}$/ ? -(span_tag.length + 1) : -1
+    sentence.insert(insert_index, %{<br />})
   end
 
   def to_prog_text

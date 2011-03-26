@@ -16,7 +16,7 @@ class MarkovPoem
   end
 
   def display
-    @lines.collect(&:display).join("<br />\n")
+    @lines.collect(&:display).join("\n")
   end
   
   def undeleted_lines

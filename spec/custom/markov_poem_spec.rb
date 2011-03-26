@@ -14,7 +14,7 @@ describe MarkovPoem do
       end
 
       it "should display properly" do
-        @p.display.should == %{<span class="new-text"> Take this kiss</span> upon the brow!}
+        @p.display.should == %{<span class="new-text"> Take this kiss</span> upon the brow!<br />}
       end
 
       it "should have the right programmatic text" do
@@ -29,7 +29,7 @@ describe MarkovPoem do
       end
 
       it "should display properly" do
-        @p.display.should == %{Take this kiss upon the brow!}
+        @p.display.should == %{Take this kiss upon the brow!<br />}
       end
 
       it "should have the right programmatic text" do
@@ -50,7 +50,7 @@ describe MarkovPoem do
       end
 
       it "should display properly" do
-        @p.display.should == %{<span class="deleted-text"> Take this</span><br />\nKiss upon the brow!}
+        @p.display.should == %{<span class="deleted-text"> Take this<br /></span>\nKiss upon the brow!<br />}
       end
 
       it "should have the right programmatic text" do
@@ -65,7 +65,7 @@ describe MarkovPoem do
       end
 
       it "should display properly" do
-        @p.display.should == %{Kiss upon the brow!}
+        @p.display.should == %{Kiss upon the brow!<br />}
       end
 
       it "should have the right programmatic text" do
@@ -128,7 +128,7 @@ describe MarkovPoem do
     end
 
     it "should display properly" do
-      @p.display.should == "Take<br />\nAnd raven!"
+      @p.display.should == "Take<br />\nAnd raven!<br />"
     end
     
   end

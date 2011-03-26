@@ -3,7 +3,7 @@ include MarkovHelper
 describe MarkovLine do
   shared_examples_for "any line" do
     it "it's display length should equal it's num_chars" do
-      @line.display.length.should == @line.num_chars
+      @line.display.length.should == @line.num_chars + %{<br />}.length
     end
     
   end
@@ -98,7 +98,7 @@ describe MarkovLine do
     end
 
     it "should display properly" do
-      @line.display.should == "Lie by POETRY primeval DISASTER measure encircles seen death watches"
+      @line.display.should == "Lie by POETRY primeval DISASTER measure encircles seen death watches<br />"
     end
     
     it "should only contain MarkovWords" do
