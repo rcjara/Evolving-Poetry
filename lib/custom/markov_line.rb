@@ -121,7 +121,7 @@ class MarkovLine
 
     orig_words = @words.dup
 
-    index = possible_indices[rand(possible_indices.length)]
+    index = possible_indices.sample
     orig_child = @words[index + 1]
 
     done_looking = false
@@ -136,7 +136,14 @@ class MarkovLine
       attempts += 1
     end
     
-    @words = orig_words unless new_child #restore original words unless the change was a good one
+    if new_child #restore original words unless the change was a good one
+      mark_index = index + 1 >= @words.length ? @words.length - 1 : index + 1
+      @words[mark_index][:attr][:beginalteredtext] = true
+      @words[-1][:attr][:endspan] = true
+    else
+      @words = orig_words 
+    end
+
     new_child
   end
 
@@ -146,7 +153,7 @@ class MarkovLine
 
     orig_words = @words.dup
     
-    index = possible_indices[rand(possible_indices.length)]
+    index = possible_indices.sample
     orig_parent = index - 1
     done_looking = false
     new_parent = false
@@ -154,13 +161,22 @@ class MarkovLine
 
     until done_looking
       @words = orig_words[index..-1]
+      start_length = @words.length
       lang.walk(@words.first[:word], self, :backward)
+      end_length = @words.length
       new_parent = @words[index - 1] != orig_parent
       done_looking = new_parent || attempts > Constants::MAX_ALTERING_ATTEMPTS
       attempts += 1
     end
+    
+    if new_parent #restore original words unless the change was a good one
+      @words[0][:attr][:beginalteredtext] = true
+      @words[end_length - start_length][:attr][:endspan] = true
+    else
+      @words = orig_words 
+    end
 
-    @words = orig_words unless new_parent
+    new_parent
   end
 
   def multiple_children_indices

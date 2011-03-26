@@ -1,4 +1,3 @@
 Family Trees
-  Make sure that altering a line produces discernable output on a family tree
   +Make sure that text coloring only shows up on family trees
   Make family trees more compressed

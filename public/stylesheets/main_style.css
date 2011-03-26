@@ -155,13 +155,6 @@ div.right-language {
   float: right;
 }
 div.poem { margin-bottom: 20px; }
-span.new-text { background-color: #aaddaa; }
-span.deleted-text {
-  background-color: #777777;
-  text-color: #cccccc;
-}
-span.from-first-parent { background-color: #ddddaa; }
-span.from-second-parent { background-color: #aaaadd; }
 div.left-text {
   width: 50%;
   float: left;

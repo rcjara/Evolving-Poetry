@@ -5,6 +5,7 @@ var nonsenseEngine = ( function() {
   return {
     enableInheritenceView: function() {
       $(".new-text").css("background-color", "#777");
+      $(".altered-text").css("background-color", "#f95");
       $(".from-first-parent").css("background-color", "#dda");
       $(".from-second-parent").css("background-color", "#aad");
       $(".deleted-text").css("display", "inline");
@@ -12,7 +13,7 @@ var nonsenseEngine = ( function() {
       $(".deleted-text").css("text-color", "#ccc");
     },
     disableInheritenceView: function() {
-      $(".new-text, .from-first-parent, .from-second-parent").css("background-color", "transparent");
+      $(".new-text, .from-first-parent, .from-second-parent, .altered-text").css("background-color", "transparent");
       $(".deleted-text").css("display", "none");
     }
   };

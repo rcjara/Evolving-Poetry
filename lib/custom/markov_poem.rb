@@ -1,7 +1,7 @@
 class MarkovPoem
   attr_reader :lines
 
-  TAGS_TO_STRIP = %w[BEGINNEWTEXT ENDSPAN FROMFIRSTPARENT FROMSECONDPARENT BEGINDELETED.*?ENDDELETED\s\S+\s?]
+  TAGS_TO_STRIP = %w[BEGINNEWTEXT BEGINALTEREDTEXT ENDSPAN FROMFIRSTPARENT FROMSECONDPARENT BEGINDELETED.*?ENDDELETED\s\S+\s?]
 
   def initialize(lines = [])
     @lines = lines
@@ -91,15 +91,15 @@ class MarkovPoem
     while self_lines.length > 0 && other_lines.length > 0
       if rand(out_of) < prob
         new_lines << self_lines.slice!(0)
-        which_tag_array << true
+        which_tag_array << true unless new_lines[-1] =~ /^BEGINDELETED.*?ENDDELETED\s\S+\s?$/
       else
         new_lines << other_lines.slice!(0)
-        which_tag_array << false
+        which_tag_array << false unless new_lines[-1] =~ /^BEGINDELETED.*?ENDDELETED\s\S+\s?$/
       end
     end
     #add any lines left to the poem
     new_lines += self_lines + other_lines
-    which_tag_array += [true] * self_lines.length + [false] * other_lines.length
+    which_tag_array += ([true] * self_lines.length) + ([false] * other_lines.length)
 
     new_poem = self.class.from_prog_text(new_lines.join(" BREAK "), lang, :strip => true)
 
