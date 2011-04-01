@@ -326,6 +326,19 @@ describe Poem do
                                                       [nil, @p8, @p9, @p10]]
           end
 
+          it "should display the right family tree structure (with lines)" do
+            @p1.display_fam_tree_struct(true).should == <<EOS
+p . . .
+[ T - ]
+p p . p
+. [ ] |
+. p p p
+. [ ] |
+. p p p
+EOS
+          end
+          
+
           it "should have the right family tree structure" do
             @p1.fam_tree_struct.should == [[@p1, nil, nil, nil],
                                            [@p2, @p3, nil, @p4],

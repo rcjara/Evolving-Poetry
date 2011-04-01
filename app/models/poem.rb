@@ -108,6 +108,26 @@ class Poem < ActiveRecord::Base
 #   -- find your children...
 #   -- make two lines, with you at top, and all your children's sub arrays in the second
 
+  def display_fam_tree_struct(with_lines)
+    array = if with_lines
+      fam_tree_struct_with_lines
+    else
+      fam_tree_struct
+    end
+
+    array.collect do |line|
+      line.collect do |item|
+        if item.nil?
+          '.'
+        elsif item.class == Poem
+          'p'
+        else
+          item
+        end
+      end.join(" ")
+    end.join("\n") + "\n"
+  end
+
   def fam_tree_struct(attr = {})
     add_lines = true if attr[:add_lines]
 
@@ -124,19 +144,22 @@ class Poem < ActiveRecord::Base
     return [[self]] if tree_children.empty?
 
     children_trees       = tree_children.collect { |p| p.sub_fam_tree(fam_members, add_lines) }
-    children_trees_array = collapse_child_trees(children_trees)
+    children_trees_array = collapse_child_trees(children_trees, add_lines)
     self_line = [self] + [nil] * (children_trees_array[0].length - 1)
 
-    if add_lines
+    final_array = if add_lines
       [self_line, lines_array(children_trees_array[0])] + children_trees_array
     else
       [self_line] + children_trees_array
     end
+
+    compress_array(final_array, add_lines)
   end
 
-  def collapse_child_trees(array_of_arrays)
+  def collapse_child_trees(array_of_arrays, add_lines)
     max_depth = array_of_arrays.inject(0){|depth, array| array.length > depth ? array.length : depth }
     final_array = max_depth.times.collect{ [] }
+
     array_of_arrays.each do |array|
       this_length = array[0].length
       (0...max_depth).each do |i|
@@ -146,6 +169,54 @@ class Poem < ActiveRecord::Base
     end
     
     final_array
+  end
+
+  def compress_array(array, add_lines)
+    return array if array.length == 1 || array[0].length <= 2
+    max_depth = array.length
+    
+    step_by       = add_lines ? 2 : 1
+    line_to_check = step_by
+
+    return array if max_depth < line_to_check + step_by
+    
+    h_position = array[0].length - 2
+
+    while h_position >= 0
+      should_remove = array[line_to_check][h_position].nil? && 
+        array[line_to_check + step_by][h_position + 1].nil?
+      v_position = line_to_check + 2 * step_by
+      while should_remove && v_position < max_depth
+        should_remove &&= array[v_position][h_position].nil?
+        v_position += step_by
+      end
+      
+      if should_remove
+        array[line_to_check].slice(h_position)
+        if step_by == 2
+          array[0].slice!(h_position)
+          array[1].slice!(h_position)
+          array[line_to_check].slice!(h_position)
+          array[line_to_check + 1].slice!(h_position + 1)
+          array[line_to_check + 2].slice!(h_position + 1)
+          array[line_to_check + 3].slice!(h_position) if array[line_to_check + 3]
+          v_position = line_to_check + 4
+        else
+          array[0].slice!(h_position)
+          array[line_to_check].slice!(h_position)
+          array[line_to_check + 1].slice!(h_position + 1)
+          v_position = line_to_check + 2
+        end
+
+        while should_remove && v_position < max_depth
+          array[v_position].slice!(h_position)
+          v_position += 1
+        end
+      end
+      h_position -= 1
+    end
+
+    array
   end
 
   def family_members

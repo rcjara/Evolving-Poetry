@@ -3,8 +3,12 @@
 //
 var nonsenseEngine = ( function() {
   return {
+
+  /* For the inheritence views:
+   * make it so that they disable / enable their buttons as well */
+   
     enableInheritenceView: function() {
-      $(".new-text").css("background-color", "#777");
+      $(".new-text").css("background-color", "#9f9");
       $(".altered-text").css("background-color", "#f95");
       $(".from-first-parent").css("background-color", "#dda");
       $(".from-second-parent").css("background-color", "#aad");
