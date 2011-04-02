@@ -23,5 +23,6 @@ group :test do
   gem 'rspec'
   gem 'webrat'
   gem 'factory_girl_rails'
+  gem 'spork', '~> 0.9.0.rc'
 end
 gem "mocha", :group => :test
