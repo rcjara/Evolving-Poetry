@@ -109,23 +109,13 @@ class Poem < ActiveRecord::Base
 #   -- make two lines, with you at top, and all your children's sub arrays in the second
 
   def display_fam_tree_struct(with_lines)
-    array = if with_lines
+    tree = if with_lines
       fam_tree_struct_with_lines
     else
       fam_tree_struct
     end
 
-    array.collect do |line|
-      line.collect do |item|
-        if item.nil?
-          '.'
-        elsif item.class == Poem
-          'p'
-        else
-          item
-        end
-      end.join(" ")
-    end.join("\n") + "\n"
+    FamilyTreeCompressor::string(tree)
   end
 
   def fam_tree_struct(attr = {})
@@ -153,7 +143,11 @@ class Poem < ActiveRecord::Base
       [self_line] + children_trees_array
     end
 
-    compress_array(final_array, add_lines)
+    if add_lines
+      FamilyTreeCompressor::compress(final_array)
+    else
+      final_array
+    end
   end
 
   def collapse_child_trees(array_of_arrays, add_lines)
@@ -169,54 +163,6 @@ class Poem < ActiveRecord::Base
     end
     
     final_array
-  end
-
-  def compress_array(array, add_lines)
-    return array if array.length == 1 || array[0].length <= 2
-    max_depth = array.length
-    
-    step_by       = add_lines ? 2 : 1
-    line_to_check = step_by
-
-    return array if max_depth < line_to_check + step_by
-    
-    h_position = array[0].length - 2
-
-    while h_position >= 0
-      should_remove = array[line_to_check][h_position].nil? && 
-        array[line_to_check + step_by][h_position + 1].nil?
-      v_position = line_to_check + 2 * step_by
-      while should_remove && v_position < max_depth
-        should_remove &&= array[v_position][h_position].nil?
-        v_position += step_by
-      end
-      
-      if should_remove
-        array[line_to_check].slice(h_position)
-        if step_by == 2
-          array[0].slice!(h_position)
-          array[1].slice!(h_position)
-          array[line_to_check].slice!(h_position)
-          array[line_to_check + 1].slice!(h_position + 1)
-          array[line_to_check + 2].slice!(h_position + 1)
-          array[line_to_check + 3].slice!(h_position) if array[line_to_check + 3]
-          v_position = line_to_check + 4
-        else
-          array[0].slice!(h_position)
-          array[line_to_check].slice!(h_position)
-          array[line_to_check + 1].slice!(h_position + 1)
-          v_position = line_to_check + 2
-        end
-
-        while should_remove && v_position < max_depth
-          array[v_position].slice!(h_position)
-          v_position += 1
-        end
-      end
-      h_position -= 1
-    end
-
-    array
   end
 
   def family_members
