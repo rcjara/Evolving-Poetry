@@ -25,7 +25,16 @@ module FamilyTreeCompressor
       new_tree = slide(new_tree, region, edges, slide_length)
     end
 
-    new_tree
+    resquare(new_tree)
+  end
+
+  def self.resquare(tree)
+    width = tree.inject(tree[0].length) do |max, line| 
+      max > line.length ? max : line.length
+    end
+    tree.collect do |line|
+      line + [nil] * (width - line.length)
+    end
   end
 
   def self.slide(tree, region, edges, slide_length)
@@ -65,9 +74,16 @@ module FamilyTreeCompressor
       # relations)
     regions = []
     r_start = r_end = nil
+    last_index = family_tree[2].length - 1
     family_tree[2].each_with_index do |cell, i|
-      if cell.nil?
+      if cell.nil? && i < last_index
         r_start = i if r_start.nil?
+      elsif i == last_index && cell.nil?
+        regions << if r_start
+          [r_start, last_index]
+        else
+          [last_index, last_index]
+        end
       else
         r_end = i - 1
         regions << [r_start, r_end] if r_start && r_end
@@ -80,12 +96,13 @@ module FamilyTreeCompressor
   end
 
   def self.edges_for_index(family_tree, h_index)
-    family_tree[4..-1].collect do |line|
-      left  = h_index
-      right = h_index + 1
-      left  -= 1 while line[left].nil?  && left > 0 
-      right += 1 while line[right].nil? && right < line.length
-      [left, right]
+    family_tree[4..-1].select.with_index{|l, i| i % 2 == 0 }
+      .collect do |line|
+        left  = h_index
+        right = h_index + 1
+        left  -= 1 while line[left].nil?  && left > 0 
+        right += 1 while line[right].nil? && right < 2 * line.length
+        [left, right]
     end
   end
 

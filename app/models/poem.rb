@@ -12,6 +12,10 @@ class Poem < ActiveRecord::Base
   has_many :second_children, :class_name => 'Poem', 
     :foreign_key => :second_parent_id
 
+  def inspect
+    "<Poem: #{self.id}>"
+  end
+
   def vote_for!
     language.add_vote!
     self.votes_for += 1

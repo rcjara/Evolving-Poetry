@@ -64,11 +64,11 @@ EOS
     end
 
     it "should be able to get the right edges for the blank region" do
-      FamilyTreeCompressor.edges_for_index(@tree, 1).should == [[1, 3]]
+      FamilyTreeCompressor.edges_for_index(@tree, 1).should == [[1, 6]]
     end
     
     it "should be able to slide properly" do
-      FamilyTreeCompressor.slide(@tree, [1, 1], [[1, 3]], 1).should ==
+      FamilyTreeCompressor.slide(@tree, [1, 1], [[1, 6]], 1).should ==
         [[@p1, nil],
          ['[', ']'],
          [@p2, @p3],
@@ -77,7 +77,7 @@ EOS
     end
     
     it "should be able to slide (as string)" do
-      FamilyTreeCompressor.string(FamilyTreeCompressor.slide(@tree, [1, 1], [[1, 3]], 1)).should == <<EOS
+      FamilyTreeCompressor.string(FamilyTreeCompressor.slide(@tree, [1, 1], [[1, 6]], 1)).should == <<EOS
 p .
 [ ]
 p p
@@ -162,7 +162,7 @@ EOS
 
     it "should be able to get the right edges for index 5" do
       FamilyTreeCompressor.edges_for_index(@tree, 6).should == 
-        [[6, 8]]
+        [[6, 16]]
     end
     
   end
@@ -210,54 +210,99 @@ EOS
     describe "after adding another lines" do
       before(:each) do
         @tree = [
-          [@p1, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil],
-          ['[', '-', '-', '-', '-', 'T', 'T', 'T', ']', nil, nil],
-          [@p2, nil, nil, nil, nil, @p2, @p2, @p2, @p2, nil, nil],
-          ['[', '-', '-', '-', ']', nil, nil, nil, '[', '-', ']'],
-          [@p3, @p3, @p3, @p3, @p3, nil, nil, nil, @p4, @p4, @p4],
-          [nil, nil, nil, nil, '|', nil, nil, nil, '|', nil, nil],
-          [nil, nil, nil, nil, @p1, nil, nil, nil, @p1, nil, nil]]
+          [@p1, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil],
+          ['[', '-', '-', '-', '-', '-', 'T', 'T', 'T', ']', nil, nil],
+          [@p2, nil, nil, nil, nil, nil, @p2, @p2, @p2, @p2, nil, nil],
+          ['[', '-', '-', '-', ']', nil, nil, nil, nil, '[', '-', ']'],
+          [@p3, @p3, @p3, @p3, @p3, nil, nil, nil, nil, @p4, @p4, @p4],
+          [nil, nil, nil, nil, '[', ']', nil, nil, nil, '|', nil, nil],
+          [nil, nil, nil, nil, @p1, @p1, nil, nil, nil, @p1, nil, nil]]
         @ans = FamilyTreeCompressor.compress(@tree)
       end
       
       it "should be able to display properly as a string" do
         FamilyTreeCompressor.string(@tree).should == <<EOS
-p . . . . . . . . . .
-[ - - - - T T T ] . .
-p . . . . p p p p . .
-[ - - - ] . . . [ - ]
-p p p p p . . . p p p
-. . . . | . . . | . .
-. . . . p . . . p . .
+p . . . . . . . . . . .
+[ - - - - - T T T ] . .
+p . . . . . p p p p . .
+[ - - - ] . . . . [ - ]
+p p p p p . . . . p p p
+. . . . [ ] . . . | . .
+. . . . p p . . . p . .
 EOS
       end
 
+      it "should have the right blank regions" do
+        FamilyTreeCompressor.identify_blank_regions(@tree).should == 
+          [[1, 5], [10, 11]]
+      end
+
+      it "should have the right edges for the first region" do
+        FamilyTreeCompressor.edges_for_index(@tree, 5).should ==
+          [[4, 9], [5, 9]]
+      end
+      
+      
+
       it "should be able to display the right answer" do
         FamilyTreeCompressor.string(@ans).should == <<EOS
-p . . . . . . .
-[ - T T T ] . .
-p . p p p p . .
-[ - - - ] [ - ]
-p p p p p p p p
-. . . . | | . .
-. . . . p p . .
+p . . . . . . . .
+[ - - T T T ] . .
+p . . p p p p . .
+[ - - - ] . [ - ]
+p p p p p . p p p
+. . . . [ ] | . .
+. . . . p p p . .
 EOS
       end
 
       it "should have the right answer" do
         @ans.should == [
-          [@p1, nil, nil, nil, nil, nil, nil, nil],
-          ['[', '-', 'T', 'T', 'T', ']', nil, nil],
-          [@p2, nil, @p2, @p2, @p2, @p2, nil, nil],
-          ['[', '-', '-', '-', ']', '[', '-', ']'],
-          [@p3, @p3, @p3, @p3, @p3, @p4, @p4, @p4],
-          [nil, nil, nil, nil, '|', '|', nil, nil],
-          [nil, nil, nil, nil, @p1, @p1, nil, nil]]
+          [@p1, nil, nil, nil, nil, nil, nil, nil, nil],
+          ['[', '-', '-', 'T', 'T', 'T', ']', nil, nil],
+          [@p2, nil, nil, @p2, @p2, @p2, @p2, nil, nil],
+          ['[', '-', '-', '-', ']', nil, '[', '-', ']'],
+          [@p3, @p3, @p3, @p3, @p3, nil, @p4, @p4, @p4],
+          [nil, nil, nil, nil, '[', ']', '|', nil, nil],
+          [nil, nil, nil, nil, @p1, @p1, @p1, nil, nil]]
       end
       
     end
   end
-  
+
+  describe "a tree where there are more 3rd generation poems than 2nd" do
+    before(:each) do
+      @tree = [
+          [@p1, nil, nil, nil, nil, nil, nil],
+          ['[', '-', '-', '-', '-', 'T', ']'],
+          [@p2, nil, nil, nil, nil, @p2, @p2],
+          ['[', 'T', 'T', 'T', ']', nil, nil],
+          [@p3, @p3, @p3, @p3, @p3, nil, nil]]
+      @ans = FamilyTreeCompressor.compress(@tree)
+    end
+    
+    it "should display properly as a string" do
+      FamilyTreeCompressor.string(@tree).should == <<EOS
+p . . . . . .
+[ - - - - T ]
+p . . . . p p
+[ T T T ] . .
+p p p p p . .
+EOS
+    end
+    
+    it "should be able to display the right answer" do
+      FamilyTreeCompressor.string(@ans).should == <<EOS
+p . . . .
+[ T ] . .
+p p p . .
+[ T T T ]
+p p p p p
+EOS
+    end
+    
+    
+  end
   
 end
 
