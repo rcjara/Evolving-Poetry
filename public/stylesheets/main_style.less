@@ -7,10 +7,11 @@
  */
 
 /* Colors */
-@white: #FFFFFF;
+@white: #FCFCFC;
 @dif: #181818;
 @black: #000000;
 @dark: #333;
+@text_color: #444;
 @main_color: #666666;
 @sub_color_1: @main_color + @dif;
 @sub_color_2: @main_color - @dif;
@@ -68,6 +69,18 @@ h1 {
 a {
   text-decoration: none;
   font-weight: bold;
+}
+
+a, a:active, a:visited {
+  color: #6078a0;
+}
+
+a:hover {
+  color: #036; 
+}
+
+a.disabled-link {
+  color: #222;
 }
 
 ul {

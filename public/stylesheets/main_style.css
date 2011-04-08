@@ -26,6 +26,11 @@ a {
   text-decoration: none;
   font-weight: bold;
 }
+a { color: #6078a0; }
+a:active { color: #6078a0; }
+a:visited { color: #6078a0; }
+a:hover { color: #003366; }
+a.disabled-link { color: #222222; }
 ul {
   padding: 0px;
   margin-left: 0px;
@@ -36,8 +41,8 @@ div.clear {
   clear: both;
 }
 .top_bottom_gradient {
-  background: -moz-linear-gradient(top, #ffffff, #666666);
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#666666));
+  background: -moz-linear-gradient(top, #fcfcfc, #666666);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#666666));
 }
 body {
   font-size: 13px;
@@ -50,7 +55,7 @@ div.main-body {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   width: 80%;
-  background-color: #ffffff;
+  background-color: #fcfcfc;
   min-height: 600px;
   min-width: 784px;
   border-width: 1px;
@@ -80,9 +85,9 @@ header {
   height: 60px;
   position: fixed;
   top: 0px;
-  background-color: #ffffff;
-  background: -moz-linear-gradient(top, #ffffff, #666666);
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#666666));
+  background-color: #fcfcfc;
+  background: -moz-linear-gradient(top, #fcfcfc, #666666);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#666666));
   border-width: 1px;
   border-style: none none solid;
   border-color: #222222;

@@ -1,5 +1,5 @@
 // Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+// This file is automatically included by javascript-include-tag :defaults
 //
 var nonsenseEngine = ( function() {
   return {
@@ -15,10 +15,25 @@ var nonsenseEngine = ( function() {
       $(".deleted-text").css("display", "inline");
       $(".deleted-text").css("background-color", "#777");
       $(".deleted-text").css("text-color", "#ccc");
+
+      $('#inheritence-enabler').addClass("disabled-link")
+      $('#inheritence-enabler').click( function(){ return true; } );
+
+      $('#inheritence-disabler').removeClass("disabled-link")
+      $('#inheritence-disabler').click( function(){ nonsenseEngine.disableInheritenceView(); } );
+      return false;
     },
     disableInheritenceView: function() {
       $(".new-text, .from-first-parent, .from-second-parent, .altered-text").css("background-color", "transparent");
       $(".deleted-text").css("display", "none");
+
+
+      $('#inheritence-disabler').addClass("disabled-link")
+      $('#inheritence-disabler').click( function(){ return true; } );
+
+      $('#inheritence-enabler').removeClass("disabled-link")
+      $('#inheritence-enabler').click( function(){ nonsenseEngine.enableInheritenceView(); } );
+      return false;
     }
   };
 })();

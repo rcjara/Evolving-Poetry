@@ -1,8 +1,12 @@
 module ApplicationHelper
+  def enable_inheretence_on_load
+    javascript_tag "$(document).ready( function() { nonsenseEngine.enableInheritenceView();})"
+  end
+
   def inheritence_view_setter
-    link_to_function("Enable", "nonsenseEngine.enableInheritenceView()") + 
+    link_to_function("Enable", "nonsenseEngine.enableInheritenceView()", id: 'inheritence-enabler') + 
     " / " + 
-    link_to_function("Disable", "nonsenseEngine.disableInheritenceView()") +  
+    link_to_function("Disable", "", id: 'inheritence-disabler', class: 'disabled-link') +  
     " inheritence view<br />".html_safe
   end
 
