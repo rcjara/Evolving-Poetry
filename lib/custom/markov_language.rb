@@ -56,15 +56,15 @@ class MarkovLanguage
     orig_length = line.length
     current_word = orig_word
 
-    get_command, add_command, remove_command = if direction == :forward
-      [:get_random_child, :add_word, :remove_last_word]
+    get_command, add_command, remove_command, terminate_command = if direction == :forward
+      [:get_random_child, :add_word, :remove_last_word, :sentence_end?]
     else
-      [:get_random_parent, :push_word, :remove_first_word]
+      [:get_random_parent, :push_word, :remove_first_word, :sentence_begin?]
     end
 
     while current_word = @words[current_word.send(get_command)]
       line.send(add_command, current_word)
-      break if line.num_chars > @limit
+      break if line.num_chars > @limit || current_word.send(terminate_command)
     end
     
     while line.num_chars > @limit

@@ -1,4 +1,4 @@
-class Constants
+module Constants
   STILL_ALIVE_CUTOFF = -3
   BEAR_CHILD_CUTOFF = 7
 
@@ -6,7 +6,7 @@ class Constants
   MUTATE_ODDS = 2
   MAX_MUTATIONS = 4
 
-  MAX_NUM_CHARS = 120
+  MAX_NUM_CHARS = 100
 
   MAX_ALTERING_ATTEMPTS = 20
   MAX_WALK_ATTEMPTS = 20

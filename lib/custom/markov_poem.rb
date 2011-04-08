@@ -91,10 +91,10 @@ class MarkovPoem
     while self_lines.length > 0 && other_lines.length > 0
       if rand(out_of) < prob
         new_lines << self_lines.slice!(0)
-        which_tag_array << true unless new_lines[-1] =~ /^BEGINDELETED.*?ENDDELETED\s\S+\s?$/
+        which_tag_array << true 
       else
         new_lines << other_lines.slice!(0)
-        which_tag_array << false unless new_lines[-1] =~ /^BEGINDELETED.*?ENDDELETED\s\S+\s?$/
+        which_tag_array << false
       end
     end
     #add any lines left to the poem
@@ -115,10 +115,15 @@ class MarkovPoem
     new_poem
   end
 
-  def half_lines
-    indices = (0...length).to_a.shuffle[0...(length / 2)].sort
-    prog_lines = to_prog_text.split(/ BREAK /)
-    indices.collect{ |i| prog_lines[i] }
+  def half_lines(include_deleted = false)
+    potential_lines = if include_deleted 
+      @lines
+    else
+      @lines.select{ |l| !l.deleted? }
+    end
+
+    indices = (0...potential_lines.length).to_a.sample(length / 2).sort
+    indices.collect{ |i| potential_lines[i].to_prog_text }
   end
 
 

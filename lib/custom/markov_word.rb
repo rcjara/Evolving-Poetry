@@ -2,7 +2,7 @@ class MarkovWord
   attr_reader :identifier, :count, :parents_count, :children_count, :shout_count
   
   PUNCTUATION_REGEX = /[\.\,\:\;\!\?]/
-  SENTENCE_END_REGEX = /\.\s|\?\s|\!\s/
+  SENTENCE_END_REGEX = /^\.|^\?|^\!/
   
   def initialize(ident, parent, sentence_begin = false)
     @identifier = MarkovWord.downcase(ident)
@@ -162,8 +162,8 @@ class MarkovWord
     
     def is_sentence_end_test?(word)
       word = word.to_s
-      return false unless word.scan(SENTENCE_END_REGEX).length > 0
-      return false unless word.scan(/\.\.+/).length == 0  #this is for ellipses, e.g. "...."
+      return false unless word =~ SENTENCE_END_REGEX 
+      return false if word =~ /\.\.+/  #this is for ellipses, e.g. "...."
       true
     end
 

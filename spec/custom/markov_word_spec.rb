@@ -240,7 +240,8 @@ describe MarkovWord do
     
     context "on creating punctuation words" do
       before(:each) do
-        @words = [". ","! ","? ",".","!","?",",",":",";","...."].collect{ |word| MarkovWord.new(word, :begin) }
+        @words = [".", "!", "?", "zaps.", "pow!", 
+          "fun?", ",", ":", ";", "...."].collect{ |word| MarkovWord.new(word,  :begin) }
       end
       
       it "each word should be punctuation" do
@@ -248,11 +249,11 @@ describe MarkovWord do
       end
       
       it "the first three words should be sentence endings" do
-        @words[0..2].each { |word| word.sentence_end?.should == true }
+        @words[0..2].each { |word| word.sentence_end?.should be_true }
       end
       
       it "the last six words should not be sentence endings" do
-        @words[-7..-1].each { |word| word.sentence_end?.should == false }
+        @words[-7..-1].each { |word| word.sentence_end?.should be_false }
       end
     end
     

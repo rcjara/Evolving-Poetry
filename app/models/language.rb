@@ -101,6 +101,7 @@ class Language < ActiveRecord::Base
       author.works.each do |work|
         text = work.content.gsub(/\n/, " ")
         text.gsub!(/"/, " ")
+        text.gsub!(/\s'|'\s/, " ")
         text.gsub!(/[\[\]\(\)\{\}]/, "")
         @@languages[name].add_snippet(text) 
       end
