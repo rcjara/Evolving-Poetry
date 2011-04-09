@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(function(){
-        $("div.top-poems-<%= language.id %>").carousel({
+        $("#top-poems-<%= language.id %>").carousel({
           effect:    'fade',
           animSpeed: 'slow',
           direction: 'vertical'
@@ -17,8 +17,8 @@
   </div>
   <div class="right-language">
     <h3>Top Poems</h3>
-    <div class="top-poems-<%= language.id %>">
-      <ul>
+    <div id="top-poems-<%= language.id %>">
+      <ul class="carousel-poem-container">
         <% language.top_5.each do |poem| %>
             <li> <%= render poem %> </li>
         <% end %>
