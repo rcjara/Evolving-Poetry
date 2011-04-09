@@ -35,11 +35,11 @@ h1, h2, h3 {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+  margin-bottom: @padding;
   width: 100%;
 }
 
 h3 {
-  margin-bottom: @padding;
 }
 
 hr.small {
@@ -129,6 +129,7 @@ div.main-body {
   margin-bottom: 50px;
   margin-left: auto;
   margin-right: auto;
+  z-index: 10;
 }
 
 div.margin-box {
@@ -234,11 +235,13 @@ div.home-links li {
  */
 
 div.language {
+  .rounded-corners;
   border-style: solid;
   display: block;
   padding: 5px;
-  border-color: #000;
-  border-width: 5px;
+  border-color: @text_color;
+  border-width: 1px;
+  min-height: 250px;
   margin-top: 25px;
 }
 
@@ -250,11 +253,13 @@ div.left-language {
 div.right-language {
   width: 50%;
   float: right;
+  z-index: 1;
 }
 
 /* Poem */
 div.poem {
   margin-bottom: @padding;
+  z-index: 2;
 }
 
 
