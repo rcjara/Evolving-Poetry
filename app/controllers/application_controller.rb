@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  helper_method :current_user_session, :current_user, :signed_in? 
+  helper_method :current_user_session, :current_user, :signed_in?
 
   def signed_in?
     current_user
@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   def admin_user
     redirect_to(root_path) unless current_user.admin?
   end
- 
+
   def require_no_user
     logger.debug "ApplicationController::require_no_user"
     if current_user

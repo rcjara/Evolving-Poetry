@@ -36,6 +36,9 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  require 'simplecov'
+  SimpleCov.start 'rails'
+  SimpleCov.coverage_dir 'coverage'
   # This code will be run each time you run your specs.
 
 end
@@ -108,7 +111,7 @@ def work_create(author)
 end
 
 def author_create
- Author.create!(:first_name => "Edgar", :last_name => "Poe", :full_name => "Edgar Allan Poe", :visible => true) 
+ Author.create!(:first_name => "Edgar", :last_name => "Poe", :full_name => "Edgar Allan Poe", :visible => true)
 end
 
 def author_work_language_combo
@@ -118,4 +121,4 @@ def author_work_language_combo
   language.add_author! author
   [author, work, language]
 end
-  
+

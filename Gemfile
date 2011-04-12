@@ -25,4 +25,6 @@ group :test do
   gem 'factory_girl_rails'
   gem 'spork', '~> 0.9.0.rc'
 end
+
 gem "mocha", :group => :test
+gem 'simplecov', '>= 0.4.2', :require => false, :group => :test

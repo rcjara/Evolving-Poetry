@@ -1,8 +1,8 @@
 class WorksController < ApplicationController
   def show
-    @title = @work.title
     @work = Work.find(params[:id])
-    raise ActiveRecord::RecordNotFound unless @work.visible
+    @title = @work.title
+    raise ActiveRecord::RecordNotFound unless @work.author_visible
 
     respond_to do |format|
         format.html # show.html.erb
