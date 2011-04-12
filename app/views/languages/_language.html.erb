@@ -3,7 +3,9 @@
         $("#top-poems-<%= language.id %>").carousel({
           effect:    'fade',
           animSpeed: 'slow',
-          direction: 'vertical'
+          direction: 'vertical',
+          nextBtn:   '#carousel-next-<%= language.id %>',
+          prevBtn:   '#carousel-prev-<%= language.id %>'
         });
     });
 </script>
@@ -17,6 +19,8 @@
   </div>
   <div class="right-language">
     <h3>Top Poems</h3>
+    <span id="carousel-next-<%= language.id %>">Next</span>
+    <span id="carousel-prev-<%= language.id %>">Prev</span>
     <div id="top-poems-<%= language.id %>">
       <ul class="carousel-poem-container">
         <% language.top_5.each do |poem| %>

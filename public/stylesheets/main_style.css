@@ -54,7 +54,7 @@ div.main-body {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  width: 80%;
+  width: 1000px;
   background-color: #fcfcfc;
   min-height: 600px;
   min-width: 784px;
@@ -94,7 +94,7 @@ header {
   border-color: #222222;
 }
 header div.centered {
-  width: 80%;
+  width: 1000px;
   padding-top: 20px;
   padding-bottom: 20px;
   margin-left: auto;
@@ -124,7 +124,7 @@ div.right-column {
   float: right;
 }
 div.main-body {
-  width: 80%;
+  width: 1000px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -150,11 +150,24 @@ div.language {
   -moz-border-radius: 5px;
   border-style: solid;
   display: block;
-  padding: 5px;
+  padding: 20px;
   border-color: #444444;
+  background-color: #eeeeee;
   border-width: 1px;
   min-height: 250px;
   margin-top: 25px;
+}
+div.left-languages-column {
+  width: 420px;
+  padding: 20px;
+  height: 100px;
+  float: left;
+}
+div.right-languages-column {
+  width: 420px;
+  float: right;
+  height: 100px;
+  overflow-y: auto;
 }
 div.left-language {
   width: 50%;
@@ -179,7 +192,7 @@ div.right-text {
   float: right;
   text-align: left;
 }
-div.family-tree { overflow: scroll; }
+div.family-tree { overflow: auto; }
 .fam-tree-leaf-mixin {
   float: left;
   padding: 15px;
