@@ -5,3 +5,4 @@ tmp/**/*
 *.sw*
 .DS_Store
 rails_best_practices_output.html
+coverage/*
