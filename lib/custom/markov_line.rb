@@ -63,9 +63,9 @@ class MarkovLine
   def remove_last_word
     return nil unless @words.length > 1
     removed = @words.pop
-    
-    #question, do I remove the attr from the display?  
-    #Right now this could only make more characters than it should remove, 
+
+    #question, do I remove the attr from the display?
+    #Right now this could only make more characters than it should remove,
     #but in the future, I might have attr for which this makes sense
     @num_chars -= removed[:word].display(removed[:attr]).length
 
@@ -78,9 +78,9 @@ class MarkovLine
   def remove_first_word
     return nil unless @words.length > 1
     removed = @words.slice!(0)
-    
-    #question, do I remove the attr from the display?  
-    #Right now this could only make more characters than it should remove, 
+
+    #question, do I remove the attr from the display?
+    #Right now this could only make more characters than it should remove,
     #but in the future, I might have attr for which this makes sense
     @num_chars -= removed[:word].display(removed[:attr]).length
 
@@ -89,14 +89,14 @@ class MarkovLine
   end
 
   def display(sentence_begin = true)
-    sentence = @words.collect do |hash| 
+    sentence = @words.collect do |hash|
       w = hash[:word]
       a = hash[:attr]
 
-      this_begin = sentence_begin  
+      this_begin = sentence_begin
       sentence_begin = w.sentence_end?
 
-      w.display(a, this_begin) 
+      w.display(a, this_begin)
     end.join.strip
 
     span_tag = %{</span>}
@@ -105,7 +105,7 @@ class MarkovLine
   end
 
   def to_prog_text
-    @words.collect do |h| 
+    @words.collect do |h|
       key_words = ""
       h[:attr].each_pair do |k, val|
         key_words << k.to_s.upcase + " " if val
@@ -128,20 +128,20 @@ class MarkovLine
     new_child = false
     attempts = 0
 
-    until done_looking 
+    until done_looking
       @words = orig_words[0..index]
       lang.walk(@words.last[:word], self, :forward)
       new_child = @words[index + 1] != orig_child
       done_looking =  new_child || attempts > Constants::MAX_ALTERING_ATTEMPTS
       attempts += 1
     end
-    
+
     if new_child #restore original words unless the change was a good one
       mark_index = index + 1 >= @words.length ? @words.length - 1 : index + 1
       @words[mark_index][:attr][:beginalteredtext] = true
       @words[-1][:attr][:endspan] = true
     else
-      @words = orig_words 
+      @words = orig_words
     end
 
     new_child
@@ -152,7 +152,7 @@ class MarkovLine
     return false if possible_indices.empty?
 
     orig_words = @words.dup
-    
+
     index = possible_indices.sample
     orig_parent = index - 1
     done_looking = false
@@ -168,12 +168,12 @@ class MarkovLine
       done_looking = new_parent || attempts > Constants::MAX_ALTERING_ATTEMPTS
       attempts += 1
     end
-    
+
     if new_parent #restore original words unless the change was a good one
       @words[0][:attr][:beginalteredtext] = true
       @words[end_length - start_length][:attr][:endspan] = true
     else
-      @words = orig_words 
+      @words = orig_words
     end
 
     new_parent
@@ -205,7 +205,7 @@ class MarkovLine
       else
         mark_word = lang.fetch_word(word)
         raise "Word not found: '#{word}'" unless mark_word
-        line.add_word_hash :word => lang.fetch_word(word), :attr => attr 
+        line.add_word_hash :word => lang.fetch_word(word), :attr => attr
         attr = {}
       end
     end

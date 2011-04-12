@@ -1,8 +1,8 @@
 class Language < ActiveRecord::Base
   include LanguagesHelper
 
-  attr_accessible :name, :total_votes, :max_poems, :created_at, 
-    :updated_at, :active, :description, :min_lines, :max_lines, 
+  attr_accessible :name, :total_votes, :max_poems, :created_at,
+    :updated_at, :active, :description, :min_lines, :max_lines,
     :cur_family
 
   has_many :auth_lang_relations, :dependent => :destroy
@@ -85,7 +85,7 @@ class Language < ActiveRecord::Base
   def markov
     @@languages ||= {}
     return @@languages[name] if @@languages[name]
-    
+
     reload_language
     @@languages[name]
   end
@@ -103,12 +103,12 @@ class Language < ActiveRecord::Base
         text.gsub!(/"/, " ")
         text.gsub!(/\s'|'\s/, " ")
         text.gsub!(/[\[\]\(\)\{\}]/, "")
-        @@languages[name].add_snippet(text) 
+        @@languages[name].add_snippet(text)
       end
     end
   end
 
-  private 
+  private
 
 
 end

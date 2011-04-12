@@ -1,15 +1,15 @@
 class Poem < ActiveRecord::Base
-  attr_accessible :full_text, :programmatic_text, :language_id, :votes_for, 
-    :votes_against, :score, :alive, :died_on, :num_children, :family, 
+  attr_accessible :full_text, :programmatic_text, :language_id, :votes_for,
+    :votes_against, :score, :alive, :died_on, :num_children, :family,
     :second_family, :second_parent_id
   belongs_to :language
-  belongs_to :parent, :class_name => 'Poem', 
+  belongs_to :parent, :class_name => 'Poem',
     :foreign_key => :parent_id
-  belongs_to :second_parent, :class_name => 'Poem', 
+  belongs_to :second_parent, :class_name => 'Poem',
     :foreign_key => :second_parent_id
-  has_many :children, :class_name => 'Poem', 
+  has_many :children, :class_name => 'Poem',
     :foreign_key => :parent_id
-  has_many :second_children, :class_name => 'Poem', 
+  has_many :second_children, :class_name => 'Poem',
     :foreign_key => :second_parent_id
 
   def inspect
@@ -54,7 +54,7 @@ class Poem < ActiveRecord::Base
       self.language.alert_of_death!
     end
   end
-  
+
   def bear_child
     self.score = 0
     self.save
@@ -84,10 +84,10 @@ class Poem < ActiveRecord::Base
 
   def sexually_reproduce_with!(other_poem)
     new_markov_poem = markov_form.sexually_reproduce_with(other_poem.markov_form, self.language.markov)
-    new_poem = self.children.build :family => self.family, 
+    new_poem = self.children.build :family => self.family,
       :language_id => self.language_id,
       :second_family => other_poem.family,
-      :full_text => new_markov_poem.display, 
+      :full_text => new_markov_poem.display,
       :programmatic_text => new_markov_poem.to_prog_text
     new_poem.save
     other_poem.second_children << new_poem
@@ -96,7 +96,7 @@ class Poem < ActiveRecord::Base
   end
 
   def create_identical_child
-    self.children.build :full_text => self.full_text, :programmatic_text => self.programmatic_text, 
+    self.children.build :full_text => self.full_text, :programmatic_text => self.programmatic_text,
       :family => self.family, :language_id => self.language_id
   end
 
@@ -165,7 +165,7 @@ class Poem < ActiveRecord::Base
         final_array[i] += to_add
       end
     end
-    
+
     final_array
   end
 

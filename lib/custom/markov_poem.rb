@@ -18,7 +18,7 @@ class MarkovPoem
   def display
     @lines.collect(&:display).join("\n")
   end
-  
+
   def undeleted_lines
     @lines.inject(0) do |sum, line|
       line.deleted? ? sum : sum + 1
@@ -28,7 +28,7 @@ class MarkovPoem
   #####################
   # Evolution methods #
   #####################
-  
+
   def mutate!(lang)
     max_mutate_num = undeleted_lines > 1 ? 4 : 3
     case rand(max_mutate_num)
@@ -91,7 +91,7 @@ class MarkovPoem
     while self_lines.length > 0 && other_lines.length > 0
       if rand(out_of) < prob
         new_lines << self_lines.slice!(0)
-        which_tag_array << true 
+        which_tag_array << true
       else
         new_lines << other_lines.slice!(0)
         which_tag_array << false
@@ -104,7 +104,7 @@ class MarkovPoem
     new_poem = self.class.from_prog_text(new_lines.join(" BREAK "), lang, :strip => true)
 
     #mark which lines came from which parent
-    which_tag_array.each_with_index do |first_parent, i| 
+    which_tag_array.each_with_index do |first_parent, i|
       if first_parent
         new_poem.lines[i].mark_as_from_first_parent!
       else
@@ -116,7 +116,7 @@ class MarkovPoem
   end
 
   def half_lines(include_deleted = false)
-    potential_lines = if include_deleted 
+    potential_lines = if include_deleted
       @lines
     else
       @lines.select{ |l| !l.deleted? }
