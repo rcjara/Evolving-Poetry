@@ -1,4 +1,4 @@
 <h3><%= @work.title %></h3>
 <div class="author-name">by <%= @work.author_full_name %></div>
 <%= display_content(@work) %>
-<%= link_to "back", authors_path(:anchor =>  "author_#{@work.author.id}") %>
+<%= link_to "back", authors_path(:anchor =>  "author_#{@work.author_id}") %>
