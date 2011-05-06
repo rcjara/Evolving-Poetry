@@ -10,7 +10,7 @@ hr.small {
   margin-left: auto;
   margin-right: auto;
 }
-div.centered {
+.centered {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
@@ -36,7 +36,7 @@ ul {
   margin-left: 0px;
   list-style-type: none;
 }
-div.clear {
+.clear {
   display: block;
   clear: both;
 }
@@ -50,7 +50,7 @@ body {
   background: -webkit-gradient(linear, 0% 0%, 100% 100%, from(#1e1e1e), to(#1e1e1e), color-stop(0.5, #4e4e4e));
   min-height: 800px;
 }
-div.main-body {
+.main-body {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -66,7 +66,7 @@ div.main-body {
   margin-left: auto;
   margin-right: auto;
 }
-div.margin-box {
+.margin-box {
   width: 95%;
   min-width: 744px;
   margin: 20px;
@@ -109,42 +109,42 @@ header li {
   margin-left: 20px;
   float: right;
 }
-div.page-title {
+.page-title {
   text-align: center;
   margin-top: 2px;
   margin-left: auto;
   margin-right: auto;
 }
-div.left-column {
+.left-column {
   width: 45%;
   float: left;
 }
-div.right-column {
+.right-column {
   width: 45%;
   float: right;
 }
-div.main-body {
+.main-body {
   width: 1000px;
   margin-left: auto;
   margin-right: auto;
 }
-div.main-left-column {
+.main-left-column {
   float: left;
   width: 450px;
 }
-div.main-right-column {
+.main-right-column {
   float: right;
   width: 45%;
 }
-div.home-links {
+.home-links {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 20px;
   margin-bottom: 20px;
 }
-div.home-links li { margin-top: 15px; }
-div.language {
+.home-links li { margin-top: 15px; }
+.language {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -157,56 +157,56 @@ div.language {
   min-height: 250px;
   margin-top: 25px;
 }
-div.left-languages-column {
+.left-languages-column {
   width: 420px;
   padding: 20px;
   height: 100px;
   float: left;
 }
-div.right-languages-column {
+.right-languages-column {
   width: 420px;
   float: right;
   height: 100px;
   overflow-y: auto;
 }
-div.left-language {
+.left-language {
   width: 50%;
   float: left;
 }
-div.right-language {
+.right-language {
   width: 50%;
   float: right;
   z-index: 1;
 }
-div.poem {
+.poem {
   margin-bottom: 20px;
   z-index: 2;
 }
-div.left-text {
+.left-text {
   width: 50%;
   float: left;
   text-align: right;
 }
-div.right-text {
+.right-text {
   width: 50%;
   float: right;
   text-align: left;
 }
-div.family-tree { overflow: auto; }
+.family-tree { overflow: auto; }
 .fam-tree-leaf-mixin {
   float: left;
   padding: 15px;
   font-size: 8.666666666666666px;
   line-height: 10.666666666666666px;
 }
-div.fam-tree-leaf {
+.fam-tree-leaf {
   float: left;
   padding: 15px;
   font-size: 8.666666666666666px;
   line-height: 10.666666666666666px;
   width: 270px;
 }
-div.fam-tree-leaf-self {
+.fam-tree-leaf-self {
   float: left;
   padding: 15px;
   font-size: 8.666666666666666px;
@@ -216,23 +216,23 @@ div.fam-tree-leaf-self {
   border-color: #333333;
   border-width: 2px;
 }
-div.fam-tree-row { min-height: 100px; }
-div.fam-tree-line-level {
-  width: 300px;
-  height: 50px;
-}
-div.fam-tree-line-container {
+.fam-tree-row { min-height: 100px; }
+.fam-tree-line-container {
   width: 300px;
   height: 100px;
   float: left;
 }
+.fam-tree-line-level {
+  width: 300px;
+  height: 50px;
+}
 .fam-tree-box { float: left; }
-div.fam-tree-unmarked {
+.fam-tree-unmarked {
   float: left;
   height: 50px;
   width: 150px;
 }
-div.fam-tree-marked-right {
+.fam-tree-marked-right {
   float: left;
   border-right-style: solid;
   border-right-width: 1px;
@@ -240,7 +240,7 @@ div.fam-tree-marked-right {
   height: 50px;
   width: 149px;
 }
-div.fam-tree-marked-bottom {
+.fam-tree-marked-bottom {
   float: left;
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -248,8 +248,8 @@ div.fam-tree-marked-bottom {
   height: 49px;
   width: 150px;
 }
-div.author-name {
+.author-name {
   text-decoration: italic;
   margin-bottom: 10px;
 }
-div.author { margin-top: 25px; }
+.author { margin-top: 25px; }
