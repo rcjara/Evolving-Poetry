@@ -18,6 +18,7 @@ group :development do
   gem 'rspec-rails'
   gem 'annotate-models'
   gem 'faker'
+  gem 'jasmine'
 end
 
 group :test do
@@ -25,7 +26,8 @@ group :test do
   gem 'webrat'
   gem 'factory_girl_rails'
   gem 'spork', '~> 0.9.0.rc'
+  gem 'jasmine'
+  gem "mocha"
+  gem 'simplecov', '>= 0.4.2'
 end
 
-gem "mocha", :group => :test
-gem 'simplecov', '>= 0.4.2', :require => false, :group => :test
