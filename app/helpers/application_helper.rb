@@ -3,11 +3,20 @@ module ApplicationHelper
     javascript_tag "$(document).ready( function() { nonsenseEngine.enableInheritenceView();})"
   end
 
-  def inheritence_view_setter
-    link_to_function("Enable", "nonsenseEngine.enableInheritenceView()", id: 'inheritence-enabler') + 
-    " / " + 
-    link_to_function("Disable", "", id: 'inheritence-disabler', class: 'disabled-link') +  
-    " inheritence view<br />".html_safe
+  def carousel_id(obj)
+    [obj.class.to_s, obj.id, "carousel"].join('-')
+  end
+
+  def carousel_next_link(obj)
+    carousel_link(obj, "next")
+  end
+
+  def carousel_prev_link(obj)
+    carousel_link(obj, "prev")
+  end
+
+  def carousel_link(obj, additional)
+    link_to additional.capitalize, '#', :id => "#{carousel_id(obj)}-#{additional}"
   end
 
   def page_title

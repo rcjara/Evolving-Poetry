@@ -1,3 +1,4 @@
 <div id="poem_<%= poem.id %>" class="poem">
+  <%= link_to 'Nameless Poem #' + poem.id.to_s, poem %><br />
   <%= poem.full_text.html_safe %>
 </div>

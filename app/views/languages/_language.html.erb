@@ -1,15 +1,3 @@
-<script type="text/javascript">
-    $(function(){
-        $("#top-poems-<%= language.id %>").carousel({
-          effect:    'fade',
-          animSpeed: 'slow',
-          direction: 'vertical',
-          nextBtn:   '#carousel-next-<%= language.id %>',
-          prevBtn:   '#carousel-prev-<%= language.id %>'
-        });
-    });
-</script>
-
 <div class="language">
   <h3><%= language.name %></h3>
   <div class="left-language">
@@ -18,13 +6,16 @@
     with a total of <%=pluralize language.total_votes, "vote" %></p>
   </div>
   <div class="right-language">
-    <h3>Top Poems</h3>
-    <span id="carousel-next-<%= language.id %>">Next</span>
-    <span id="carousel-prev-<%= language.id %>">Prev</span>
-    <div id="top-poems-<%= language.id %>">
-      <ul class="carousel-poem-container">
+    <div class="centered">
+      <strong>Top Poems</strong><br />
+      <%= carousel_prev_link(language) %> | <%= carousel_next_link(language) %>
+    </div>
+    <div class="carousel" id="<%= carousel_id(language) %>">
+      <ul>
         <% language.top_5.each do |poem| %>
-            <li> <%= render poem %> </li>
+            <li>
+              <%= render poem %>
+            </li>
         <% end %>
       </ul>
     </div>
