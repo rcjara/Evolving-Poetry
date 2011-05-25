@@ -8,8 +8,10 @@
   <div class="right-language">
     <div class="centered">
       <strong>Top Poems</strong><br />
-      <%= carousel_prev_link(language) %> | <%= carousel_next_link(language) %>
+      <%= carousel_prev_link(language) %> | <%= carousel_next_link(language) %><br />
     </div>
+    <%= carousel_counter(language) %>
+    <%= clear %>
     <div class="carousel" id="<%= carousel_id(language) %>">
       <ul>
         <% language.top_5.each do |poem| %>

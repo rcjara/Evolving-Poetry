@@ -19,6 +19,10 @@ module ApplicationHelper
     link_to additional.capitalize, '#', :id => "#{carousel_id(obj)}-#{additional}"
   end
 
+  def carousel_counter(obj)
+    raw( %{<div class="carousel-counter" id="#{carousel_id(obj)}-counter"></div>} )
+  end
+
   def page_title
     extra = @title ? " | " + @title : ""
     "Non-Sense Engine" + extra

@@ -178,6 +178,24 @@ header li {
   float: right;
   z-index: 1;
 }
+.carousel { min-height: 300px; }
+.carousel-counter { margin-left: -15.5%; }
+.carousel-counter ul { margin-left: 50%; }
+.carousel-counter li {
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  float: left;
+  margin-left: 4px;
+  height: 8px;
+  width: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #222222;
+  display: block;
+}
+.carousel-unselected { background-color: #ffffff; }
+.carousel-selected { background-color: #555555; }
 .poem {
   margin-bottom: 20px;
   z-index: 2;

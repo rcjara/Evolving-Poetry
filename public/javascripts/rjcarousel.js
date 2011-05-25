@@ -1,27 +1,54 @@
 (function rjcarousel($) {
-  $.fn.initRJCarousel = function() {
+  $.fn.initRJCarousel = function(options) {
     return this.each( function(idx, elem) {
       var _divId = $(elem).attr('id'),
-          _index = 0,
+          _index = -1,
           _fadeLength = 600,
-          $elems = $("#" + _divId + " li"),
-          $next = $('#' + _divId + '-next'),
-          $prev = $('#' + _divId + '-prev'),
+          _hasCounter = false,
+          $counter, $counterLis,
+          $elems   = $('#' + _divId + ' li'),
+          $next    = $('#' + _divId + '-next'),
+          $prev    = $('#' + _divId + '-prev'),
+          hasCounter  = function() { return _hasCounter; },
           divId       = function() { return _divId; },
           numElements = function() { return $elems.size(); };
+
+      options = options || {};
+
+      if(options['counter']) {
+        (function() {
+          _hasCounter = true;
+          $counter = $('#' + _divId + '-counter');
+
+          var $ul = $('<ul/>');
+          $counter.append($ul);
+          for(var i = 0; i < numElements(); i++) {
+            $ul.append( $('<li/>') );
+          }
+          $counterLis = $ul.find('li');
+        })();
+      }
+
+      var removeCounterMarks = function() {
+        if(_hasCounter) {
+          $counterLis.removeClass('carousel-selected carousel-unselected').
+            addClass('carousel-unselected');
+        }
+      }
 
       var setFadeLength = function(newSpeed) {
         _fadeLength = newSpeed;
       };
 
       var next = function() {
+        removeCounterMarks();
         $elems.eq(_index).fadeOut(_fadeLength, incIndex);
       };
 
       var prev = function() {
+        removeCounterMarks();
         $elems.eq(_index).fadeOut(_fadeLength, decIndex);
       };
-
 
       var incIndex = function() {
         _index += 1;
@@ -37,6 +64,10 @@
 
       var showCurElement = function() {
         $elems.eq(_index).fadeIn(_fadeLength);
+        if(_hasCounter) {
+          $counterLis.eq(_index).removeClass('carousel-unselected').
+            addClass('carousel-selected');
+        }
       };
 
       $elems.css('display', 'none');
@@ -48,6 +79,7 @@
         divId:         divId,
         setFadeLength: setFadeLength,
         numElements:   numElements,
+        hasCounter:    hasCounter,
         next:          next,
         prev:          prev
       });
