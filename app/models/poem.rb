@@ -12,6 +12,10 @@ class Poem < ActiveRecord::Base
   has_many :second_children, :class_name => 'Poem',
     :foreign_key => :second_parent_id
 
+  scope :alive, where('alive = ?', true)
+  scope :top,   alive.order(Constants::POEM_ORDERING).limit(1)
+  scope :top_5, alive.order(Constants::POEM_ORDERING).limit(5)
+
   def inspect
     "<Poem: #{self.id}>"
   end
@@ -76,9 +80,9 @@ class Poem < ActiveRecord::Base
   end
 
   def sexually_reproduce!
-    potential_mates = self.language.top_5
+    potential_mates = self.language.poems.top_5
     mate = self
-    mate = potential_mates[rand(5)] while mate == self
+    mate = potential_mates.sample while mate == self
     sexually_reproduce_with!(mate)
   end
 

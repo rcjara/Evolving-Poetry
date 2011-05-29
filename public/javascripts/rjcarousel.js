@@ -5,6 +5,7 @@
           _index = -1,
           _fadeLength = 600,
           _hasCounter = false,
+          _locked     = false,
           $counter, $counterLis,
           $elems   = $('#' + _divId + ' li'),
           $next    = $('#' + _divId + '-next'),
@@ -73,11 +74,14 @@
       };
 
       var showCurElement = function() {
+        $elems.hide();
         $elems.eq(_index).fadeIn(_fadeLength);
         if(_hasCounter) {
+          removeCounterMarks();
           $counterLis.eq(_index).removeClass('carousel-unselected').
             addClass('carousel-selected');
         }
+        _locked = false;
       };
 
       $elems.css('display', 'none');

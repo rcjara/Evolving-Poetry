@@ -4,7 +4,7 @@ describe Language do
   before(:each) do
     @l = Language.create!(:name => "test name")
   end
-  
+
   describe "adding and removing authors" do
     before(:each) do
       @a = author_create
@@ -19,8 +19,8 @@ describe Language do
     it "should show that it has the right author" do
       @l.has_author?(@a).should be_true
     end
-    
-    
+
+
     it "should be able to remove an author" do
       @l.remove_author!(@a)
       @l.reload
@@ -36,15 +36,15 @@ describe Language do
       @l.reload
       @l.total_votes.should == 1
     end
-    
-    
+
+
 
     describe "generating a poem" do
       before(:each) do
         @l.gen_poem!
         @l.reload
       end
-      
+
       it "should have a poem" do
         @l.poems.length.should == 1
       end
@@ -52,7 +52,7 @@ describe Language do
       it "should have a poem with programmatic text" do
         @l.poems.first.programmatic_text.length.should > 0
       end
-      
+
       it "should have a poem with full text" do
         @l.poems.first.full_text.length.should > 0
       end
@@ -74,7 +74,7 @@ describe Language do
         end
       end
     end
-    
+
 
     describe "after generating 20 poems" do
       before(:each) do
@@ -90,21 +90,21 @@ describe Language do
 
       describe "the top 5 poems" do
         it "should have only 5 poems" do
-          @l.top_5.length.should == 5
+          @l.poems.top_5.length.should == 5
         end
 
         it "should not include the first poem" do
-          @l.top_5.should_not include @l.poems.first
+          @l.poems.top_5.should_not include @l.poems.first
         end
 
         it "should include the last poem" do
-          @l.top_5.should include @l.poems.last
+          @l.poems.top_5.should include @l.poems.last
         end
-        
-        
+
+
       end
-      
+
     end
   end
-  
+
 end

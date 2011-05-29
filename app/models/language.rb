@@ -41,7 +41,7 @@ class Language < ActiveRecord::Base
   end
 
   def alert_of_death!
-    if self.alive_poems.length < self.max_poems
+    if self.poems.alive.length < self.max_poems
       gen_poem!
     end
   end
@@ -50,31 +50,14 @@ class Language < ActiveRecord::Base
     possibilities = alive_poems
 
     if rigged
-      max = possibilities.length
-      poem1 = poem2 = possibilities[4] # 4 is the rigged amount
+      poem2 = poem1 = possibilities[0...4].sample
       while poem2 == poem1
-        poem2 = possibilities[rand(max)]
+        poem2 = possibilities.sample
       end
       [poem1, poem2]
     else
       possibilities.sample(2)
     end
-  end
-
-  def top_5
-    alive_ordered.limit(5)
-  end
-
-  def top_poem
-    alive_ordered.limit(1)
-  end
-
-  def alive_ordered
-    alive_poems.order(Constants::POEM_ORDERING)
-  end
-
-  def alive_poems
-    self.poems.where("alive = ?", true)
   end
 
   def add_vote!

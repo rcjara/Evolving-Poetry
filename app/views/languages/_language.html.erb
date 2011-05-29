@@ -14,7 +14,7 @@
     </div>
     <div class="carousel" id="<%= carousel_id(language) %>">
       <ul>
-        <% language.top_5.each do |poem| %>
+        <% language.poems.top_5.each do |poem| %>
             <li>
               <%= render poem %>
             </li>
