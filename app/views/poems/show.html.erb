@@ -1,11 +1,15 @@
-<%= enable_inheretence_on_load %>
+<%= content_for :document_ready do %>
+  nonsenseEngine.inheritenceView.enable();
+  console.log($('.fam-tree-leaf').size() );
+  $('.fam-tree-leaf').bind( 'click', nonsenseEngine.fullSize.open);
+<% end %>
 
 <div id="container">
   <div class="left-column">
-    <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
+    <%= render @poem %>
   </div>
   <div class="right-column">
-    <%= render @poem %>
+    <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
   </div>
   <div class="clear"></div>
 </div>

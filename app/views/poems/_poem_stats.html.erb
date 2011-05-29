@@ -1,21 +1,22 @@
-<strong>Poem Id:</strong> <%= poem.id %> <br />
-<strong>Language:</strong> 
-  <%= link_to poem.language.name, language_path(poem.language) %> 
-  <br />
-<strong>Born:</strong> <%= born_fmt(poem) %> <br />
-<strong>Died:</strong> <%= died_fmt(poem) %> <br />
-<strong>Votes for/against:</strong> <%= poem.votes_for %> / <%= poem.votes_against %> <br />
-<% if poem.alive? %>
-  <strong>Votes for until it bears a child:</strong> <%= poem.votes_til_birth %><br />
-  <strong>Votes against until it dies:</strong> <%= poem.votes_til_death %><br />
-<% end %>
-<% if poem.parent %>
-  <strong>Parents:</strong> <%= link_to "Mother", poem_path(poem.parent) %>
-  <% if poem.second_parent %>
-    | <%= link_to "Father", poem_path(poem.parent) %>
+<div class="poem-stats">
+  <strong>Poem Id:</strong> <%= poem.id %> <br />
+  <strong>Language:</strong>
+    <%= link_to poem.language.name, language_path(poem.language) %>
+    <br />
+  <strong>Born:</strong> <%= born_fmt(poem) %> <br />
+  <strong>Died:</strong> <%= died_fmt(poem) %> <br />
+  <strong>Votes for/against:</strong> <%= poem.votes_for %> / <%= poem.votes_against %> <br />
+  <% if poem.alive? %>
+    <strong>Votes for until it bears a child:</strong> <%= poem.votes_til_birth %><br />
+    <strong>Votes against until it dies:</strong> <%= poem.votes_til_death %><br />
   <% end %>
-  <br />
-<% end %>
-<strong>Number of Children:</strong> <%= poem.all_children.length %><br />
-<%= children_links(poem) %>
-
+  <% if poem.parent %>
+    <strong>Parents:</strong> <%= link_to "Mother", poem_path(poem.parent) %>
+    <% if poem.second_parent %>
+      | <%= link_to "Father", poem_path(poem.parent) %>
+    <% end %>
+    <br />
+  <% end %>
+  <strong>Number of Children:</strong> <%= poem.all_children.length %><br />
+  <%= children_links(poem) %>
+</div>

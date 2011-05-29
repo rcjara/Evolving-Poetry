@@ -1,8 +1,4 @@
 module ApplicationHelper
-  def enable_inheretence_on_load
-    javascript_tag "$(document).ready( function() { nonsenseEngine.enableInheritenceView();})"
-  end
-
   def carousel_id(obj)
     [obj.class.to_s, obj.id, "carousel"].join('-')
   end

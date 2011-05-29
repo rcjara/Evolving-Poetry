@@ -2,7 +2,7 @@
   <%= javascript_include_tag "rjcarousel" %>
   <%= javascript_tag do %>
     $(document).ready(function() {
-      $('.carousel').initRJCarousel({counter: true}).next();
+      $('.carousel').initRJCarousel({counter: true, center: true}).next();
     });
   <% end %>
 <% end %>

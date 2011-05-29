@@ -1,6 +1,9 @@
 Languages
   Main Language layouts.
-  Carousel
+  Sorting for poems/graveyard
 
 Poems
+  alter family trees to also include fathers / children fathered
+    add field for tracking children's families
   Track down orphaned span tags
+  Hover to view full text of poem

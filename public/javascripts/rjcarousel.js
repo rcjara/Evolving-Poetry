@@ -26,6 +26,16 @@
             $ul.append( $('<li/>') );
           }
           $counterLis = $ul.find('li');
+
+          if(options['center']) {
+            var totalWidth = $counterLis.outerWidth(true) * numElements() -
+              parseInt( $counterLis.eq(0).css('margin-left') ) -
+              parseInt( $counterLis.eq(-1).css('margin-right') );
+            var spareWidth = $counter.innerWidth() - totalWidth;
+            $ul.css('margin-left', spareWidth / 2);
+            $counterLis.eq(0).css('margin-left', 0);
+            console.log('$counter.outerWidth(): ' + $counter.outerWidth() );
+          }
         })();
       }
 

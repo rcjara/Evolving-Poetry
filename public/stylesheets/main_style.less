@@ -261,12 +261,12 @@ header li {
 }
 
 .left-language {
-  width: 50%;
+  width: 45%;
   float: left;
 }
 
 .right-language {
-  width: 50%;
+  width: 45%;
   float: right;
   z-index: 1;
 }
@@ -274,15 +274,8 @@ header li {
 /* Carousel */
 
 .carousel {
+  width: 100%;
   min-height: 300px;
-}
-
-.carousel-counter {
-  margin-left: -15.5%;
-}
-
-.carousel-counter ul {
-  margin-left: 50%;
 }
 
 .carousel-counter li {
@@ -295,6 +288,8 @@ header li {
   border-style: solid;
   border-color: #222;
   display: block;
+  margin-top: 8px;
+  margin-bottom: 2px;
 }
 
 .carousel-unselected {
@@ -311,11 +306,19 @@ header li {
   z-index: 2;
 }
 
+.poem-stats {
+}
+
+.poem-stats ul {
+  height: 200px;
+  overflow: auto;
+}
+
 
 /* Family Tree */
-@fam_tree_line_width: 300px;
+@fam_tree_line_width: 200px;
 @fam_tree_line_height: 100px;
-@fam_tree_leaf_padding: 15px;
+@fam_tree_leaf_padding: 10px;
 
 .left-text {
   width: 50%;
@@ -336,8 +339,8 @@ header li {
 .fam-tree-leaf-mixin {
   float: left;
   padding: @fam_tree_leaf_padding;
-  font-size: 2 * @default_font_size / 3;
-  line-height: 2 * @default_line_height / 3;
+  font-size: @default_font_size / 2.0;
+  line-height: @default_line_height / 2.0;
 }
 .fam-tree-leaf {
   .fam-tree-leaf-mixin;
@@ -395,8 +398,35 @@ header li {
   width: @fam_tree_line_width / 2;
 }
 
+.full-sized-poem {
+  .rounded-corners;
+  display: none;
+  width: 2.0 * @fam_tree_line_width;
+  min-height: 200px;
+  padding: @fam_tree_leaf_padding * 2.0;
+  position: fixed;
+  top: 200px;
+  border-style: solid;
+  background-color: @white;
+  border-color: #222;
+  border-width: 1px;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  display: none;
+  background-color: @black;
+}
+
 /* Evolution Chamber */
 
+.inheritence-container {
+  margin-bottom: 20px;
+}
 
 /* Works */
 

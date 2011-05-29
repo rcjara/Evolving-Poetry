@@ -42,14 +42,14 @@ module PoemsHelper
       ""
     else
       links = poem.all_children.collect.with_index do |child, i|
-        link = link_to child.id, poem_path(child)
+        link = link_to("##{child.id}", poem_path(child) )
 
         other_parent_link = if child.second_parent.nil?
           " (mother)"
         elsif child.second_parent == poem
-          " (father with " + link_to(child.parent.id, poem_path(child.parent) ) + " as the mother)"
+          " (father with " + link_to("##{child.parent.id}", poem_path(child.parent) ) + " as the mother)"
         else
-          " (mother with " + link_to(child.second_parent.id, poem_path(child.second_parent) ) + " as the father)"
+          " (mother with " + link_to("##{child.second_parent.id}", poem_path(child.second_parent) ) + " as the father)"
         end
 
         "<li>" + link + other_parent_link + "</li>"
@@ -66,7 +66,7 @@ module PoemsHelper
     struct = poem.fam_tree_struct_with_lines
     struct.collect do |line|
       middle_text = line.collect { |elem| struct_elem(elem, poem) }.join("\n")
-      line_width = line.length * 300;
+      line_width = line.length * 200;
       %{<div class="fam-tree-row" style="width: #{line_width}px;">\n} + middle_text + clear + %{</div>}
     end.join("\n").html_safe
   end
