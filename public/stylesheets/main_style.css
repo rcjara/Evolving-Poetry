@@ -297,6 +297,11 @@ header li {
   display: none;
   background-color: #000000;
 }
+#close-btn {
+  position: fixed;
+  display: none;
+  z-index: 10;
+}
 .inheritence-container { margin-bottom: 20px; }
 .author-name {
   text-decoration: italic;

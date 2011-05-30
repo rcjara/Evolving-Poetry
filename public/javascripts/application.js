@@ -50,7 +50,9 @@ nonsenseEngine.inheritenceView = ( function() {
 
 nonsenseEngine.fullSize = ( function() {
   var $backdrop,
-      $container;
+      $container,
+      $close_btn,
+      CLOSE_BTN_OFFSET = 18;
 
   $(document).ready( function() {
     $container = $('<div/>');
@@ -62,14 +64,25 @@ nonsenseEngine.fullSize = ( function() {
     $backdrop.addClass('backdrop');
     $backdrop.bind('click', close);
     $backdrop.css({opacity: 0.85});
+
+    $close_btn = $('#close-btn');
+    $close_btn.bind('click', close);
+
+    $container.bind('mouseover', show_btn);
+    $backdrop .bind('mouseover', hide_btn);
   });
 
   var open = function(e) {
     e.preventDefault();
 
     $container.html( $(e.currentTarget).html() );
-    $container.css('left',
-      ($(window).width() - parseInt($container.css('width'))) / 2);
+
+    var container_left = ($(window).width() - parseInt($container.css('width'))) / 2;
+    $container.css('left', container_left);
+    $close_btn.css('left', container_left +
+      parseInt($container.css('width')) + CLOSE_BTN_OFFSET);
+    $close_btn.css('top',
+      parseInt($container.css('top')) - CLOSE_BTN_OFFSET);
     $container.slideDown();
     $backdrop.fadeIn();
   };
@@ -78,12 +91,24 @@ nonsenseEngine.fullSize = ( function() {
     e.preventDefault();
 
     $container.slideUp();
+    $close_btn.fadeOut();
     $backdrop.fadeOut();
   };
 
+  var show_btn = function(e) {
+    $close_btn.show();
+  }
+
+  var hide_btn = function(e) {
+    $close_btn.hide();
+  }
+
+
   return {
-    open:  open,
-    close: close,
+    open:         open,
+    close:        close,
+    show_btn:     show_btn,
+    hide_btn:     hide_btn,
     container:    function() { return $container; },
     backdrop:     function() { return $backdrop; } ,
   };
