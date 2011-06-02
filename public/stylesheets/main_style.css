@@ -196,6 +196,7 @@ header li {
   display: block;
   margin-top: 8px;
   margin-bottom: 2px;
+  cursor: pointer;
 }
 .carousel-unselected { background-color: #ffffff; }
 .carousel-selected { background-color: #555555; }
@@ -297,7 +298,7 @@ header li {
   display: none;
   background-color: #000000;
 }
-#close-btn {
+.close-btn {
   position: fixed;
   display: none;
   z-index: 10;

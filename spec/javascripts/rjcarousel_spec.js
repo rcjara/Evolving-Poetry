@@ -61,6 +61,26 @@ describe("RJCarousel", function() {
       });
     });
 
+    describe("jumping to index", function() {
+      beforeEach(function() {
+        carousel.next();
+        carousel.next();
+        carousel.jump(0);
+      });
+
+      it("should have one visible element", function() {
+        expect($('#cara li:visible').size() ).toEqual(1);
+      });
+
+      it("should have two hidden elements", function() {
+        expect($('#cara li:hidden').size() ).toEqual(2);
+      });
+
+      it("should have the right html in its visible element", function() {
+        expect($('#cara li:visible').html() ).toEqual("One");
+      });
+    });
+
     describe("two carousel elements at once", function() {
       beforeEach(function() {
         carousel.next();

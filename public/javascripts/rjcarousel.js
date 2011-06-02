@@ -14,30 +14,29 @@
           divId       = function() { return _divId; },
           numElements = function() { return $elems.size(); };
 
-      options = options || {};
+      var setupCounter = function() {
+        _hasCounter = true;
+        $counter = $('#' + _divId + '-counter');
 
-      if(options['counter']) {
-        (function() {
-          _hasCounter = true;
-          $counter = $('#' + _divId + '-counter');
+        var $ul = $('<ul/>');
+        $counter.append($ul);
+        for(var i = 0; i < numElements(); i++) {
+          var $newLi = $('<li/>');
+          $ul.append($newLi);
+          $newLi.data('index', i);
+          $newLi.bind('click', $jump );
+        }
+        $counterLis = $ul.find('li');
 
-          var $ul = $('<ul/>');
-          $counter.append($ul);
-          for(var i = 0; i < numElements(); i++) {
-            $ul.append( $('<li/>') );
-          }
-          $counterLis = $ul.find('li');
-
-          if(options['center']) {
-            var totalWidth = $counterLis.outerWidth(true) * numElements() -
-              parseInt( $counterLis.eq(0).css('margin-left') ) -
-              parseInt( $counterLis.eq(-1).css('margin-right') );
-            var spareWidth = $counter.innerWidth() - totalWidth;
-            $ul.css('margin-left', spareWidth / 2);
-            $counterLis.eq(0).css('margin-left', 0);
-            console.log('$counter.outerWidth(): ' + $counter.outerWidth() );
-          }
-        })();
+        if(options['center']) {
+          var totalWidth = $counterLis.outerWidth(true) * numElements() -
+            parseInt( $counterLis.eq(0).css('margin-left') ) -
+            parseInt( $counterLis.eq(-1).css('margin-right') );
+          var spareWidth = $counter.innerWidth() - totalWidth;
+          $ul.css('margin-left', spareWidth / 2);
+          $counterLis.eq(0).css('margin-left', 0);
+          console.log('$counter.outerWidth(): ' + $counter.outerWidth() );
+        }
       }
 
       var removeCounterMarks = function() {
@@ -53,25 +52,31 @@
 
       var next = function() {
         removeCounterMarks();
-        $elems.eq(_index).fadeOut(_fadeLength, incIndex);
+        $elems.eq(_index).fadeOut(_fadeLength, setIndex(_index + 1) );
       };
 
       var prev = function() {
         removeCounterMarks();
-        $elems.eq(_index).fadeOut(_fadeLength, decIndex);
+        $elems.eq(_index).fadeOut(_fadeLength, setIndex(_index - 1) );
       };
 
-      var incIndex = function() {
-        _index += 1;
+      var $jump = function(e) {
+        var i = $(e.target).data('index');
+        e.preventDefault();
+        jump(i);
+      };
+
+      var jump = function(i) {
+        removeCounterMarks();
+        $elems.eq(_index).fadeOut(_fadeLength, setIndex(i) );
+      };
+
+      var setIndex = function(i) {
+        _index = i;
+        if(_index < 0) { _index += numElements(); }
         _index %= numElements();
         showCurElement();
-      };
-
-      var decIndex = function() {
-        _index -= 1;
-        if(_index < 0) { _index += numElements(); }
-        showCurElement();
-      };
+      }
 
       var showCurElement = function() {
         $elems.hide();
@@ -84,6 +89,13 @@
         _locked = false;
       };
 
+      //setup
+      options = options || {};
+
+      if(options['counter']) {
+        setupCounter();
+      }
+
       $elems.css('display', 'none');
       $.each([$next, $prev], function(idx, $elem){ $elem.unbind();});
       $next.bind('click', function(e) {e.preventDefault(); next(); });
@@ -94,6 +106,7 @@
         setFadeLength: setFadeLength,
         numElements:   numElements,
         hasCounter:    hasCounter,
+        jump:          jump,
         next:          next,
         prev:          prev
       });
@@ -106,16 +119,23 @@
     });
   };
 
-  $.fn.next = function(length) {
+  $.fn.next = function() {
     return this.each( function(idx, elem) {
       $(elem).data('rjcarousel').next();
     });
   };
 
-  $.fn.prev = function(length) {
+  $.fn.prev = function() {
     return this.each( function(idx, elem) {
       $(elem).data('rjcarousel').prev();
     });
   };
+
+  $.fn.jump = function(i) {
+    return this.each( function(idx, elem) {
+      $(elem).data('rjcarousel').jump(i);
+    });
+  };
+
 })(jQuery);
 

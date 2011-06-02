@@ -27,7 +27,8 @@ nonsenseEngine.inheritenceView = ( function() {
   };
 
   var disable = function() {
-    $(".new-text, .from-first-parent, .from-second-parent, .altered-text").css("background-color", "transparent");
+    $(".new-text, .from-first-parent, .from-second-parent, .altered-text")
+      .css("background-color", "transparent");
     $(".deleted-text").css("display", "none");
 
     $('#inheritence-disabler').addClass("disabled-link")
@@ -52,9 +53,10 @@ nonsenseEngine.fullSize = ( function() {
   var $backdrop,
       $container,
       $close_btn,
+      _setup,
       CLOSE_BTN_OFFSET = 18;
 
-  $(document).ready( function() {
+  var setup = function() {
     $container = $('<div/>');
     $container.prependTo(document.body);
     $container.addClass('full-sized-poem');
@@ -65,15 +67,22 @@ nonsenseEngine.fullSize = ( function() {
     $backdrop.bind('click', close);
     $backdrop.css({opacity: 0.85});
 
-    $close_btn = $('#close-btn');
+    $close_btn = $('<img />');
+    $close_btn.attr('src', '../images/close_button.png')
+    $close_btn.addClass('close-btn');
+    $close_btn.prependTo(document.body);
     $close_btn.bind('click', close);
 
     $container.bind('mouseover', show_btn);
     $backdrop .bind('mouseover', hide_btn);
-  });
+
+    _setup = true;
+  };
 
   var open = function(e) {
     e.preventDefault();
+
+    if(!_setup) { setup(); }
 
     $container.html( $(e.currentTarget).html() );
 
@@ -105,12 +114,14 @@ nonsenseEngine.fullSize = ( function() {
 
 
   return {
+    setup:        setup,
     open:         open,
     close:        close,
     show_btn:     show_btn,
     hide_btn:     hide_btn,
     container:    function() { return $container; },
     backdrop:     function() { return $backdrop; } ,
+    close_btn:    function() { return $close_btn; }
   };
 })();
 
