@@ -173,6 +173,7 @@ header li {
   width: 45%;
   float: left;
 }
+.left-language p { margin-bottom: 15px; }
 .right-language {
   width: 45%;
   float: right;

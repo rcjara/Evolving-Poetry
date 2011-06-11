@@ -1,9 +1,25 @@
 <div class="language">
   <h3><%= language.name %></h3>
   <div class="left-language">
-    <p class="language-description"><%= language.description %></p>
-    <p class="language-description">Featuring works by <%= author_links(language) %>
+    <p><%= language.description %></p>
+    <p>Featuring works by <%= author_links(language) %>
     with a total of <%=pluralize language.total_votes, "vote" %></p>
+
+    <% if language.active? %>
+      <p>This language is still active, which means you can take part
+      in its evolution.  Head to an <%= link_to "evolution chamber",
+      evolution_chamber_path(language.id) %> to affect how this
+      language's poems develop.</p>
+    <% else %>
+      <p>This language is <strong>inactive</strong>, meaning that you no
+      new poems are being born and you cannot affect the score of old
+      poems.  You are free to look at the poems that were created and
+      evolved in this language, however.</p>
+    <% end %>
+
+    <% if able_to_view?(language) %>
+      <p><%= link_to "More info", language %></p>
+    <% end %>
   </div>
   <div class="right-language">
     <div class="centered">

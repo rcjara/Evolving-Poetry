@@ -9,8 +9,10 @@ class Language < ActiveRecord::Base
   has_many :authors, :through => :auth_lang_relations
   has_many :poems
 
+  scope :active, where('active = ?', true)
+
   def self.random
-    Language.where('active = ?', true).sample
+    Language.active.sample
   end
 
   def add_author!(author)
@@ -33,6 +35,17 @@ class Language < ActiveRecord::Base
     increment_family!
     new_poem.save
     new_poem
+  end
+
+  def poems_by(sorting)
+    case sorting && sorting.to_sym
+    when :all_time
+      poems.all_time
+    when :dead
+      poems.dead
+    else
+      poems.by_score
+    end
   end
 
   def increment_family!

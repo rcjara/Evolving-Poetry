@@ -12,9 +12,12 @@ class Poem < ActiveRecord::Base
   has_many :second_children, :class_name => 'Poem',
     :foreign_key => :second_parent_id
 
-  scope :alive, where('alive = ?', true)
-  scope :top,   alive.order(Constants::POEM_ORDERING).limit(1)
-  scope :top_5, alive.order(Constants::POEM_ORDERING).limit(5)
+  scope :alive,    where('alive = ?', true)
+  scope :by_score, alive.order('(votes_for - votes_against) / (votes_against + 1.0) DESC')
+  scope :top,      by_score.limit(1)
+  scope :top_5,    by_score.limit(5)
+  scope :all_time, order('votes_for')
+  scope :dead,     where('alive =?', false).order('votes_for')
 
   def inspect
     "<Poem: #{self.id}>"
