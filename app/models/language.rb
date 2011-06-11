@@ -3,7 +3,8 @@ class Language < ActiveRecord::Base
 
   attr_accessible :name, :total_votes, :max_poems, :created_at,
     :updated_at, :active, :description, :min_lines, :max_lines,
-    :cur_family
+    :cur_family, :num_families, :poems_sexually_reproduced,
+    :poems_asexually_reproduced
 
   has_many :auth_lang_relations, :dependent => :destroy
   has_many :authors, :through => :auth_lang_relations
@@ -31,8 +32,8 @@ class Language < ActiveRecord::Base
     num_lines = rand(max_lines - min_lines + 1) + min_lines
     p = markov.gen_poem(num_lines)
 
-    new_poem = poems.build(:full_text => p.display, :programmatic_text => p.to_prog_text, :family => self.cur_family)
     increment_family!
+    new_poem = poems.build(:full_text => p.display, :programmatic_text => p.to_prog_text, :family => self.num_families)
     new_poem.save
     new_poem
   end
@@ -48,8 +49,22 @@ class Language < ActiveRecord::Base
     end
   end
 
+  def total_poems
+    poems.count
+  end
+
   def increment_family!
-    self.cur_family += 1
+    self.num_families += 1
+    save
+  end
+
+  def increment_sexual_poems!
+    self.poems_sexually_reproduced += 1
+    save
+  end
+
+  def increment_asexual_poems!
+    self.poems_asexually_reproduced += 1
     save
   end
 
@@ -60,16 +75,16 @@ class Language < ActiveRecord::Base
   end
 
   def poems_for_voting(rigged = false)
-    possibilities = alive_poems
+    pool = poems.alive
 
     if rigged
-      poem2 = poem1 = possibilities[0...4].sample
+      poem2 = poem1 = pool[0...4].sample
       while poem2 == poem1
-        poem2 = possibilities.sample
+        poem2 = pool.sample
       end
       [poem1, poem2]
     else
-      possibilities.sample(2)
+      pool.sample(2)
     end
   end
 

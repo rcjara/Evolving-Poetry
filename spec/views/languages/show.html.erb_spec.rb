@@ -5,7 +5,9 @@ describe "languages/show.html.erb" do
     @language = assign(:language, stub_model(Language,
       :name => "Name",
       :total_votes => 1,
-      :max_poems => 1
+      :max_poems => 1,
+      :poems_sexually_reproduced => 1,
+      :poems_asexually_reproduced => 1
     ))
   end
 

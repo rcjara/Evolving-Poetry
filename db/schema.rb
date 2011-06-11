@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110408010635) do
+ActiveRecord::Schema.define(:version => 20110611184144) do
 
   create_table "auth_lang_relations", :force => true do |t|
     t.integer  "author_id"
@@ -36,15 +36,17 @@ ActiveRecord::Schema.define(:version => 20110408010635) do
 
   create_table "languages", :force => true do |t|
     t.string   "name"
-    t.integer  "total_votes", :default => 0
-    t.integer  "max_poems",   :default => 20
+    t.integer  "total_votes",                :default => 0
+    t.integer  "max_poems",                  :default => 20
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active",      :default => true
-    t.integer  "min_lines",   :default => 4
-    t.integer  "max_lines",   :default => 10
+    t.boolean  "active",                     :default => true
+    t.integer  "min_lines",                  :default => 4
+    t.integer  "max_lines",                  :default => 10
     t.text     "description"
-    t.integer  "cur_family",  :default => 1
+    t.integer  "num_families",               :default => 0
+    t.integer  "poems_sexually_reproduced",  :default => 0
+    t.integer  "poems_asexually_reproduced", :default => 0
   end
 
   create_table "poems", :force => true do |t|

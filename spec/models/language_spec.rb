@@ -1,6 +1,16 @@
 require 'spec_helper'
 
 describe Language do
+  shared_examples_for "a language that hasn't had any poems reproduce" do
+    it "should not have any poems generated sexually" do
+      @l.poems_sexually_reproduced.should == 0
+    end
+
+    it "should not have any poems generated asexually" do
+      @l.poems_asexually_reproduced.should == 0
+    end
+  end
+
   before(:each) do
     @l = Language.create!(:name => "test name")
   end
@@ -11,6 +21,8 @@ describe Language do
       work_create @a
       @l.add_author!(@a)
     end
+
+    it_should_behave_like "a language that hasn't had any poems reproduce"
 
     it "should have added an author" do
       @l.authors.length.should == 1
@@ -37,6 +49,11 @@ describe Language do
       @l.total_votes.should == 1
     end
 
+    it "should have no families" do
+      @l.num_families.should == 0
+    end
+
+
 
 
     describe "generating a poem" do
@@ -44,6 +61,8 @@ describe Language do
         @l.gen_poem!
         @l.reload
       end
+
+      it_should_behave_like "a language that hasn't had any poems reproduce"
 
       it "should have a poem" do
         @l.poems.length.should == 1
@@ -64,6 +83,8 @@ describe Language do
         @l.reload
       end
 
+      it_should_behave_like "a language that hasn't had any poems reproduce"
+
       it "should have 3 poems" do
         @l.poems.length.should == 3
       end
@@ -73,6 +94,25 @@ describe Language do
           poem.family.should == (i + 1)
         end
       end
+
+      describe "sexual reproduction" do
+        before(:each) do
+          @l.poems.sample.asexually_reproduce!
+          2.times { @l.poems.sample.sexually_reproduce! }
+          @l.reload
+        end
+
+        it "should have 1 asexually reproduced poems" do
+          @l.poems_asexually_reproduced.should == 1
+        end
+
+        it "should have 2 sexually reproduced poems" do
+          @l.poems_sexually_reproduced.should == 2
+        end
+
+
+      end
+
     end
 
 
@@ -83,6 +123,8 @@ describe Language do
         @l.poems.first.vote_against!
         @l.poems.last.vote_for!
       end
+
+      it_should_behave_like "a language that hasn't had any poems reproduce"
 
       it "should have 20 poems" do
         @l.poems.length.should == 20
@@ -100,7 +142,16 @@ describe Language do
         it "should include the last poem" do
           @l.poems.top_5.should include @l.poems.last
         end
+      end
 
+      describe "getting poems for voting" do
+        before(:each) do
+          @voters = @l.poems_for_voting
+        end
+
+        it "should return two items" do
+          @voters.length.should == 2
+        end
 
       end
 

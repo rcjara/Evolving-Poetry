@@ -1,10 +1,5 @@
 Languages
 
-  Add migration with
-    total_poems
-    poems_sexually_reproduced
-    poems_asexually_reproduced
-
   Main Language layouts.
 
   Sorting for poems/graveyard (done, now need layout)

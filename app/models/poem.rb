@@ -78,7 +78,9 @@ class Poem < ActiveRecord::Base
     (rand(Constants::MAX_MUTATIONS) + 1).times{ new_markov_poem.mutate!(self.language.markov) }
     new_poem = self.children.build(:family => self.family, :language_id => self.language_id,
       :programmatic_text => new_markov_poem.to_prog_text, :full_text => new_markov_poem.display)
-    new_poem.save
+
+    language.increment_asexual_poems! if new_poem.save
+
     new_poem
   end
 
@@ -98,7 +100,9 @@ class Poem < ActiveRecord::Base
       :programmatic_text => new_markov_poem.to_prog_text
     new_poem.save
     other_poem.second_children << new_poem
-    new_poem.save
+
+    language.increment_sexual_poems! if new_poem.save
+
     new_poem
   end
 
