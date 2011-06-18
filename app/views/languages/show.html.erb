@@ -1,3 +1,7 @@
+<% content_for :document_ready do %>
+  $('.poem').bind( 'click', nonsenseEngine.fullSize.open);
+<% end %>
+
 <div class="left-column">
   <h3><%= @language.name %></h3>
 
@@ -27,7 +31,7 @@
 </div>
 
 <div class="right-column">
-  <%= render @poems %>
+  <%= render :partial => "poems/poem_stat_combo", :collection => @poems, :as => :poem %>
 </div>
 
 <%= clear %>

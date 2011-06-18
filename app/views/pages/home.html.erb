@@ -24,11 +24,11 @@
       </li>
       <% unless signed_in? %>
         <li>
-          <%= link_to "Log in", signin_path %> 
-          or 
+          <%= link_to "Log in", signin_path %>
+          or
           <%= link_to "Sign up", signup_path %>
           <br />
-          You don't have to have an account to use the site, but you gain access to more features.  You can read why you should sign up, 
+          You don't have to have an account to use the site, but you gain access to more features.  You can read why you should sign up,
           <%= link_to "here", signup_path %>.
         </li>
       <% end %>

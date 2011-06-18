@@ -1,0 +1,9 @@
+<div class="poem-stat-combo">
+  <div class="left-column">
+    <%= render :partial => "poems/poem_mini_stats", :locals => {:poem => poem } %>
+  </div>
+  <div class="right-column">
+    <%= render poem %>
+  </div>
+  <%= clear %>
+</div>

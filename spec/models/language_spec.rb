@@ -109,7 +109,29 @@ describe Language do
         it "should have 2 sexually reproduced poems" do
           @l.poems_sexually_reproduced.should == 2
         end
+      end
 
+      describe "speed voting test" do
+        before(:each) do
+          @num_votes = 100
+          @original_total = @l.total_votes
+
+          @num_votes.times do
+            p1, p2 = @l.poems_for_voting
+            p1.vote_for!
+            p2.vote_against!
+          end
+
+          @l.reload
+        end
+
+        it "should have registered all the votes" do
+          @l.total_votes.should == (@original_total + @num_votes)
+        end
+
+        it "the poems should have a total number of votes equal the total_votes" do
+          @l.poems.inject(0) { |s, o| s + o.votes_for }.should == @num_votes
+        end
 
       end
 

@@ -54,18 +54,15 @@ class Language < ActiveRecord::Base
   end
 
   def increment_family!
-    self.num_families += 1
-    save
+    increment!(:num_families)
   end
 
   def increment_sexual_poems!
-    self.poems_sexually_reproduced += 1
-    save
+    increment!(:poems_sexually_reproduced)
   end
 
   def increment_asexual_poems!
-    self.poems_asexually_reproduced += 1
-    save
+    increment!(:poems_asexually_reproduced)
   end
 
   def alert_of_death!
@@ -89,8 +86,7 @@ class Language < ActiveRecord::Base
   end
 
   def add_vote!
-    self.total_votes += 1
-    save
+    increment!(:total_votes)
   end
 
   def markov

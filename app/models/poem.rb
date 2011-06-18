@@ -25,8 +25,8 @@ class Poem < ActiveRecord::Base
 
   def vote_for!
     language.add_vote!
-    self.votes_for += 1
-    self.score += 1
+    increment(:votes_for)
+    increment(:score)
 
     bear_child if votes_til_birth <= 0
 
@@ -42,8 +42,8 @@ class Poem < ActiveRecord::Base
   end
 
   def vote_against!
-    self.votes_against += 1
-    self.score -= 1
+    increment(:votes_against)
+    decrement(:score)
 
     check_for_death!
 

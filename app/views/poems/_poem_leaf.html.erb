@@ -2,14 +2,11 @@
   <% unless poem.alive? %>
     <p><strong>Deceased</strong></p><br />
   <% end %>
-  <%= poem.full_text.html_safe %>
+  <%= render poem %>
   <br />
   <hr class="small">
   <div class="centered">
      <%= alive_dates(poem) %>
   </div>
   <br />
-  <p>
-    <%= link_to "more info", poem_path(poem) %>
-  </p>
 </div>

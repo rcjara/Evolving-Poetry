@@ -1,8 +1,9 @@
+p { margin-bottom: 16px; }
 h1, h2, h3 {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
 }
 hr.small {
@@ -178,6 +179,13 @@ header li {
   width: 45%;
   float: right;
   z-index: 1;
+}
+.poem-stat-combo { margin-bottom: 20px; }
+.poem-stat-combo .poem {
+  padding: 10px;
+  line-height: 8px;
+  font-size: 6.5px;
+  cursor: pointer;
 }
 .carousel {
   width: 100%;

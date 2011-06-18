@@ -1,0 +1,6 @@
+<div class="poem-stats">
+  <strong>Born:</strong> <%= born_fmt(poem) %> <br />
+  <strong>Died:</strong> <%= died_fmt(poem) %> <br />
+  <strong>Votes for/against:</strong> <%= poem.votes_for %> / <%= poem.votes_against %> <br />
+  <strong>Number of Children:</strong> <%= poem.all_children.length %><br />
+</div>
