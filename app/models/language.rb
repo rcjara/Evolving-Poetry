@@ -28,14 +28,36 @@ class Language < ActiveRecord::Base
     auth_lang_relations.find_by_author_id(author)
   end
 
-  def gen_poem!
+  def quick_evolution_poems(orig_poem = nil)
+    orig_poem ||= gen_poem
+    other_poems = 3.times.collect do
+      orig_poem.quick_evolution_reproduce
+    end
+    [orig_poem, other_poems]
+  end
+
+  def gen_poem
     num_lines = rand(max_lines - min_lines + 1) + min_lines
     p = markov.gen_poem(num_lines)
+    from_markov(p)
+  end
 
+  def gen_poem!
+    new_poem = gen_poem
     increment_family!
-    new_poem = poems.build(:full_text => p.display, :programmatic_text => p.to_prog_text, :family => self.num_families)
+    new_poem.family = self.num_families
     new_poem.save
     new_poem
+  end
+
+  def from_markov(p)
+    poems.build(:full_text => p.display, :programmatic_text => p.to_prog_text)
+  end
+
+  def from_prog_text(prog_text, strip = true)
+    markov_poem = MarkovPoem.from_prog_text(prog_text,
+      self.markov, :strip => strip)
+    from_markov(markov_poem)
   end
 
   def poems_by(sorting)

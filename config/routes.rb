@@ -22,6 +22,9 @@ EvolvingPoetry::Application.routes.draw do
   match "/signin",  :to => 'user_sessions#new'
   match "/signout", :to => 'user_sessions#destroy'
 
+  match "/quick_evolution/start/:id", :to => 'quick_evolution#new'
+  match "/quick_evolution/continue/:id", :to => 'quick_evolution#continue'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

@@ -73,15 +73,23 @@ class Poem < ActiveRecord::Base
     end
   end
 
+  def markov_asexual
+    MarkovPoem.from_prog_text(self.programmatic_text, self.language.markov, :strip => true).tap do |markov_poem|
+      (rand(Constants::MAX_MUTATIONS) + 1).times{ markov_poem.mutate!(self.language.markov) }
+    end
+  end
+
+  def quick_evolution_reproduce
+    self.language.from_markov(markov_asexual)
+  end
+
   def asexually_reproduce!
-    new_markov_poem = MarkovPoem.from_prog_text(self.programmatic_text, self.language.markov, :strip => true)
-    (rand(Constants::MAX_MUTATIONS) + 1).times{ new_markov_poem.mutate!(self.language.markov) }
-    new_poem = self.children.build(:family => self.family, :language_id => self.language_id,
-      :programmatic_text => new_markov_poem.to_prog_text, :full_text => new_markov_poem.display)
-
-    language.increment_asexual_poems! if new_poem.save
-
-    new_poem
+    new_markov_poem = markov_asexual
+    self.children.build(:family => self.family, :language_id => self.language_id,
+      :programmatic_text => new_markov_poem.to_prog_text,
+      :full_text => new_markov_poem.display).tap do |new_poem|
+        language.increment_asexual_poems! if new_poem.save
+    end
   end
 
   def sexually_reproduce!

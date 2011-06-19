@@ -178,6 +178,50 @@ describe Language do
       end
 
     end
+
+    describe "poems for quick evolution" do
+      before(:each) do
+        @poem, @other_poems = @l.quick_evolution_poems
+      end
+
+      describe "all the poems" do
+        it "should not have a family set" do
+          ([@poem] + @other_poems).each do |p|
+            p.family.should be_nil
+          end
+        end
+      end
+
+      describe "the original poem" do
+        it "should not have a span tag (indicating evolution)" do
+          @poem.full_text.should_not =~ /\<span/
+        end
+
+      end
+
+
+      describe "the other poems" do
+        it "should number three" do
+          @other_poems.length.should == 3
+        end
+
+        it "should each have different text from the original poem" do
+          @other_poems.each do |p|
+            p.programmatic_text.should_not == @poem.programmatic_text
+          end
+        end
+
+        it "should each have span tags (indicating evolution occured)" do
+          @other_poems.each do |p|
+            p.full_text.should =~ /\<span/
+          end
+        end
+      end
+
+
+
+    end
+
   end
 
 end

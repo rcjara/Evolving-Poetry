@@ -1,0 +1,9 @@
+<div class="quick-first-row">
+  <%= render @orig_poem %>
+</div>
+
+<ul>
+  <% @other_poems.each do |poem| %>
+    <li><%= render poem %></li>
+  <% end %>
+</ul>

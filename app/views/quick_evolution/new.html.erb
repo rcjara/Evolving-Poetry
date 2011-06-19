@@ -1,0 +1,18 @@
+<%= content_for :document_ready do %>
+  nonsenseEngine.inheritenceView.enable();
+<% end %>
+
+<div class="quick-first-row">
+  <%= render @orig_poem %>
+  <%= form_to_continue(@orig_poem) %>
+</div>
+
+<ul>
+  <% @other_poems.each do |poem| %>
+    <li>
+      <%= render poem %>
+      <%= form_to_continue(poem) %>
+    </li>
+
+  <% end %>
+</ul>
