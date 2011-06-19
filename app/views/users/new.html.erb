@@ -1,4 +1,16 @@
-<h1> New User </h1>
 
-<%= render 'form' %>
+<div class="left-column">
+  <h1>Get an Account</h1>
+  <%= render 'form' %>
+</div>
+
+<div class="right-column">
+  <h1>Why Sign Up?</h1>
+  <p>There are a couple of extra features that you get when you sign up.  You can post in the forum, take part in <%= link_to 'quick evolution', :controller => :pages, :action => :about_quick_evolution %>, and keep track of your evolutionary stats.  If you stick with the site, your votes will count more than other people's votes, so you can influence the path this site takes even more.  Quick evolution is pretty awesome.  It's totally worth it to sign up just for that.</p>
+  <p>There no danger in signing up.  Nonsense Engine will never send you spam, sell your email address, personal information (not that we collect any), or do anything else that sounds/is shady.  Which sort of begs the question, if there's no profit to be made off of you signing up, why make you sign up at all?</p>
+  <p>Because this site is an experiment.  No one really knows how this whole natural selection applied to poetry will work, or if it will produce anything any more interesting than the other computer generated poetry that's out there (and yes, it is out there).  In order for the experiment to have a chance to succeed, it needs people to participate.  Not to be dramatic, or anything, but it needs you.</p>
+  <p>By signing up, you give <%= link_to "Nonsense Engine", root_path %> a means to give you little rewards for participating more.  Nothing amazing, but a couple of things that are kind of neat. If that helps you to read a few more nonsense poems, and lend the site just a little more of your good taste, well then, mission accomplished.</p>
+  <p>Thanks for visiting, <br />
+  Ra&uacute;l (the guy who wrote the site) </p>
+</div>
 

@@ -145,6 +145,17 @@ header li {
   margin-bottom: 20px;
 }
 .home-links li { margin-top: 15px; }
+.home-links li .left {
+  width: 45%;
+  float: left;
+  text-align: right;
+  vertical-align: middle;
+}
+.home-links li .right {
+  width: 50%;
+  float: right;
+  text-align: left;
+}
 .language {
   border-radius: 5px;
   -webkit-border-radius: 5px;

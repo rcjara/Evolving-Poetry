@@ -11,6 +11,7 @@ EvolvingPoetry::Application.routes.draw do
 
   get "pages/home"
   get "pages/about"
+  get "pages/about_quick_evolution"
 
   post "evolution_chamber/vote"
 

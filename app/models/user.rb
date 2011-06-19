@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
                        :length => { :maximum => 50 },
                        :format => { :with => /^[^@]+$/}
 
-  validates :email,    :confirmation => true
+  validates :email,    :confirmation => true,
+                       :format => { :with => /@/ }
 
   acts_as_authentic
 
