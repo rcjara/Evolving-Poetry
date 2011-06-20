@@ -1,5 +1,6 @@
 class QuickEvolutionController < ApplicationController
   def new
+    @title = "Quick Evolution Chamber"
     @language = Language.find(params[:id])
 
     @orig_poem, @other_poems = @language.quick_evolution_poems
@@ -8,6 +9,7 @@ class QuickEvolutionController < ApplicationController
   end
 
   def continue
+    @title = "Quick Evolution Chamber"
     @language = Language.find(params[:id])
 
     @orig_poem, @other_poems = @language.quick_evolution_poems(

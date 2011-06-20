@@ -110,6 +110,8 @@ ul {
   border-radius: @radius;
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
+  border-width: 1px;
+  border-style: solid;
 }
 
 /*
@@ -129,9 +131,7 @@ body {
   background-color: @white;
   min-height: @minimum_height;
   min-width: @minimum_width;
-  border-width: 1px;
   border-color: @black;
-  border-style: solid;
   margin-top: @header_height - 2 * @header_padding + 10px;
   margin-bottom: 50px;
   margin-left: auto;
@@ -253,12 +253,10 @@ header li {
 
 .language {
   .rounded-corners;
-  border-style: solid;
   display: block;
   padding: @padding;
   border-color: @text_color;
   background-color: @grey;
-  border-width: 1px;
   min-height: 400px;
   margin-top: 25px;
 }
@@ -316,8 +314,6 @@ header li {
   margin-left: 4px;
   height: 8px;
   width:  8px;
-  border-width: 1px;
-  border-style: solid;
   border-color: #222;
   display: block;
   margin-top: 8px;
@@ -439,10 +435,8 @@ header li {
   padding: @fam_tree_leaf_padding * 2.0;
   position: fixed;
   top: 200px;
-  border-style: solid;
   background-color: @white;
   border-color: #222;
-  border-width: 1px;
 }
 
 .backdrop {
@@ -476,4 +470,38 @@ header li {
 
 .author {
   margin-top: 25px;
+}
+
+/* Quick Evolution Chamber */
+
+.quick-row {
+  .rounded-corners;
+  border-color: #222;
+  width: 300px - (2 * @padding);
+  padding: @padding;
+  background-color: @grey;
+}
+
+.quick-first-row {
+  .quick-row;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.quick-second-row {
+  margin-top: 25px;
+}
+.quick-second-row .first {
+  .quick-row;
+  margin-right: 21px;
+  float: left;
+}
+.quick-second-row .second {
+  .quick-row;
+  margin-right: 21px;
+  float: left;
+}
+.quick-second-row .third {
+  .quick-row;
+  float: left;
 }

@@ -55,13 +55,13 @@ body {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
   width: 1000px;
   background-color: #fcfcfc;
   min-height: 600px;
   min-width: 784px;
-  border-width: 1px;
   border-color: #000000;
-  border-style: solid;
   margin-top: 70px;
   margin-bottom: 50px;
   margin-left: auto;
@@ -160,12 +160,12 @@ header li {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
+  border-width: 1px;
   border-style: solid;
   display: block;
   padding: 20px;
   border-color: #444444;
   background-color: #eeeeee;
-  border-width: 1px;
   min-height: 400px;
   margin-top: 25px;
 }
@@ -206,12 +206,12 @@ header li {
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
+  border-width: 1px;
+  border-style: solid;
   float: left;
   margin-left: 4px;
   height: 8px;
   width: 8px;
-  border-width: 1px;
-  border-style: solid;
   border-color: #222222;
   display: block;
   margin-top: 8px;
@@ -298,16 +298,16 @@ header li {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
   display: none;
   width: 400px;
   min-height: 200px;
   padding: 20px;
   position: fixed;
   top: 200px;
-  border-style: solid;
   background-color: #fcfcfc;
   border-color: #222222;
-  border-width: 1px;
 }
 .backdrop {
   position: fixed;
@@ -329,3 +329,66 @@ header li {
   margin-bottom: 10px;
 }
 .author { margin-top: 25px; }
+.quick-row {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #222222;
+  width: 260px;
+  padding: 20px;
+  background-color: #eeeeee;
+}
+.quick-first-row {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #222222;
+  width: 260px;
+  padding: 20px;
+  background-color: #eeeeee;
+  margin-left: auto;
+  margin-right: auto;
+}
+.quick-second-row { margin-top: 25px; }
+.quick-second-row .first {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #222222;
+  width: 260px;
+  padding: 20px;
+  background-color: #eeeeee;
+  margin-right: 21px;
+  float: left;
+}
+.quick-second-row .second {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #222222;
+  width: 260px;
+  padding: 20px;
+  background-color: #eeeeee;
+  margin-right: 21px;
+  float: left;
+}
+.quick-second-row .third {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #222222;
+  width: 260px;
+  padding: 20px;
+  background-color: #eeeeee;
+  float: left;
+}

@@ -7,12 +7,17 @@
   <%= form_to_continue(@orig_poem) %>
 </div>
 
-<ul>
-  <% @other_poems.each do |poem| %>
-    <li>
-      <%= render poem %>
-      <%= form_to_continue(poem) %>
-    </li>
-
-  <% end %>
+<ul class="quick-second-row">
+  <li class="first">
+    <%= render @other_poems[0] %>
+    <%= form_to_continue(@other_poems[0]) %>
+  </li>
+  <li class="second">
+    <%= render @other_poems[1] %>
+    <%= form_to_continue(@other_poems[1]) %>
+  </li>
+  <li class="third">
+    <%= render @other_poems[2] %>
+    <%= form_to_continue(@other_poems[2]) %>
+  </li>
 </ul>
