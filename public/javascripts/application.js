@@ -125,3 +125,59 @@ nonsenseEngine.fullSize = ( function() {
   };
 })();
 
+nonsenseEngine.quickEvolutionVoting = (function() {
+  var $containers,
+      enterColor = '#EEF',
+      exitColor  = '#EEE';
+
+  var submit_fn = function(e) {
+    e.preventDefault();
+    $(e.target).find('form').submit();
+  };
+
+  var parent_submit_fn = function(e) {
+    e.preventDefault();
+    $(e.target).parent().find('form').submit();
+  };
+
+  var setup = function() {
+    $containers = $('.quick-poem-container')
+
+    $containers.bind('click', submit_fn);
+
+    $containers.bind('mouseenter', function(e) {
+      $elem = $(e.target);
+      while(!$elem.hasClass('quick-poem-container')) {
+        $elem = $elem.parent();
+      }
+      $elem.animate({backgroundColor: enterColor});
+      $elem.find('.poem').animate({backgroundColor: enterColor});
+    });
+
+    $containers.bind('mouseleave', function(e) {
+      $elem = $(e.target);
+      while(!$elem.hasClass('quick-poem-container')) {
+        $elem = $elem.parent();
+      }
+      $elem.animate({backgroundColor: exitColor});
+      $elem.find('.poem').animate({backgroundColor: exitColor});
+    });
+
+
+    var $inner_poems = $containers.find('.poem');
+    $inner_poems.bind('click', parent_submit_fn);
+    $inner_poems.bind('mouseenter', function(e) {
+      $elem = $(e.target);
+      while(!$elem.hasClass('quick-poem-container')) {
+        $elem = $elem.parent();
+      }
+      $elem.parent().animate({backgroundColor: enterColor})
+      $elem.animate({backgroundColor: enterColor})
+    });
+  };
+
+  return {
+    setup:   setup
+  };
+})();
+
