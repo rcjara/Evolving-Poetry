@@ -20,6 +20,7 @@ $sub_color_3: $main_color - (2 * $dif);
 $sub_color_4: $main_color - (3 * $dif);
 
 /* Overall Settings */
+
 $default_font_size: 13px;
 $default_line_height: 16px;
 $logo_font_size: 20px;
@@ -34,14 +35,17 @@ $minimum_height: 600px;
 $minimum_body_height: 800px;
 $minimum_width: 784px;
 
+/* poem settings */
+$poem_width: 400px - 2 * $padding;
+
 /* Family tree settings */
-$fam_tree_line_width: 200px;
+$fam_tree_line_width: $poem_width / 2;
 $fam_tree_line_height: 100px;
-$fam_tree_leaf_padding: 10px;
+$fam_tree_leaf_padding: $padding / 2;
 
 
 p {
-  margin-bottom: $default_line_height;
+  margin-bottom: 5px;
 }
 
 h1, h2, h3 {
@@ -314,6 +318,14 @@ header {
 .carousel {
   width: 100%;
   min-height: 300px;
+
+  li {
+    margin-top: 15px;
+    @include rounded_corners;
+    padding: $padding;
+    width: $poem_width;
+    background-color: $white;
+  }
 }
 
 .carousel-counter li {
@@ -374,12 +386,12 @@ header {
 }
 .fam-tree-leaf {
   @include fam-tree-leaf-mixin;
-  width: $fam_tree_line_width - 2 * $fam_tree_leaf_padding;
+  width: $fam_tree_line_width;
 }
 
 .fam-tree-leaf-self {
   @include fam-tree-leaf-mixin;
-  width: $fam_tree_line_width - 2 * $fam_tree_leaf_padding - 4px;
+  width: $fam_tree_line_width - 4px;
   border-style: solid;
   border-color: $dark;
   border-width: 2px;
@@ -390,20 +402,20 @@ header {
 }
 
 .fam-tree-line-container {
-  width: $fam_tree_line_width;
+  width: $fam_tree_line_width + 2 * $fam_tree_leaf_padding;
   height: $fam_tree_line_height;
   float: left;
 }
 
 .fam-tree-line-level {
-  width: $fam_tree_line_width;
+  width: $fam_tree_line_width + 2 * $fam_tree_leaf_padding;
   height: $fam_tree_line_height / 2;
 }
 
 .fam-tree-unmarked {
   float: left;
   height: $fam_tree_line_height / 2;
-  width: $fam_tree_line_width / 2;
+  width: $fam_tree_line_width / 2 + $fam_tree_leaf_padding;
 }
 
 .fam-tree-marked-right {
@@ -412,7 +424,7 @@ header {
   border-right-width: 1px;
   border-right-color: #666;
   height: $fam_tree_line_height / 2;
-  width: $fam_tree_line_width / 2 - 1;
+  width: $fam_tree_line_width / 2 + $fam_tree_leaf_padding - 1;
 }
 
 .fam-tree-marked-bottom {
@@ -421,7 +433,7 @@ header {
   border-bottom-width: 1px;
   border-bottom-color: #666;
   height: $fam_tree_line_height / 2 - 1;
-  width: $fam_tree_line_width / 2;
+  width: $fam_tree_line_width / 2 + $fam_tree_leaf_padding;
 }
 
 .full-sized-poem {
@@ -429,7 +441,7 @@ header {
   display: none;
   width: 2.0 * $fam_tree_line_width;
   min-height: 200px;
-  padding: $fam_tree_leaf_padding * 2.0;
+  padding: $padding;
   position: fixed;
   top: 200px;
   background-color: $white;
@@ -453,6 +465,32 @@ header {
 }
 
 /* Evolution Chamber */
+@mixin voting {
+  @include rounded-corners;
+  cursor: pointer;
+  border-color: #222;
+  padding: $padding;
+  background-color: $grey;
+}
+
+.evolution-chamber {
+  .left-column {
+    float: left;
+    width: 50%;
+  }
+
+  .right-column {
+    float: right;
+    width: 50%;
+  }
+
+  .voting-container {
+    @include voting;
+    width: $poem_width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 
 .inheritence-container {
   margin-bottom: 20px;
@@ -471,36 +509,42 @@ header {
 
 /* Quick Evolution Chamber */
 
-.quick-poem-container {
-  @include rounded-corners;
-  cursor: pointer;
-  border-color: #222;
-  width: 300px - (2 * $padding);
-  padding: $padding;
-  background-color: $grey;
-}
-
-.quick-first-row {
-  width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.quick-second-row {
-  margin-top: 25px;
-
-  .first {
-    margin-right: 21px;
-    float: left;
+.quick-evolution {
+  .voting-container {
+    @include voting;
+    width: 400px - (2 * $padding);
   }
 
-  .second {
-    margin-right: 21px;
-    float: left;
+  .first-row {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .third {
-    float: left;
+  .second-row {
+    margin-top: 25px;
+
+    .voting-container {
+      @include voting;
+      width: 3 / 4 * (400px - (2 * $padding));
+      font-size: 3 / 4 * $default_font_size;
+      line-height: 3 / 4 * $default_line_height;
+      padding: 3 / 4 * $padding;
+    }
+
+    .first {
+      margin-right: 21px;
+      float: left;
+    }
+
+    .second {
+      margin-right: 21px;
+      float: left;
+    }
+
+    .third {
+      float: left;
+    }
   }
 }
 

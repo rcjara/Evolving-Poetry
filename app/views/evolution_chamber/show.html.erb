@@ -1,15 +1,28 @@
 <%= content_for :document_ready do %>
   nonsenseEngine.inheritenceView.disable();
+  nonsenseEngine.enableVoting();
 <% end %>
 
+<h1>Evolution Chamber</h1>
+
+<p>This evolution chamber will show you poems from
+<%= link_to @language.name, @language %>, two at a time.</p>
+<p><strong>Click on the poem you prefer.</strong> Poems that
+no one clicks on will eventually stop showing up here.  Poems
+that get clicked on a lot will reproduce. </p>
+<br />
 <%= render 'shared/inheritence_view_setter' %>
-<div class="left-column">
-  <%= render @poem1 %>
-  <%= link_to "Select this poem", {:id => @language, :action => :vote, :vote_for => @poem1, :vote_against => @poem2}, :method => :post %>
-  | <%= link_to "about this poem", poem_path(@poem1) %>
-</div>
-<div class="right-column">
-  <%= render @poem2 %>
-  <%= link_to "Select this poem", {:id => @language, :action => :vote, :vote_for => @poem2, :vote_against => @poem1}, :method => :post %>
-  | <%= link_to "about this poem", poem_path(@poem2) %>
+<div class="evolution-chamber">
+  <div class="left-column">
+    <div class="voting-container">
+      <%= render @poem1 %>
+      <%= form_for_voting(@poem1, @poem2) %>
+    </div>
+  </div>
+  <div class="right-column">
+    <div class="voting-container">
+      <%= render @poem2 %>
+      <%= form_for_voting(@poem2, @poem1) %>
+    </div>
+  </div>
 </div>

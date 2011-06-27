@@ -1,34 +1,38 @@
 <%= content_for :document_ready do %>
   nonsenseEngine.inheritenceView.enable();
-  nonsenseEngine.quickEvolutionVoting.setup();
+  nonsenseEngine.enableVoting();
 <% end %>
 
-<div class="quick-first-row">
-  <div class="quick-poem-container">
-    <%= render @orig_poem %>
-    <%= form_to_continue(@orig_poem) %>
+<%= render 'shared/inheritence_view_setter' %>
+
+<div class="quick-evolution">
+  <div class="first-row">
+    <div class="voting-container">
+      <%= render @orig_poem %>
+      <%= form_to_continue(@orig_poem) %>
+    </div>
   </div>
+
+  <ul class="second-row">
+    <li class="first">
+      <div class="voting-container">
+        <%= render @other_poems[0] %>
+        <%= form_to_continue(@other_poems[0]) %>
+      </div>
+    </li>
+    <li class="second">
+      <div class="voting-container">
+        <%= render @other_poems[1] %>
+        <%= form_to_continue(@other_poems[1]) %>
+      </div>
+    </li>
+    <li class="third">
+      <div class="voting-container">
+        <%= render @other_poems[2] %>
+        <%= form_to_continue(@other_poems[2]) %>
+      </div>
+    </li>
+  </ul>
+
+  <%= clear %>
 </div>
-
-<ul class="quick-second-row">
-  <li class="first">
-    <div class="quick-poem-container">
-      <%= render @other_poems[0] %>
-      <%= form_to_continue(@other_poems[0]) %>
-    </div>
-  </li>
-  <li class="second">
-    <div class="quick-poem-container">
-      <%= render @other_poems[1] %>
-      <%= form_to_continue(@other_poems[1]) %>
-    </div>
-  </li>
-  <li class="third">
-    <div class="quick-poem-container">
-      <%= render @other_poems[2] %>
-      <%= form_to_continue(@other_poems[2]) %>
-    </div>
-  </li>
-</ul>
-
-<%= clear %>

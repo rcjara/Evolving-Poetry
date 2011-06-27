@@ -6,9 +6,10 @@
  */
 /* Colors */
 /* Overall Settings */
+/* poem settings */
 /* Family tree settings */
 p {
-  margin-bottom: 16px; }
+  margin-bottom: 5px; }
 
 h1, h2, h3 {
   margin-left: auto;
@@ -222,6 +223,16 @@ header {
 .carousel {
   width: 100%;
   min-height: 300px; }
+  .carousel li {
+    margin-top: 15px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    padding: 20px;
+    width: 360px;
+    background-color: #fcfcfc; }
 
 .carousel-counter li {
   border-radius: 4px;
@@ -325,7 +336,7 @@ header {
   border-width: 1px;
   border-style: solid;
   display: none;
-  width: 400px;
+  width: 360px;
   min-height: 200px;
   padding: 20px;
   position: fixed;
@@ -348,6 +359,26 @@ header {
   z-index: 10; }
 
 /* Evolution Chamber */
+.evolution-chamber .left-column {
+  float: left;
+  width: 50%; }
+.evolution-chamber .right-column {
+  float: right;
+  width: 50%; }
+.evolution-chamber .voting-container {
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  border-color: #222;
+  padding: 20px;
+  background-color: #eeeeee;
+  width: 360px;
+  margin-left: auto;
+  margin-right: auto; }
+
 .inheritence-container {
   margin-bottom: 20px; }
 
@@ -360,7 +391,7 @@ header {
   margin-top: 25px; }
 
 /* Quick Evolution Chamber */
-.quick-poem-container {
+.quick-evolution .voting-container {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -368,22 +399,34 @@ header {
   border-style: solid;
   cursor: pointer;
   border-color: #222;
-  width: 260px;
   padding: 20px;
-  background-color: #eeeeee; }
-
-.quick-first-row {
-  width: 300px;
+  background-color: #eeeeee;
+  width: 360px; }
+.quick-evolution .first-row {
+  width: 400px;
   margin-left: auto;
   margin-right: auto; }
-
-.quick-second-row {
+.quick-evolution .second-row {
   margin-top: 25px; }
-  .quick-second-row .first {
+  .quick-evolution .second-row .voting-container {
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    cursor: pointer;
+    border-color: #222;
+    padding: 20px;
+    background-color: #eeeeee;
+    width: 270px;
+    font-size: 9.75px;
+    line-height: 12px;
+    padding: 15px; }
+  .quick-evolution .second-row .first {
     margin-right: 21px;
     float: left; }
-  .quick-second-row .second {
+  .quick-evolution .second-row .second {
     margin-right: 21px;
     float: left; }
-  .quick-second-row .third {
+  .quick-evolution .second-row .third {
     float: left; }

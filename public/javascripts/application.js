@@ -125,49 +125,37 @@ nonsenseEngine.fullSize = ( function() {
   };
 })();
 
-nonsenseEngine.quickEvolutionVoting = (function() {
-  var $containers,
-      enterColor = '#DDF',
-      exitColor  = '#EEE';
+// This function assumes the class 'voting-container'
+nonsenseEngine.enableVoting = function() {
+  var enterColor  = '#DDF',
+      exitColor   = '#EEE',
+      targetClass = 'voting-container';
 
-  var submit_fn = function(e) {
-    e.preventDefault();
-    $(e.target).find('form').submit();
+  var findElem = function(e) {
+    var $elem = $(e.target);
+    while( !$elem.hasClass(targetClass) ) {
+      $elem = $elem.parent();
+    }
+    return $elem;
+  }
+
+  var submit = function(e) {
+    findElem(e).find('form').submit();
   };
 
-  var parent_submit_fn = function(e) {
-    e.preventDefault();
-    $(e.target).parent().find('form').submit();
-  };
+  var highlight = function(e) {
+    findElem(e).animate({backgroundColor: enterColor});
+  }
 
-  var setup = function() {
-    $containers = $('.quick-poem-container')
+  var dehighlight = function(e) {
+    findElem(e).animate({backgroundColor: exitColor});
+  }
 
-    $containers.bind('click', submit_fn);
-    $containers.find('.poem').bind('click', parent_submit_fn);
+  $voters = $('.' + targetClass);
+  $voters.bind('click', submit);
+  $voters.children().bind('click', submit);
 
-    $containers.bind('mouseenter', function(e) {
-      $elem = $(e.target);
-      while(!$elem.hasClass('quick-poem-container')) {
-        $elem = $elem.parent();
-      }
-      $elem.animate({backgroundColor: enterColor});
-      $elem.find('.poem').animate({backgroundColor: enterColor});
-    });
-
-    $containers.bind('mouseleave', function(e) {
-      $elem = $(e.target);
-      while(!$elem.hasClass('quick-poem-container')) {
-        $elem = $elem.parent();
-      }
-      $elem.animate({backgroundColor: exitColor});
-      $elem.find('.poem').animate({backgroundColor: exitColor});
-    });
-
-  };
-
-  return {
-    setup:   setup
-  };
-})();
+  $voters.bind('mouseenter', highlight);
+  $voters.bind('mouseleave', dehighlight);
+};
 
