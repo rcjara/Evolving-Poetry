@@ -143,10 +143,20 @@ describe User do
 
       end
 
+      describe "after being awarded many points" do
+        before(:each) do
+          9.times { @user.award_point! }
+        end
+
+        it "should have the right number of available points" do
+          @user.available_points.should == 10
+        end
+
+      end
+
     end
 
   end
-
 
 end
 

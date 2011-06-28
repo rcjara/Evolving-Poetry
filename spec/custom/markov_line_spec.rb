@@ -98,7 +98,7 @@ describe MarkovLine do
     end
 
     it "should display properly" do
-      @line.display.should == display_line( "Lie by POETRY primeval DISASTER measure encircles seen death watches")
+      @line.display.should == display_line("Lie by POETRY primeval DISASTER measure encircles seen death watches")
     end
 
     it "should only contain MarkovWords" do
