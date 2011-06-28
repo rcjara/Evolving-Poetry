@@ -2,15 +2,22 @@
   <div class="centered">
     <%= link_to "Nonsense Engine", root_path, :class => "logo-link" %>
     <ul>
-      <li><%= link_to "Home", root_path %></li>
       <% if signed_in? %>
-        <li>Points: <%= current_user.available_points %>
-          (<%= current_user.total_points %>)</li>
-        <li><%= link_to current_user.username, current_user %></li>
-        <li><%= link_to "Log out", signout_path %></li>
+        <li>
+          <%= link_to "Log out", signout_path %>
+        </li>
+        <li>
+          <%= link_to "Points:", controller: :about, action: :points %>
+          <%= current_user.available_points %>
+          (<%= current_user.total_points %>)
+        </li>
+        <li>
+          <%= link_to current_user.username, current_user %>
+        </li>
       <% else %>
         <li><%= link_to "Log in", signin_path %></li>
       <% end %>
+      <li><%= link_to "Home", root_path %></li>
     </ul>
   </div>
 </header>

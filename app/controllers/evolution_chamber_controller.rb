@@ -20,6 +20,8 @@ class EvolutionChamberController < ApplicationController
     @for.vote_for!
     @against.vote_against!
 
+    award_point!
+
     redirect_to :action => :show, :id => @for.language
   end
 end

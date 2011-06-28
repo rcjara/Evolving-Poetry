@@ -10,8 +10,10 @@ EvolvingPoetry::Application.routes.draw do
   resources :users
 
   get "pages/home"
-  get "pages/about"
-  get "pages/about_quick_evolution"
+
+  get "about", :to => 'about#index'
+  get "about/quick_evolution"
+  get "about/points"
 
   post "evolution_chamber/vote"
 

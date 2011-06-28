@@ -2,6 +2,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user_session, :current_user, :signed_in?
 
+  def award_point!(num = 1)
+    current_user.award_point!(num) if current_user
+  end
+
   def signed_in?
     current_user
   end
