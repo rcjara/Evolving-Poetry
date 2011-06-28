@@ -122,3 +122,7 @@ def author_work_language_combo
   [author, work, language]
 end
 
+def display_line(line)
+  %{<p>} + line + %{</p>}
+end
+

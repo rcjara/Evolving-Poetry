@@ -25,7 +25,7 @@ describe User do
     user.should_not be_valid
   end
 
-  it "should reject a name with the '@' symbol in it" do 
+  it "should reject a name with the '@' symbol in it" do
     user = User.create(@attr.merge({:username => "funny@thing"}) )
     user.should_not be_valid
   end
@@ -56,15 +56,15 @@ describe User do
       invalid_email_user.should_not be_valid
     end
   end
-  
+
   it "should reject email addresses identical up to case" do
     upcased_email = @attr[:email].upcase
     User.create!(@attr.merge(:email => upcased_email))
     user_with_duplicate_email = User.new(@attr)
     user_with_duplicate_email.should_not be_valid
   end
-  
-  describe "Password Validations" do 
+
+  describe "Password Validations" do
     it "should require a password" do
       u = User.new(@attr.merge({:password => "", :password_confirmation => ""}) )
       u.should_not be_valid
@@ -81,6 +81,72 @@ describe User do
       u.should_not be_valid
     end
   end
+
+  describe "a user's points" do
+    before(:each) do
+      @user = User.create!(@attr)
+    end
+
+    it "should be zero" do
+      @user.total_points.should == 0
+      @user.points_used.should == 0
+    end
+
+    it "should not be able to spend a point" do
+      @user.spend_point!.should == false
+    end
+
+
+    describe "after being awarded a point" do
+      before(:each) do
+        @user.award_point!
+      end
+
+      it "should be at one total_point" do
+        @user.total_points.should == 1
+      end
+
+      it "should be at zero used points" do
+        @user.points_used.should == 0
+      end
+
+      it "should be at one available point" do
+        @user.available_points.should == 1
+      end
+
+      it "should be able to spend a point" do
+        @user.spend_point!.should == true
+      end
+
+      it "should not be able to spend two points" do
+        @user.spend_points!(2).should == false
+      end
+
+
+
+      describe "after spending a point" do
+        before(:each) do
+          @user.spend_point!
+        end
+
+        it "should still have one total_points" do
+          @user.total_points.should == 1
+        end
+
+        it "should have one point_used" do
+          @user.points_used.should == 1
+        end
+
+        it "should have no available points" do
+          @user.available_points.should == 0
+        end
+
+      end
+
+    end
+
+  end
+
 
 end
 

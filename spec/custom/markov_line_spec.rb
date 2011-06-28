@@ -3,9 +3,9 @@ include MarkovHelper
 describe MarkovLine do
   shared_examples_for "any line" do
     it "it's display length should equal it's num_chars" do
-      @line.display.length.should == @line.num_chars + %{<br />}.length
+      @line.display.length.should == @line.num_chars + %{<p>}.length + %{</p>}.length
     end
-    
+
   end
 
   before(:all) do
@@ -25,26 +25,26 @@ describe MarkovLine do
     end
 
     it_should_behave_like "any line"
-    
+
     describe "after removing one word" do
       before(:each) do
         @old_length = @line.num_chars
         @line.remove_last_word
       end
-      
+
       it_should_behave_like "any line"
 
       it "should have fewer characters" do
         @line.num_chars.should be < @old_length
       end
     end
-    
+
     describe "after adding one word" do
       before(:each) do
         @old_length = @line.num_chars
         @line.add_word( @lang.fetch_word(@lang.words[6]) )
       end
-      
+
       it_should_behave_like "any line"
 
       it "should have more characters" do
@@ -63,7 +63,7 @@ describe MarkovLine do
           (w.upcase == w || w.downcase == w).should be_true
         end
       end
-      
+
       it "should have the same number of words" do
         @line.words.length.should == @line2.words.length
       end
@@ -71,12 +71,12 @@ describe MarkovLine do
       it "should have the same display sentence" do
         @line.display.should == @line2.display
       end
-      
+
       describe "after altering the new line" do
         before(:each) do
           @line2.add_word( @lang.fetch_word(@lang.words[10]) )
         end
-        
+
         it "should not have the same number of words" do
           @line2.words.length.should_not == @line.words.length
         end
@@ -84,13 +84,13 @@ describe MarkovLine do
         it "should not have the same display sentence" do
           @line2.display.should_not == @line.display
         end
-        
+
       end
-      
+
     end
-    
+
   end
-  
+
   describe "a line of programmatic text" do
     before(:each) do
       @text = "lie by SHOUT poetry primeval SHOUT disaster measure encircles seen death watches"
@@ -98,30 +98,30 @@ describe MarkovLine do
     end
 
     it "should display properly" do
-      @line.display.should == "Lie by POETRY primeval DISASTER measure encircles seen death watches<br />"
+      @line.display.should == display_line( "Lie by POETRY primeval DISASTER measure encircles seen death watches")
     end
-    
+
     it "should only contain MarkovWords" do
       @line.words.each do |word_hash|
         word_hash[:word].class.should == MarkovWord
       end
     end
-    
+
     it "should not be deleted" do
       @line.should_not be_deleted
     end
-    
+
     describe "after being marked as deleted" do
       before(:each) do
         @line.mark_as_deleted!
       end
-      
+
       it "should be deleted" do
         @line.should be_deleted
       end
-      
+
     end
-    
+
   end
 
   describe "when altering a tail" do
@@ -135,7 +135,7 @@ describe MarkovLine do
     it "should have a new display" do
       @line.display.should_not == @orig_display
     end
-    
+
     it "should have the same first word" do
       @line.words.first.should == @orig_first_word
     end
@@ -144,7 +144,7 @@ describe MarkovLine do
       w = @line.words.last[:word]
       (w.terminates? || w.sentence_end?).should be_true
     end
-    
+
   end
 
   describe "when marked as from first_parent" do
@@ -154,10 +154,10 @@ describe MarkovLine do
     end
 
     it "should have a display with the right tags" do
-      @line.display.should =~ /^\<span class\="from-first-parent"\>.*?\<\/span\>$/
+      @line.display.should =~ /^\<p\>\<span class\="from-first-parent"\>.*?\<\/span\>\<\/p\>$/
     end
   end
-  
+
   describe "when marked as from second_parent" do
     before(:each) do
       @line = @lang.gen_line
@@ -165,11 +165,11 @@ describe MarkovLine do
     end
 
     it "should have a display with the right tags" do
-      @line.display.should =~ /^\<span class\="from-second-parent"\>.*?\<\/span\>$/
+      @line.display.should =~ /^\<p\>\<span class\="from-second-parent"\>.*?\<\/span\>\<\/p\>$/
     end
   end
-  
-  
+
+
   describe "altering a front" do
     before(:each) do
       @line = @lang.gen_line
@@ -181,7 +181,7 @@ describe MarkovLine do
     it "should have a new display" do
       @line.display.should_not == @orig_display
     end
-    
+
     it "should have the same last word" do
       @line.words.last.should == @orig_last_word
     end
@@ -191,7 +191,7 @@ describe MarkovLine do
       w.sentence_begin?.should be_true
     end
   end
-  
-  
+
+
 end
 
