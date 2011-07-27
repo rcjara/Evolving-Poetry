@@ -11,6 +11,10 @@
 p {
   margin-bottom: 5px; }
 
+p.normal-size {
+  font-size: 13px;
+  line-height: 16px; }
+
 h1, h2, h3 {
   margin-left: auto;
   margin-right: auto;

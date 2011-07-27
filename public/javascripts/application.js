@@ -159,3 +159,34 @@ nonsenseEngine.enableVoting = function() {
   $voters.bind('mouseleave', dehighlight);
 };
 
+
+nonsenseEngine.paragraphZoom = function() {
+  var $ps = $('.second-row p');
+
+  var findElem = function(e) {
+    $elem = $(e.target);
+    while(!$elem.is("p") ) {
+      $elem = $elem.parent();
+    }
+
+    return $elem;
+  };
+
+  $ps.bind('mousemove', function(e) {
+    var $elem   = findElem(e),
+        offsetY = $elem.offset().top,
+        height  = $elem.height(),
+        relY    = e.pageY - offsetY,
+        offMid  = Math.abs(relY - 0.5 * height) / 2.0;
+    console.log("offsetY: " + offsetY + " height: " + height + " relY: " + relY + " offMid " + offMid);
+    $elem.css('font-size', (1 - offMid) * 13 + 'px');
+    $elem.css('line-height', (1 - offMid) * 16 + 'px');
+  });
+
+  $ps.bind('mouseleave', function(e) {
+    $elem = findElem(e);
+    $elem.css('font-size', '13px');
+    $elem.css('line-height', '16px');
+  });
+};
+
