@@ -5,7 +5,7 @@ class MarkovLanguage
 
   def initialize(limit = Constants::MAX_NUM_CHARS)
     @limit = limit
-    @words = {:begin => MarkovWord.new(:begin, nil, false)}
+    @words = {:__begin__ => MarkovWord.new(:__begin__, nil, false)}
   end
 
   def ==(other)
@@ -36,7 +36,7 @@ class MarkovLanguage
 
     return unless pieces && pieces.length > 0
 
-    handle_word_pair(:begin, pieces[0])
+    handle_word_pair(:__begin__, pieces[0])
 
     pieces.each_cons(2) do |word_pair|
       handle_word_pair(word_pair[0], word_pair[1])
@@ -47,7 +47,7 @@ class MarkovLanguage
 
   def gen_line
     line = MarkovLine.new
-    current_word = @words[:begin]
+    current_word = @words[:__begin__]
 
     walk(current_word, line, :forward)
   end

@@ -53,6 +53,10 @@ class MarkovLine
     mark!(:fromsecondparent)
   end
 
+  def empty?
+    @words.empty?
+  end
+
   def add_word_hash(hash)
     @words << hash
   end

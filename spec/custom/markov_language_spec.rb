@@ -3,7 +3,7 @@ describe MarkovLanguage do
     @lang = MarkovLanguage.new
     @lang.add_snippet(work_content)
   end
-  
+
   it "should have the word 'you'" do
     @lang.fetch_word("you").should_not be_nil
   end
@@ -12,31 +12,31 @@ describe MarkovLanguage do
     @lang.fetch_word("you").should_not be_is_begin
   end
 
-  it "should have a :begin" do
-    @lang.fetch_word(:begin).should_not be_nil
+  it "should have a :__begin__" do
+    @lang.fetch_word(:__begin__).should_not be_nil
   end
-  
-  it ":begin should be the begin" do
-    @lang.fetch_word(:begin).should be_is_begin
+
+  it ":__begin__ should be the begin" do
+    @lang.fetch_word(:__begin__).should be_is_begin
   end
-  
+
   it "should have the word ','" do
     @lang.fetch_word(",").should_not be_nil
   end
-  
+
   it "should have the word '!'" do
     @lang.fetch_word("!").should_not be_nil
   end
-  
+
   it "should have the word '?'" do
     @lang.fetch_word("?").should_not be_nil
   end
-  
+
   describe "the word take" do
     before(:each) do
       @word = @lang.fetch_word("take")
     end
-    
+
     it "should not be nil" do
       @word.should_not be_nil
     end
@@ -49,15 +49,15 @@ describe MarkovLanguage do
       @word.should_not be_is_begin
     end
   end
-  
+
   it "should have the word 'god'" do
     @lang.fetch_word("god").should_not be_nil
   end
-  
+
   it "should not have the word 'god!'" do
     @lang.fetch_word("god!").should be_nil
   end
-  
+
   it "should have the word 'i'" do
     @lang.fetch_word("i").should_not be_nil
   end
@@ -74,13 +74,13 @@ describe MarkovLanguage do
     it "should have '!' be its last word" do
       @words[-1].should == "!"
     end
-    
+
     it "should have 'Take' as it's first word" do
       @words[0].should == "Take"
     end
-    
-    
+
+
   end
-  
-  
+
+
 end

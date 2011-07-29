@@ -184,11 +184,15 @@ describe MarkovPoem do
           @p = MarkovPoem.from_prog_text(@p.to_prog_text, @lang, :strip => true)
         end
 
-        it "should still have 4 lines" do
+        it "should be back to 4 lines" do
           @p.length.should == 4
         end
 
-        it "should not deleted text anymore" do
+        it "should have 4 undeleted lines" do
+          @p.undeleted_lines.should == 4
+        end
+
+        it "should not have deleted text anymore" do
           @p.to_prog_text.should_not =~ /BEGINDELETED.*?ENDDELETED/
         end
 

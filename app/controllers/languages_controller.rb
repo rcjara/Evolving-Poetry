@@ -15,6 +15,11 @@ class LanguagesController < ApplicationController
     @language = Language.find(params[:id])
     @title    = @language.name
     @poems    = @language.poems_by(params[:sorting]).paginate(:page => params[:page])
+
+    respond_to do |format|
+      format.json { render :json => @language.markov }
+      format.html
+    end
   end
 
 

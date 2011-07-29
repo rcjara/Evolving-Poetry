@@ -133,7 +133,9 @@ class MarkovPoem
 
   def self.from_prog_text(pre_text, lang, options = {})
     text = options[:strip] ? strip_tags(pre_text) : pre_text
-    lines = text.split(/\sBREAK\s/).collect { |t| MarkovLine.line_from_prog_text(t, lang) }
+    lines = text.split(/\sBREAK\s/)
+      .collect { |t| MarkovLine.line_from_prog_text(t, lang) }
+      .reject(&:empty?)
     MarkovPoem.new(lines)
   end
 
@@ -150,7 +152,7 @@ class MarkovPoem
   end
 
   def self.strip_tags_regex
-    @@strip_tags_regex_var ||= construct_strip_tags_regex
+    @@strip_tags_regex ||= construct_strip_tags_regex
   end
 
   def self.construct_strip_tags_regex
