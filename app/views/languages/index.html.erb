@@ -1,10 +1,9 @@
 <%= content_for :additional_head do %>
   <%= javascript_include_tag "rjcarousel" %>
-  <%= javascript_tag do %>
-    $(document).ready(function() {
-      $('.carousel').initRJCarousel({counter: true, center: true}).next();
-    });
-  <% end %>
+<% end %>
+
+<%= content_for :document_ready do %>
+  $('.carousel').initRJCarousel({counter: true, center: true}).next();
 <% end %>
 
 <div class="langauges-header">

@@ -1,6 +1,4 @@
 class LanguagesController < ApplicationController
-  before_filter :require_user,   :only => [:show]
-
   # GET /languages
   def index
     @title     = "Languages"
