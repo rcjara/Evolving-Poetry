@@ -153,6 +153,22 @@ header {
 .main-left-column {
   float: left;
   width: 450px; }
+  .main-left-column #markov-container {
+    margin-top: 75px;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto; }
+    .main-left-column #markov-container span {
+      font-size: 20px;
+      line-height: 28px; }
+    .main-left-column #markov-container .one {
+      background-color: #ccf; }
+    .main-left-column #markov-container .two {
+      background-color: #ff7; }
+    .main-left-column #markov-container .three {
+      background-color: #f95; }
+    .main-left-column #markov-container .four {
+      background-color: #7f7; }
 
 .main-right-column {
   float: right;
@@ -406,13 +422,17 @@ header {
   padding: 20px;
   background-color: #eeeeee;
   width: 360px; }
-.quick-evolution .first-row {
+.quick-evolution .left-voting {
+  float: left;
   width: 400px;
+  padding: 20px;
   margin-left: auto;
   margin-right: auto; }
-.quick-evolution .second-row {
-  margin-top: 25px; }
-  .quick-evolution .second-row .voting-container {
+.quick-evolution .right-voting {
+  float: right;
+  width: 400px;
+  margin-top: 35px; }
+  .quick-evolution .right-voting .voting-container {
     border-radius: 5px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -422,15 +442,14 @@ header {
     border-color: #222;
     padding: 20px;
     background-color: #eeeeee;
-    width: 270px;
-    font-size: 9.75px;
-    line-height: 12px;
-    padding: 15px; }
-  .quick-evolution .second-row .first {
+    width: 360px; }
+  .quick-evolution .right-voting li {
+    margin-bottom: 20px; }
+  .quick-evolution .right-voting .first {
     margin-right: 21px;
     float: left; }
-  .quick-evolution .second-row .second {
+  .quick-evolution .right-voting .second {
     margin-right: 21px;
     float: left; }
-  .quick-evolution .second-row .third {
+  .quick-evolution .right-voting .third {
     float: left; }

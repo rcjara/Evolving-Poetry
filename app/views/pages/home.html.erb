@@ -1,22 +1,22 @@
 <%= content_for :additional_head do %>
   <%= javascript_include_tag "markov" %>
-  <%= javascript_tag "var lang" %>
+  <%= javascript_tag "var lang, disp, cont" %>
 <% end %>
 
 <%= content_for :document_ready do %>
   lang = nonsenseEngine.markov.language();
-  lang.load(4, function() {
-    nonsenseEngine.markov.display.wordArray(lang.genWordArray(), true);
-  });
+  disp = nonsenseEngine.markov.display($('#markov-container'));
+  cont = nonsenseEngine.markov.controller(lang, disp);
+  cont.start();
 <% end %>
 
 <div class="main-left-column">
-  <p>This will be an image some day.</p>
+  <div id="markov-container"></div>
 </div>
 <div class="main-right-column">
   <div class="home-links">
     <h1>Nonsense Engine</h1>
-    <h2>computer generated poetry in a state of evolution</h2>
+    <h2>computer generated poetry that evolves</h2>
     <ul>
       <li>
         <div class="left">

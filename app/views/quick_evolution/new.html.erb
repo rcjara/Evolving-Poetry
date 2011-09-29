@@ -2,32 +2,47 @@
   nonsenseEngine.inheritenceView.enable();
   nonsenseEngine.enableVoting();
   nonsenseEngine.paragraphZoom();
+  var $left      = $('.left-voting'),
+      lft_height = parseFloat($left.css('height')),
+      rgt_height = parseFloat($('.right-voting').css('height')),
+      top        = (rgt_height - lft_height) / 2;
+  console.log(lft_height);
+  console.log(rgt_height);
+  console.log(top);
+  $left.css('margin-top', top);
+
 <% end %>
 
+<h1>Quick Evolution</h1>
+<p>Quick Evolution is PLACE HOLDER</p>
 <%= render 'shared/inheritence_view_setter' %>
 
 <div class="quick-evolution">
-  <div class="first-row">
+  <div class="left-voting">
+    <h3>Parent</h3>
     <div class="voting-container">
       <%= render @orig_poem %>
       <%= form_to_continue(@orig_poem) %>
     </div>
   </div>
 
-  <ul class="second-row">
+  <ul class="right-voting">
     <li class="first">
+      <h3>Child 1</h3>
       <div class="voting-container">
         <%= render @other_poems[0] %>
         <%= form_to_continue(@other_poems[0]) %>
       </div>
     </li>
     <li class="second">
+      <h3>Child 2</h3>
       <div class="voting-container">
         <%= render @other_poems[1] %>
         <%= form_to_continue(@other_poems[1]) %>
       </div>
     </li>
     <li class="third">
+      <h3>Child 3</h3>
       <div class="voting-container">
         <%= render @other_poems[2] %>
         <%= form_to_continue(@other_poems[2]) %>

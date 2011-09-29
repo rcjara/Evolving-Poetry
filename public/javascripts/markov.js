@@ -7,15 +7,28 @@ nonsenseEngine.markov = ( function() {
     var attr = _attr;
 
     var getChild = function(excluding) {
-      var target = rand(attr.children_count),
+      var target,
+          outOf = 0,
+          tempChildren = {},
           i = 0;
 
       for(var key in attr.children) {
-        i += attr.children[key]
+        if(key !== excluding && key !== "__proto__") {
+          tempChildren[key] = attr.children[key];
+          outOf += tempChildren[key];
+        }
+      }
+
+      target = rand(outOf);
+
+      for(var key in tempChildren) {
+        i += tempChildren[key]
         if(i >= target) {
           return key;
         }
       };
+
+      return null;
     };
 
     return {
@@ -25,21 +38,80 @@ nonsenseEngine.markov = ( function() {
   };
 
   var language = function() {
-    var additionalCallback, words;
+    var additionalCallback, words,
+        wordArray = [];
 
-    var genWordArray = function() {
-      var wordArray = [],
-          curIdent = "__begin__",
-          curWord = words[curIdent];
+
+    var genWords = function(curIdent, minLength, exclude) {
+      var theseWords = []
+      if(!curIdent) {
+        curIdent = "__begin__";
+      }
+      if(!minLength) {
+        minLength = 5;
+      }
+      var curWord = words[curIdent];
 
       while(true) {
-        if(curWord.attr().sentence_end) {
-          return wordArray;
+        if(curWord.attr().sentence_end && wordArray.length > minLength + 1) {
+          return theseWords;
         }
-        curIdent = curWord.getChild();
+        curIdent = curWord.getChild(exclude);
+        if(!curIdent) {
+          curIdent = "__begin__";
+        }
+        exclude = null;
         curWord = words[curIdent];
-        wordArray.push(curWord);
+        if(curIdent != "__begin__") {
+          theseWords.push(curWord);
+          wordArray.push(curWord);
+        }
       }
+    };
+
+    var seedWith = function() {
+      for(var i = 0; i < arguments.length; i++) {
+        wordArray.push(words[ arguments[i] ]);
+      }
+
+      return wordArray;
+    };
+
+    var walkBackIndex = function(minBack) {
+      var calcNumChildren = function(obj) {
+        var i = 0;
+        for(var key in obj) {
+          i += 1;
+        }
+        return i;
+      };
+
+      if(!minBack) { minBack = 2; }
+      var i = wordArray.length - 1,
+          numChildren = 0,
+          dist = 0;
+      while(dist <= minBack) {
+        dist += 1;
+        i -= 1;
+      }
+
+      numChildren = calcNumChildren(wordArray[i].attr().children);
+      while(i > 0 && numChildren < 3) {
+        i -= 1;
+        numChildren = calcNumChildren(wordArray[i].attr().children);
+      }
+
+      return i;
+    };
+
+    var walkBack = function(toIndex) {
+      var deletedWord = wordArray[toIndex + 1].attr().identifier;
+
+      while(wordArray.length > toIndex + 1) {
+        wordArray.pop();
+      }
+
+      return deletedWord;
     };
 
     var initialize = function(data) {
@@ -61,64 +133,167 @@ nonsenseEngine.markov = ( function() {
       });
     };
 
+    var lastMarkovWord = function() {
+      if(wordArray.length > 0) {
+        return wordArray[wordArray.length - 1];
+      } else {
+        return words["__begin__"];
+      }
+    };
+
+    var lastWord = function() {
+      return lastMarkovWord().attr().identifier;
+    };
+
     var __interface__ = {
-      words:        function() { return words; },
-      load:         load,
-      genWordArray: genWordArray,
-      initialize:   initialize
+      words:          function() { return words; },
+      length:         function() { return wordArray.length; },
+      lastWord:       lastWord,
+      lastMarkovWord: lastMarkovWord,
+      load:           load,
+      seedWith:       seedWith,
+      walkBackIndex:  walkBackIndex,
+      walkBack:       walkBack,
+      genWords:       genWords,
+      initialize:     initialize
     };
 
     return __interface__;
   };
 
-  var display = (function() {
-    var $elem,
-        curIndex = 0,
+  var controller = function(lang, disp) {
+    var language      = lang,
+        display       = disp,
+        walkBackIndex = 0,
+        maxLength     = 0,
+        retractDelay  = 2500,
+        expandDelay   = 0;
+
+
+    var start = function() {
+      language.load(4, startMainLoop);
+    };
+
+    var startMainLoop = function() {
+      var words = language.seedWith('welcome', 'to', 'nonsense', 'engine', '.');
+      display.addWords(words);
+      var delay = display.appearAll();
+
+
+      setTimeout(retract, delay + retractDelay);
+    };
+
+    var retract = function() {
+      maxLength = language.length();
+      walkBackIndex = language.walkBackIndex();
+
+      if(maxLength > 75) {
+        maxLength = 3;
+        walkBackIndex = -1;
+      }
+
+      var delay = display.walkBackDisplay(walkBackIndex);
+
+      setTimeout(expand, delay + expandDelay);
+    };
+
+    var expand = function() {
+      var words,
+          exclude   = language.walkBack(walkBackIndex),
+          sentBegin = language.lastMarkovWord().attr().sentence_end;
+
+      display.walkBack(walkBackIndex);
+
+      if(walkBackIndex == 0) {
+        console.log("walkBackIndex was 0");
+        words = language.genWords();
+      } else {
+        words = language.genWords(language.lastWord(),
+          maxLength, exclude);
+      }
+      display.addWords(words, sentBegin);
+      var delay = display.appearAll();
+
+      setTimeout(retract, delay + retractDelay);
+    };
+
+    return {
+      start:      start
+    };
+  };
+
+  var display = function(elem) {
+    var $elem        = elem,
+        curIndex     = 0,
+        classes      = ['one', 'two', 'three', 'four'],
         displayWords = [];
 
-    $(document).ready(function() {
-      $elem = $('.main-left-column');
-    });
+    var addWords = function(wordArray, sentBegin) {
+      $.each(wordArray, function(i, markovWord) {
+        var attr = markovWord.attr(),
+            wordText = attr.identifier;
 
-    var wordArray = function(wArray, sentBegin) {
-      $.each(wArray, function(i, mWord) {
-        var attr = mWord.attr(),
-            wText = attr.identifier;
-
-        if(attr.proper) {
-          wText = capitalize(wText);
+        if(attr.proper || sentBegin) {
+          wordText = capitalize(wordText);
         }
         if(rand(attr.count) < attr.shout_count) {
-          wText = wText.toUpperCase();
+          wordText = wordText.toUpperCase();
+        }
+        if(!attr.punctuation) {
+          wordText = " " + wordText;
         }
 
-        if(!attr.punctuation) {
-          wText = " " + wText;
-        }
-        var $word = $('<span>' + wText + '</span>');
+        sentBegin = attr.sentence_end
+        var $word = $('<span>' + wordText + '</span>');
+        $word.addClass(classes[0]);
         $word.css('display', 'none');
         $elem.append($word);
         displayWords.push($word);
       });
 
-      appearAll();
+      shiftClass();
+    };
+
+    var shiftClass = function() {
+      var old = classes.shift();
+      classes.push(old);
+    }
+
+    //returns the total amount of time the walkback will take
+    var walkBackDisplay = function(toIndex) {
+      var delay = 0,
+          fadeOutLength = 300;
+
+      for(var i = displayWords.length - 1; i > toIndex; i--) {
+        displayWords[i].delay(delay).fadeOut(fadeOutLength);
+        delay += 50;
+      }
+
+      return delay + fadeOutLength;
+    };
+
+    var walkBack = function(toIndex) {
+      for(var i = displayWords.length - 1; i > toIndex; i--) {
+        displayWords[i].remove();
+        displayWords.pop();
+      }
+      curIndex = toIndex + 1;
     };
 
     var appearAll = function() {
-      var delay = 0;
+      var delay = 0,
+          fadeInLength = 1000;
 
       for(; curIndex < displayWords.length; curIndex++) {
-        displayWords[curIndex].delay(delay).fadeIn(1000);
+        displayWords[curIndex].delay(delay).fadeIn(fadeInLength);
         delay += 200;
       }
+
+      return delay + fadeInLength;
     };
 
     var capitalize = function(text) {
       return text.charAt(0).toUpperCase() + text.slice(1)
-    };
-
-    var language = function(language) {
-      elementsFor(language.words(), 0);
     };
 
     var elementsFor = function(obj, indent) {
@@ -146,15 +321,18 @@ nonsenseEngine.markov = ( function() {
     };
 
     return {
-      wordArray: wordArray,
-      language:  language
+      walkBackDisplay: walkBackDisplay,
+      walkBack:        walkBack,
+      appearAll:       appearAll,
+      addWords:        addWords,
     };
-  })();
+  };
 
   return {
-    language: language,
-    word:     word,
-    display:  display
+    language:   language,
+    word:       word,
+    controller: controller,
+    display:    display
   };
 })();
 

@@ -2,17 +2,16 @@
 
 <%= form_for @user_session, :url => {:action => "create"} do |f| %>
   <%= render 'shared/errors', :object => f.object %>
-  <div class="field">
-    <%= f.label :user_name_or_email, "User name or email." %><br />
+  <p>
+    <%= f.label :user_name_or_email, "User Name or email" %><br />
     <%= f.text_field :username %>
-  </div>
-  <div class="field">
+  </p>
+  <p>
     <%= f.label :password %><br />
     <%= f.password_field :password %>
-  </div>
+  </p>
   <div class="actions">
-    <%= f.submit "Sign in" %>
+     <p><%= f.submit "Sign in" %> New user? <%= link_to "Sign up now!", signup_path %></p>
   </div>
 <% end %>
 
-<p>New user? <%= link_to "Sign up now!", signup_path %></p>

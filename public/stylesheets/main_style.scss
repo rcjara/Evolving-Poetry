@@ -231,6 +231,35 @@ header {
 .main-left-column {
   float: left;
   width: 450px;
+
+  #markov-container {
+    margin-top: 75px;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+
+    span {
+      font-size: 20px;
+      line-height: 28px;
+    }
+
+    .one {
+      background-color: #ccf;
+    }
+
+    .two {
+      background-color: #ff7;
+    }
+
+    .three {
+      background-color: #f95;
+    }
+
+    .four {
+      background-color: #7f7;
+    }
+
+  }
 }
 
 .main-right-column {
@@ -520,21 +549,26 @@ header {
     width: 400px - (2 * $padding);
   }
 
-  .first-row {
+  .left-voting {
+    float: left;
     width: 400px;
+    padding: $padding;
     margin-left: auto;
     margin-right: auto;
   }
 
-  .second-row {
-    margin-top: 25px;
+  .right-voting {
+    float: right;
+    width: 400px;
+    margin-top: 35px;
 
     .voting-container {
       @include voting;
-      width: 3 / 4 * (400px - (2 * $padding));
-      font-size: 3 / 4 * $default_font_size;
-      line-height: 3 / 4 * $default_line_height;
-      padding: 3 / 4 * $padding;
+      width: 400px - (2 * $padding);
+    }
+
+    li {
+      margin-bottom: 20px;
     }
 
     .first {
