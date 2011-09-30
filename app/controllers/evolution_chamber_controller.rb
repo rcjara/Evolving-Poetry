@@ -1,6 +1,7 @@
 class EvolutionChamberController < ApplicationController
   def show
     @language = Language.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @language.active
     @title = "Evolution Chamber: #{@language.name}"
     @poem1, @poem2 = @language.poems_for_voting
 

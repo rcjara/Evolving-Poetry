@@ -15,6 +15,31 @@ describe Language do
     @l = Language.create!(:name => "test name")
   end
 
+  describe "visibility" do
+    before(:each) do
+      @l2 = Language.create!(:name => "test 2 name", :visible => false)
+      @l3 = Language.create!(:name => "test 3 name")
+      @l4 = Language.create!(:name => "test 4 name", :visible => false)
+    end
+
+    it "should have four languages all totaled" do
+      Language.all.length.should == 4
+    end
+
+    it "should have two visible languages" do
+      Language.visible.length.should == 2
+    end
+
+    it "should have 'test 3 name' as a visible language" do
+      Language.visible.where('name like ?', '%test 3 name%').should_not be_empty
+    end
+
+    it "should not have 'test 4 name' as a visible language" do
+      Language.visible.where('name like ?', '%test 4 name%').should be_empty
+    end
+  end
+
+
   describe "adding and removing authors" do
     before(:each) do
       @a = author_create

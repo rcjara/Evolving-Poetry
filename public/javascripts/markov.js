@@ -124,10 +124,10 @@ nonsenseEngine.markov = ( function() {
       }
     };
 
-    var load = function(lang_id, callBack) {
+    var load = function(url, callBack) {
       additionalCallback = callBack;
       $.ajax({
-        url:      'languages/' + lang_id + '.json',
+        url:      url,
         dataType: 'json',
         success:  function(data) { initialize(data) }
       });
@@ -161,8 +161,9 @@ nonsenseEngine.markov = ( function() {
     return __interface__;
   };
 
-  var controller = function(lang, disp) {
+  var controller = function(_url, lang, disp) {
     var language      = lang,
+        url           = _url
         display       = disp,
         walkBackIndex = 0,
         maxLength     = 0,
@@ -171,7 +172,7 @@ nonsenseEngine.markov = ( function() {
 
 
     var start = function() {
-      language.load(4, startMainLoop);
+      language.load(url, startMainLoop);
     };
 
     var startMainLoop = function() {

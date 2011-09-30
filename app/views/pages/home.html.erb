@@ -6,7 +6,7 @@
 <%= content_for :document_ready do %>
   lang = nonsenseEngine.markov.language();
   disp = nonsenseEngine.markov.display($('#markov-container'));
-  cont = nonsenseEngine.markov.controller(lang, disp);
+  cont = nonsenseEngine.markov.controller('languages/1.json', lang, disp);
   cont.start();
 <% end %>
 

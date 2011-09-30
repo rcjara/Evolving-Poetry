@@ -4,13 +4,14 @@ class Language < ActiveRecord::Base
   attr_accessible :name, :total_votes, :max_poems, :created_at,
     :updated_at, :active, :description, :min_lines, :max_lines,
     :cur_family, :num_families, :poems_sexually_reproduced,
-    :poems_asexually_reproduced
+    :poems_asexually_reproduced, :visible
 
   has_many :auth_lang_relations, :dependent => :destroy
   has_many :authors, :through => :auth_lang_relations
   has_many :poems
 
-  scope :active, where('active = ?', true)
+  scope :visible, where('visible = ?', true)
+  scope :active,  visible.where('active = ?', true)
 
   def self.random
     Language.active.sample

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110611184144) do
+ActiveRecord::Schema.define(:version => 20110929185522) do
 
   create_table "auth_lang_relations", :force => true do |t|
     t.integer  "author_id"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(:version => 20110611184144) do
     t.integer  "num_families",               :default => 0
     t.integer  "poems_sexually_reproduced",  :default => 0
     t.integer  "poems_asexually_reproduced", :default => 0
+    t.boolean  "visible",                    :default => true
   end
 
   create_table "poems", :force => true do |t|
