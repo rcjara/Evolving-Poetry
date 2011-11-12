@@ -79,10 +79,6 @@ class Poem < ActiveRecord::Base
     end
   end
 
-  def quick_evolution_reproduce
-    self.language.from_markov(markov_asexual)
-  end
-
   def asexually_reproduce!
     new_markov_poem = markov_asexual
     self.children.build(:family => self.family, :language_id => self.language_id,

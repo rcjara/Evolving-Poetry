@@ -8,13 +8,6 @@ describe AboutController do
     end
   end
 
-  describe "GET 'quick_evolution'" do
-    it "should be successful" do
-      get 'quick_evolution'
-      response.should be_success
-    end
-  end
-
   describe "GET 'points'" do
     it "should be successful" do
       get 'points'
