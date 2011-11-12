@@ -12,13 +12,13 @@ gem 'sass'
 gem 'authlogic'
 gem 'rails3-generators'
 gem 'will_paginate', '3.0.pre2'
+gem 'faker'
 
 
 
 group :development do
   gem 'rspec-rails'
   gem 'annotate-models'
-  gem 'faker'
   gem 'nifty-generators', '>= 0.4.0'
   gem 'jasmine'
 end
