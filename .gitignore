@@ -1,6 +1,7 @@
 .bundle
 db/*.sqlite3
 .sass-cache/*
+public/stylesheets/.sass-cache/*
 log/*.log
 tmp/**/*
 *.sw*

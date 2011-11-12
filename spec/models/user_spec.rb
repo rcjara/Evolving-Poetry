@@ -16,8 +16,19 @@ describe User do
     user.should_not be_valid
   end
 
-  it "should create a new instance given valid elements" do
-    User.create!(@attr)
+  describe "after creating a valid user" do
+    before(:each) do
+      User.create!(@attr)
+      @user = User.where('username = ?', "Raul Jara").first
+    end
+
+    it "should be able to access that user's email" do
+      @user.email.should == "raul.c.jara@gmail.com"
+    end
+
+    it "should be able to access that user's points" do
+      @user.total_points.should == 0
+    end
   end
 
   it "should require a name" do
