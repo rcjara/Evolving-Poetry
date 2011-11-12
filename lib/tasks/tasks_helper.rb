@@ -13,7 +13,7 @@ module TasksHelper
   end
 
   def self.create_small_languages
-    Author.all.each do |auth|
+    Author.order("id").each do |auth|
       puts "Creating language for #{auth.full_name}"
       lang = Language.create!(:name => "#{auth.full_name}'s Language", :description => "A language of #{auth.full_name}'s own.")
       lang.add_author!(auth)
