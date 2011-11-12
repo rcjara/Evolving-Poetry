@@ -35,6 +35,7 @@ module EvolvingPoetry
 
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(#{config.root}/lib/custom)
+    config.autoload_paths += %W(#{config.root}/lib/tasks)
     config.autoload_paths += %W(#{config.root}/lib)
 
     # Configure the default encoding used in templates for Ruby 1.9.

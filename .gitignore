@@ -2,6 +2,7 @@
 db/*.sqlite3
 .sass-cache/*
 public/stylesheets/.sass-cache/*
+db/development.sqlite3-journal
 log/*.log
 tmp/**/*
 *.sw*
