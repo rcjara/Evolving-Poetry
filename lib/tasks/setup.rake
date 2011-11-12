@@ -9,6 +9,14 @@ namespace :db do
   end
 end
 
+namespace :db do
+  desc "Set up the environment for deployment"
+  task :deploy_setup => :environment do
+    Rake::Task['db:process_works'].invoke
+    create_languages
+  end
+end
+
 def create_languages
   create_small_languages
   create_mega_language
