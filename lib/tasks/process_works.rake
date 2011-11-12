@@ -18,6 +18,9 @@ def process_works_files
   file_names.unshift( file_names.delete "nonsense_welcome.txt" )
 
   puts "#{file_names.length} files."
+  puts '-' * 20
+  puts file_names.join("\n")
+  puts '-' * 20
 
   file_names.each do |fn|
     puts "processing.. #{fn}"
