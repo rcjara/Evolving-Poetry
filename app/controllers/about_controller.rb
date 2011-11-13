@@ -3,11 +3,9 @@ class AboutController < ApplicationController
     @title = "About"
   end
 
-  def quick_evolution
-    @title = "About Quick Evolution"
-  end
+  def show
+    page = params[:id]
 
-  def points
-    @title = "About Points"
+    render "about/#{page}"
   end
 end

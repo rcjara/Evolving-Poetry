@@ -1,0 +1,18 @@
+<div class="not-so-wide">
+  <p class="heading">How Does Nonsense Engine Generate its Nonsense?</p>
+  <p>In a single phrase: Markov chains.  But that doesn&rsquo;t do you much good, unless you already know about Markov chains.  So forget about them for now.</p>
+
+  <p>What Nonsense Engine does is look at some text, like say, a collection of Edgar Allen Poe&rsquo;s more famous poems.  It looks at these poems, and keeps track of which words start lines.  Let&rsquo;s say that the most frequent words that begin a line are &ldquo;and&rdquo;, &ldquo;the&rdquo;, and &ldquo;of&rdquo; (which just so happen to be the words that most frequently start a line).  When Nonsense Engine wants to create a new line, it will select one of those words at mostly random.  It&rsquo;s more likely to select the words that show up most frequently, but aside from that, it&rsquo;s random.  So, it&rsquo;s most likely to begin with &ldquo;and&rdquo;, because that&rsquo;s the word that shows up the most at the beginning of the line.  </p>
+
+  <p>Let&rsquo;s say it chooses &ldquo;and&rdquo;.  Now it has to choose the next word.  To do that, Nonsense Engine will look at the words that come most frequently after &ldquo;and&rdquo;.  Those words happen to be &ldquo;all&rdquo;, &ldquo;I&rdquo;, and &ldquo;so&rdquo;.  They come from lines like: &ldquo;<strong>And all</strong> I loved, I loved alone.  Or lines like: &ldquo;<strong>And so</strong> faintly you came tapping, tapping at my chamber door&rdquo;.  Nonsense Engine will choose one of those words that follows &ldquo;and&rdquo;, also based on how frequently it appears.  Let&rsquo;s say Nonsense Engine chooses &ldquo;so&rdquo;.  Now the line looks like &ldquo;And so&rdquo;.  </p>
+
+  <p>Next Nonsense Engine looks at the words that come after &ldquo;so&rdquo;.  One of the words that comes after &ldquo;so&rdquo; is &ldquo;soft&rdquo;.  From the line &ldquo;...when the air <strong>so soft</strong> / Fail'd…&rdquo;  Now the line looks like &ldquo;And so soft&rdquo;.  Even though the words &ldquo;and so soft&rdquo; never appear together anywhere in any of the Edgar Allan Poe poems that Nonsense Engine knows about.  </p>
+
+  <p>This process will until it hits a period, or an exclamation mark, or anything else that might end a sentence.  Then it stops, having a complete line.  Then it makes a new line until it has a few lines, and it calls that collection of lines a poem.</p>
+
+  <p>That process of looking at words tend to come after what other words is a specific type of Markov chain.  There are other uses for Markov chains.  They get used in finance quite a bit.  But rather than do something practical with them, Nonsense Engine uses them to help make nonsense.</p>
+
+  <p>The poems are pretty random.  Sometimes they have a line or two that are pretty entertaining.  A lot of the time the whole poem is basically crap.  That&rsquo;s where the visitors to Nonsense Engine come in.  You can help to make the poems better.</p>
+</div>
+
+<%= link_to "Nonsense Explained", controller: 'about', action: 'index' %>

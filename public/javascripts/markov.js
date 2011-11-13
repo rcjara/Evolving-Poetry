@@ -190,7 +190,7 @@ nonsenseEngine.markov = ( function() {
 
       if(maxLength > 75) {
         maxLength = 3;
-        walkBackIndex = -1;
+        walkBackIndex = 0;
       }
 
       var delay = display.walkBackDisplay(walkBackIndex);

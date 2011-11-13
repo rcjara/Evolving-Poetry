@@ -11,9 +11,7 @@ EvolvingPoetry::Application.routes.draw do
 
   get "pages/home"
 
-  get "about", :to => 'about#index'
-  get "about/quick_evolution"
-  get "about/points"
+  resources 'about', only: [:show, :index]
 
   post "evolution_chamber/vote"
 

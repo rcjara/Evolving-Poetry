@@ -11,6 +11,7 @@
 <% end %>
 
 <div class="main-left-column">
+  <h2>Please excuse the mess.  This site is still under construction.</h2>
   <div id="markov-container"></div>
 </div>
 <div class="main-right-column">
@@ -28,13 +29,13 @@
           </p>
         </li>
       <% end %>
-      <%= link_to about_path do %>
+      <%= link_to controller: 'about', action: 'index' do %>
         <li class="button">
           <p class="label">
             What is This Nonsense?
           </p>
           <p class="description">
-            Helps make the nonsense less nonsensical.
+            Explains just what is going on here.
           </p>
         </li>
       <% end %>
