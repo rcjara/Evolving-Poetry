@@ -65,6 +65,14 @@ h1, h2, h3 {
   width: 100%;
 }
 
+h1 {
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
 h3 {
 }
 
@@ -85,6 +93,7 @@ hr.small {
   line-height: $default_line_height;
   text-decoration: none;
   color: $sub_color_2;
+  letter-spacing: 1px;
   font-family: Arial Black, sans serif;
 }
 
@@ -146,6 +155,7 @@ body {
 
 .main-body {
   @include rounded-corners;
+  opacity: 0.9;
   width: $overall_width;
   background-color: $white;
   min-height: $minimum_height;
@@ -271,6 +281,60 @@ header {
   width: 45%;
 }
 
+
+@mixin shadows($box-shadow-color) {
+  -webkit-box-shadow: 1px 1px 1px $box-shadow-color;
+  box-shadow: 1px 1px 1px $box-shadow-color;
+}
+
+@mixin button {
+  margin-bottom: 15px;
+  @include rounded-corners(20px);
+  @include shadows(#999);
+  padding: 20px;
+
+  p {
+    text-align: center;
+  }
+
+  p.label {
+    font-size: $default_font_size + 2;
+    line-height: $default_line_height + 2;
+    color: $white;
+    text-shadow: $black 1px 1px;
+  }
+
+  p.description {
+    color: $dark;
+    font-weight: normal;
+  }
+}
+
+@mixin button-gradient($base-color, $base-bright: 45%) {
+  $hue: hue($base-color);
+  $saturation: saturation($base-color);
+  $button-bottom:    hsl( $hue, $saturation, $base-bright + 0);
+  $button-mid-point: hsl( $hue - 5, $saturation + 2, $base-bright + 10);
+  $button-split:     hsl( $hue - 5, $saturation + 5, $base-bright + 5);
+  $button-top:       hsl( $hue - 1, $saturation + 3, $base-bright + 20 );
+
+  background: $button-bottom; /* Old browsers */
+  background: -moz-linear-gradient(top, $button-top 0%, $button-mid-point 50%, $button-split 51%, $button-bottom 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$button-top), color-stop(50%,$button-mid-point), color-stop(51%,$button-split), color-stop(100%,$button-bottom)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* IE10+ */
+  background: linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$button-top', endColorstr='$button-bottom',GradientType=0 ); /* IE6-9 */
+}
+
+/* $button-bottom: #1e5799;
+ * $button-mid-point: #2989d8;
+ * $button-split: #207cca;
+ * $button-top: #7db9e8;
+ */
+
+
 .home-links {
   width: 90%;
   margin-left: auto;
@@ -278,21 +342,24 @@ header {
   margin-top: $padding;
   margin-bottom: $padding;
 
-  li {
-    margin-top: 15px;
+  .button {
+    @include button;
+    @include button-gradient(#1e5799);
+  }
 
-    .left {
-      width: 45%;
-      float: left;
-      text-align: right;
-      vertical-align: middle;
-    }
+  .button:hover {
+    @include button-gradient(#1e5799, 50%);
+    border-color: $grey;
+  }
 
-    .right {
-      width: 50%;
-      float: right;
-      text-align: left;
-    }
+  .call-to-action {
+    @include button;
+    @include button-gradient( #f09050 );
+  }
+
+  .call-to-action:hover {
+    @include button-gradient( #f09050, 50%);
+    border-color: $grey;
   }
 }
 
@@ -543,6 +610,8 @@ header {
 }
 
 .evolution-chamber {
+  margin-bottom: 30px;
+
   .left-column {
     float: left;
     width: 50%;

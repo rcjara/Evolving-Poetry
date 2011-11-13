@@ -3,13 +3,9 @@
   nonsenseEngine.enableVoting();
 <% end %>
 
-<h3>Evolution Chamber</h3>
+<h1>Evolution Chamber</h1>
+<h2>choose which poems will continue on</h2>
 
-  <p>This evolution chamber will show you poems from
-  <%= link_to @language.name, @language %>, two at a time.</p>
-  <p><strong>Please click on the poem you prefer.</strong> Poems
-  that no one clicks on will eventually stop showing up here.  Poems
-  that get clicked on a lot will reproduce. </p>
 
 <% if @voting_response %>
   <div class="voting-response">
@@ -42,3 +38,9 @@
   </div>
   <%= clear %>
 </div>
+
+<p>The evolution chamber above will show you poems from
+<%= link_to @language.name, @language %>, two at a time.</p>
+<p><strong>Click on the poem you prefer.</strong> Poems
+that no one clicks on will eventually stop showing up here.  Poems
+that get clicked on a lot will reproduce. </p>
