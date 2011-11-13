@@ -24,13 +24,39 @@ class Poem < ActiveRecord::Base
   end
 
   def vote_for!
-    language.add_vote!
-    increment(:votes_for)
-    increment(:score)
+    Hash.new.tap do |response|
+      language.add_vote!
+      increment(:votes_for)
+      increment(:score)
 
-    bear_child if votes_til_birth <= 0
 
-    save
+      if votes_til_birth <= 0
+        response[:gave_birth] = true
+        response[:child] = bear_child.id
+      end
+
+      response[:voted_for] = self.id
+      response[:save_status] = save
+      response[:votes_til_birth] = votes_til_birth
+    end
+  end
+
+  def vote_against!
+    Hash.new.tap do |response|
+      increment(:votes_against)
+      decrement(:score)
+
+      check_for_death!
+
+      unless self.alive
+        response[:died] = true
+        response[:died_on] = self.died_on
+      end
+
+      response[:voted_against] = self.id
+      response[:votes_til_death] = votes_til_death
+      response[:save_status] = save
+    end
   end
 
   def votes_til_birth
@@ -39,15 +65,6 @@ class Poem < ActiveRecord::Base
 
   def votes_til_death
     (self.votes_for - self.votes_against) - Constants::STILL_ALIVE_CUTOFF
-  end
-
-  def vote_against!
-    increment(:votes_against)
-    decrement(:score)
-
-    check_for_death!
-
-    save
   end
 
   def all_children

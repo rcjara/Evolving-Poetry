@@ -1,6 +1,17 @@
 module PoemsHelper
 
 #######################
+# Html helper methods #
+#######################
+  def poem_link(poem)
+    if poem.id
+      link_to 'Nameless Poem #' + poem.id.to_s, poem
+    else
+      "Poem titled: Still forming in the nonsense womb."
+    end
+  end
+
+#######################
 # Text helper methods #
 #######################
   def born_fmt(poem, include_ago = true)
@@ -9,6 +20,11 @@ module PoemsHelper
     else
       date_fmt(poem.created_at)
     end
+  end
+
+  #time of death
+  def tod_fmt(poem)
+    time_fmt(poem.died_on)
   end
 
   def died_fmt(poem, include_ago = true)

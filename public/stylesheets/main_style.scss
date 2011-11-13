@@ -21,10 +21,10 @@ $sub_color_4: $main_color - (3 * $dif);
 
 /* Overall Settings */
 
-$default_font_size: 13px;
-$default_line_height: 16px;
-$logo_font_size: 20px;
-$logo_line_height: 24px;
+$default_font_size: 14px;
+$default_line_height: 18px;
+$logo_font_size: 22px;
+$logo_line_height: 27px;
 $header_height: 100px;
 $header_padding: 20px;
 $padding: 20px;
@@ -43,6 +43,10 @@ $fam_tree_line_width: $poem_width / 2;
 $fam_tree_line_height: 100px;
 $fam_tree_leaf_padding: $padding / 2;
 
+
+$high_light_color: #3297FD;
+::-moz-selection{ background: $high_light_color; color:#fff; text-shadow: none; }
+::selection { background:$high_light_color; color:#fff; text-shadow: none; }
 
 p {
   margin-bottom: 5px;
@@ -420,11 +424,13 @@ header {
 }
 .fam-tree-leaf {
   @include fam-tree-leaf-mixin;
+  cursor: pointer;
   width: $fam_tree_line_width;
 }
 
 .fam-tree-leaf-self {
   @include fam-tree-leaf-mixin;
+  cursor: pointer;
   width: $fam_tree_line_width - 4px;
   border-style: solid;
   border-color: $dark;
@@ -505,6 +511,23 @@ header {
   border-color: #222;
   padding: $padding;
   background-color: $grey;
+}
+
+.voting-response {
+  padding: 10px;
+
+  .for {
+    padding: 10px;
+  }
+
+  .against {
+    padding: 10px;
+  }
+
+  img.voting {
+    float: left;
+    margin-right: 15px;
+  }
 }
 
 .evolution-chamber {

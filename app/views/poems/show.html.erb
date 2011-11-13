@@ -1,9 +1,15 @@
 <%= content_for :document_ready do %>
   nonsenseEngine.inheritenceView.enable();
   $('.fam-tree-leaf').bind( 'click', nonsenseEngine.fullSize.open);
+  $('.fam-tree-leaf-self').bind( 'click', nonsenseEngine.fullSize.open);
 <% end %>
 
 <div id="container">
+
+  <% unless @poem.alive %>
+    <h1>Deceased</h1>
+  <% end %>
+
   <div class="left-column">
     <%= render @poem %>
   </div>

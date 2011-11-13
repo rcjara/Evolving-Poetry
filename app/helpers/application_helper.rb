@@ -39,4 +39,8 @@ module ApplicationHelper
   def date_fmt(time)
     time.to_date.to_s(:long_ordinal)
   end
+
+  def time_fmt(time)
+    time.strftime("%I:%M %p")
+  end
 end

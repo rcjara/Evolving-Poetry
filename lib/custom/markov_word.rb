@@ -1,5 +1,5 @@
 class MarkovWord
-  attr_reader :identifier, :count, :parents_count, :children_count, :shout_count
+  attr_reader :identifier, :count, :parents_count, :children_count, :shout_count, :children
 
   PUNCTUATION_REGEX = /[\.\,\:\;\!\?]/
   SENTENCE_END_REGEX = /^\.|^\?|^\!/
@@ -211,6 +211,14 @@ class MarkovWord
     @sentence_begin
   end
 
+  def sorted_children
+    sorted_hash(@children)
+  end
+
+  def sorted_parents
+    sorted_hash(@parents)
+  end
+
   private
 
   def get_random_relative(relatives, count)
@@ -223,9 +231,14 @@ class MarkovWord
     end
   end
 
+  def sorted_hash(hash)
+    pairs = hash.each_pair.collect{|w, n| { word: w, occurances: n } }
+    pairs.sort{|a, b| b[:occurances] <=> a[:occurances] }
+  end
+
   protected
 
-  attr_reader :parents, :children
+  attr_reader :parents
   attr_writer :parents, :children, :proper, :shoutable, :speakable,
     :terminates, :punctuation, :sentence_end, :identifier, :count,
     :parents_count, :children_count, :shout_count, :begin, :sentence_begin

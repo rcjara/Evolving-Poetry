@@ -20,6 +20,7 @@ group :development do
   gem 'rspec-rails'
   gem 'annotate-models'
   gem 'nifty-generators', '>= 0.4.0'
+  gem 'graph', '2.3.0'
   gem 'jasmine'
 end
 

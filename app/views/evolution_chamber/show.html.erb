@@ -3,14 +3,29 @@
   nonsenseEngine.enableVoting();
 <% end %>
 
-<h1>Evolution Chamber</h1>
+<h3>Evolution Chamber</h3>
 
-<p>This evolution chamber will show you poems from
-<%= link_to @language.name, @language %>, two at a time.</p>
-<p><strong>Please click on the poem you prefer.</strong> Poems
-that no one clicks on will eventually stop showing up here.  Poems
-that get clicked on a lot will reproduce. </p>
+  <p>This evolution chamber will show you poems from
+  <%= link_to @language.name, @language %>, two at a time.</p>
+  <p><strong>Please click on the poem you prefer.</strong> Poems
+  that no one clicks on will eventually stop showing up here.  Poems
+  that get clicked on a lot will reproduce. </p>
+
+<% if @voting_response %>
+  <div class="voting-response">
+    <div class="for">
+      <%= image_tag "icons/thumbs_up.png", class: "voting" %>
+      <%= vote_for_msg(@voting_response) %>
+    </div>
+    <div class="against">
+      <%= image_tag "icons/thumbs_down.png", class: "voting" %>
+      <%= vote_against_msg(@voting_response) %>
+    </div>
+  </div>
+<% end %>
+
 <br />
+
 <%= render 'shared/inheritence_view_setter' %>
 <div class="evolution-chamber">
   <div class="left-column">
@@ -25,4 +40,5 @@ that get clicked on a lot will reproduce. </p>
       <%= form_for_voting(@poem2, @poem1) %>
     </div>
   </div>
+  <%= clear %>
 </div>

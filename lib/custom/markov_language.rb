@@ -23,7 +23,8 @@ class MarkovLanguage
     other
   end
 
-  def words
+  def words(all = false)
+    return @words.keys if all
     @words.keys.select{|word| word.is_a?(String)}
   end
 
