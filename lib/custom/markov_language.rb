@@ -28,6 +28,11 @@ class MarkovLanguage
     @words.keys.select{|word| word.is_a?(String)}
   end
 
+  def sorted_words
+    pairs = @words.collect {|ident, w| {word: ident, occurances: w.count} }
+    pairs.sort{|a, b| b[:occurances] <=> a[:occurances] }
+  end
+
   def num_words
     @words.length - 1
   end

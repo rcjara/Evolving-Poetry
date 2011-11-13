@@ -203,6 +203,16 @@ header {
       text-align: left; }
 
 /*
+ * About
+ */
+.heading {
+  font-weight: bold;
+  margin-top: 20px; }
+
+.not-so-wide {
+  width: 50%; }
+
+/*
  * Language Styles
  */
 .language {
