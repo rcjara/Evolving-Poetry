@@ -29,8 +29,7 @@ class MarkovLanguage
   end
 
   def sorted_words
-    pairs = @words.collect {|ident, w| {word: ident, occurances: w.count} }
-    pairs.sort{|a, b| b[:occurances] <=> a[:occurances] }
+    @words.values.sort_by(&:count).reverse
   end
 
   def num_words

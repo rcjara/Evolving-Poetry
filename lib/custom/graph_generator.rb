@@ -1,11 +1,7 @@
 class GraphGenerator
   attr_reader :lang
 
-  def initialize(lang)
-    @lang = lang
-  end
-
-  def gen(file_name, lang = @lang)
+  def self.gen(file_name, lang)
     digraph do
       lang.words(true).each do |w_id|
         word = lang.fetch_word(w_id)
@@ -24,23 +20,57 @@ class GraphGenerator
     end
   end
 
-  def gen_simplified(file_name, limit = 20, lang = @lang)
-    sorted_hash  = lang.sorted_words[0...limit]
-    sorted_words = sorted_hash.collect{ |h| h[:word].to_s }
+  def self.gen_simplified(file_name, lang, target = 10)
+    words = build_simplified_words(lang, target)
 
     digraph do
-      sorted_hash.each do |h|
-        m_word = lang.fetch_word(h[:word])
-        word   = h[:word].to_s
-        m_word.sorted_children[0...limit].each do |h2|
-          child = h2[:word].to_s
-          if sorted_words.include? child
-            edge word, child
+
+      words.values.each do |mw|
+        mw.children.keys.each do |child|
+          if words[child]
+            parent = mw.identifier.to_s
+            puts "#{parent}, #{child.to_s}"
+            edge parent, child.to_s
           end
         end
       end
 
       save file_name, 'png'
+
     end
+  end
+
+  def self.build_simplified_words(lang, target)
+    Hash.new.tap do |found_words|
+      seed_word   = lang.fetch_word(:__begin__)
+
+      okay_words  = {}
+
+      handle_found_word( seed_word, found_words, okay_words )
+
+      while found_words.length < target
+        new_word = find_next_word(lang, found_words, okay_words)
+        handle_found_word(new_word, found_words, okay_words)
+      end
+    end
+  end
+
+  def self.handle_found_word(word, found_words, okay_words)
+    found_words[word.identifier] = word
+    word.children.keys.each do |child|
+      okay_words[child] = true
+    end
+  end
+
+  def self.find_next_word(lang, found_words, okay_words)
+    lang.sorted_words.each do |mw|
+      next if found_words[mw.identifier]
+      next unless okay_words[mw.identifier]
+
+      return mw
+    end
+
+    found_words.keys.each { |fw| puts fw.to_s }
+    raise "Fatal: No acceptable word found"
   end
 end

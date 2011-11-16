@@ -3,9 +3,7 @@ namespace :graphs do
   task :simplified => :environment do
     lang      = Language.first.markov
     file_name = Rails.root.join('public/images/graphs/nonsense_welcome').to_s
-    graph_gen = GraphGenerator.new(lang)
-
-    graph_gen.gen_simplified(file_name, 20)
+    GraphGenerator::gen_simplified(file_name, lang, 20)
     File.delete(file_name + '.dot')
   end
 end
