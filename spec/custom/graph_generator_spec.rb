@@ -10,21 +10,22 @@ describe GraphGenerator do
 
   describe "building simplified words" do
     before(:each) do
-      @simplified = GraphGenerator::build_simplified_words(@lang, 20)
+      @words = GraphGenerator::build_simplified_words(@lang, 20)
+      @state = GraphGenerator::simplified_state(@words)
     end
 
     it "should build a list with the target number of words" do
-      @simplified.length.should == 20
+      @words.length.should == 20
     end
 
     it "should include a sentence ending" do
-      has_sentence_end = @simplified.inject(false) {|m, w| w ||= m.sentence_end? }
+      has_sentence_end = @words.inject(false) {|m, w| w ||= m.sentence_end? }
       has_sentence_end.should be_true
     end
 
     describe "finding the ending" do
       before(:each) do
-        @ending = GraphGenerator::find_ending(@simplified)
+        @ending = GraphGenerator::find_ending(@words)
       end
 
       it "should actually be a sentence end" do
@@ -32,41 +33,50 @@ describe GraphGenerator do
       end
     end
 
-    describe "identifying childless parents" do
+    describe "confirming integrity" do
       it "should definitly be able to find a child for :__begin__" do
-        beginning = @simplified[:__begin__]
+        beginning = @words[:__begin__]
         beginning.should_not be_nil
-        GraphGenerator.dangling?(
-          @simplified, beginning).should be_false
+
+        GraphGenerator::dangling?(@words, beginning).
+          should be_false
       end
 
+      it "should have parents for all of its words" do
+        @state.keys.each do |word|
+          next if word == :__begin__
+          GraphGenerator::has_parent?(word, @state).should be_true
+        end
+      end
+
+
       it "should be able to identify childless parents" do
-        @simplified.values.each do |mw|
+        @words.values.each do |mw|
           GraphGenerator.dangling?(
-            @simplified, mw).should be_false
+            @words, mw).should be_false
         end
       end
 
       it "shouldn't have a dangler" do
-        GraphGenerator::dangler(@simplified).should be_nil
+        GraphGenerator::dangler(@words).should be_nil
       end
     end
 
     describe "identifying childless parents (rigged)" do
       before(:each) do
-        @simplified.delete("a")
-        @simplified.delete("have")
+        @words.delete("a")
+        @words.delete("have")
       end
 
       it "should be able to identify childless parents (rigged)" do
-        @simplified.values.each do |mw|
+        @words.values.each do |mw|
           GraphGenerator.dangling?(
-            @simplified, mw).should be_false
+            @words, mw).should be_false
         end
       end
 
       it "shouldn't have a dangler" do
-        GraphGenerator::dangler(@simplified).should be_nil
+        GraphGenerator::dangler(@words).should be_nil
       end
 
     end
@@ -76,14 +86,14 @@ describe GraphGenerator do
   describe "simple case" do
     before(:each) do
       keys = [:__begin__, "nonsense", ".", "the"]
-      @simplified = {}
+      @words = {}
       keys.each do |key|
-        @simplified[key] = @lang.fetch_word(key)
+        @words[key] = @lang.fetch_word(key)
       end
     end
 
     it "should have the right simplified state" do
-      GraphGenerator::simplified_state(@simplified).should ==
+      GraphGenerator::simplified_state(@words).should ==
         {
           :__begin__ => ["nonsense", "the"],
           "nonsense" => ["."],
@@ -93,23 +103,23 @@ describe GraphGenerator do
     end
 
     it "should have a dangler" do
-      GraphGenerator::dangler(@simplified).should_not be_nil
+      GraphGenerator::dangler(@words).should_not be_nil
     end
 
     it "should have 'the' as the dangler" do
-      GraphGenerator::dangler(@simplified).identifier.should == "the"
+      GraphGenerator::dangler(@words).identifier.should == "the"
     end
 
     describe "after adding more words" do
       before(:each) do
         keys = ["poets"]
         keys.each do |key|
-          @simplified[key] = @lang.fetch_word(key)
+          @words[key] = @lang.fetch_word(key)
         end
       end
 
       it "should have the right simplified state" do
-        GraphGenerator::simplified_state(@simplified).should ==
+        GraphGenerator::simplified_state(@words).should ==
           {
             :__begin__ => ["nonsense", "poets", "the"],
             "nonsense" => ["."],
@@ -120,7 +130,7 @@ describe GraphGenerator do
       end
 
       it "shouldn't have a dangler" do
-        GraphGenerator::dangler(@simplified).should be_nil
+        GraphGenerator::dangler(@words).should be_nil
       end
 
     end

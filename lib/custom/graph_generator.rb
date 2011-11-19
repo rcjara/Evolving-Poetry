@@ -22,21 +22,24 @@ class GraphGenerator
 
   def self.gen_simplified(file_name, lang, target = 10)
     words = build_simplified_words(lang, target)
+    state = simplified_state(words)
 
     digraph do
 
-      words.values.each do |mw|
-        mw.children.keys.each do |child|
-          if words[child]
-            parent = mw.identifier.to_s
-            puts "#{parent}, #{child.to_s}"
-            edge parent, child.to_s
-          end
-        end
+      state.each_pair do |parent, children|
+        children.each { |child| edge parent.to_s, child.to_s }
       end
 
       save file_name, 'png'
+    end
+  end
 
+  def self.simplified_state(found_words)
+    Hash.new.tap do |state|
+      found_words.values.each do |mw|
+        state[mw.identifier] =
+          mw.children.keys.select { |child| found_words[child] }.sort
+      end
     end
   end
 
@@ -58,19 +61,10 @@ class GraphGenerator
       handle_found_word(new_word, found, okay)
     end
 
-    if check_no_danglers?(lang, found, okay, excluded)
+    if handle_danglers!(lang, found, okay, excluded)
       found
     else
       keep_looking(lang, target, found, okay, excluded)
-    end
-  end
-
-  def self.simplified_state(found_words)
-    Hash.new.tap do |state|
-      found_words.values.each do |mw|
-        state[mw.identifier] =
-          mw.children.keys.select { |child| found_words[child] }.sort
-      end
     end
   end
 
@@ -85,7 +79,7 @@ class GraphGenerator
     lang.sorted_words.each do |mw|
       ident = mw.identifier
       next if found_words[ident]
-      next unless okay_words[ident]
+      next unless okay_words[ident] > 0
       next if excluded_words.include? ident
 
       return mw
@@ -107,11 +101,19 @@ class GraphGenerator
     !has_child
   end
 
+  def self.has_parent?(word, simple_state)
+    all_children(simple_state).include? word
+  end
+
+  def self.all_children(simple_state)
+    simple_state.values.inject(Set.new) {|s, c| s.merge c }
+  end
+
   def self.find_ending(words)
     words.values.find {|w| w.sentence_end? }
   end
 
-  def self.check_no_danglers?(lang, found, okay, excluded)
+  def self.handle_danglers!(lang, found, okay, excluded)
     dangler = dangler(found)
     if dangler
       ident = dangler.identifier
