@@ -42,15 +42,34 @@ class GraphGenerator
 
   def self.build_simplified_words(lang, target)
     Hash.new.tap do |found_words|
-      seed_word   = lang.fetch_word(:__begin__)
-
-      okay_words  = {}
+      seed_word  = lang.fetch_word(:__begin__)
+      okay_words = Hash.new(0)
+      excluded_words = Set.new
 
       handle_found_word( seed_word, found_words, okay_words )
 
-      while found_words.length < target
-        new_word = find_next_word(lang, found_words, okay_words)
-        handle_found_word(new_word, found_words, okay_words)
+      keep_looking(lang, target, found_words, okay_words, excluded_words)
+    end
+  end
+
+  def self.keep_looking(lang, target, found, okay, excluded)
+    while found.length < target
+      new_word = find_next_word(lang, found, okay, excluded)
+      handle_found_word(new_word, found, okay)
+    end
+
+    if check_no_danglers?(lang, found, okay, excluded)
+      found
+    else
+      keep_looking(lang, target, found, okay, excluded)
+    end
+  end
+
+  def self.simplified_state(found_words)
+    Hash.new.tap do |state|
+      found_words.values.each do |mw|
+        state[mw.identifier] =
+          mw.children.keys.select { |child| found_words[child] }.sort
       end
     end
   end
@@ -58,19 +77,50 @@ class GraphGenerator
   def self.handle_found_word(word, found_words, okay_words)
     found_words[word.identifier] = word
     word.children.keys.each do |child|
-      okay_words[child] = true
+      okay_words[child] += 1
     end
   end
 
-  def self.find_next_word(lang, found_words, okay_words)
+  def self.find_next_word(lang, found_words, okay_words, excluded_words)
     lang.sorted_words.each do |mw|
-      next if found_words[mw.identifier]
-      next unless okay_words[mw.identifier]
+      ident = mw.identifier
+      next if found_words[ident]
+      next unless okay_words[ident]
+      next if excluded_words.include? ident
 
       return mw
     end
 
     found_words.keys.each { |fw| puts fw.to_s }
     raise "Fatal: No acceptable word found"
+  end
+
+  def self.dangler(found_words)
+    found_words.values.find do |mw|
+      dangling? found_words, mw
+    end
+  end
+
+  def self.dangling?(found_words, mw)
+    return false if mw.sentence_end?
+    has_child = mw.children.keys.inject(false) { |m, child| m || found_words[child] }
+    !has_child
+  end
+
+  def self.find_ending(words)
+    words.values.find {|w| w.sentence_end? }
+  end
+
+  def self.check_no_danglers?(lang, found, okay, excluded)
+    dangler = dangler(found)
+    if dangler
+      ident = dangler.identifier
+      found.delete(ident)
+      dangler.children.each { |child| okay[child] -= 1 }
+      excluded << ident
+      false
+    else
+      true
+    end
   end
 end
