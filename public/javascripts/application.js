@@ -126,10 +126,20 @@ nonsenseEngine.fullSize = ( function() {
 })();
 
 // This function assumes the class 'voting-container'
-nonsenseEngine.enableVoting = function() {
+nonsenseEngine.voting = (function() {
   var enterColor  = '#DDF',
       exitColor   = '#EEE',
-      targetClass = 'voting-container';
+      targetClass = 'voting-container',
+      $voters;
+
+  var enable = function() {
+    $voters = $('.' + targetClass);
+    $voters.bind('click', submit);
+    $voters.children().bind('click', submit);
+
+    $voters.bind('mouseenter', highlight);
+    $voters.bind('mouseleave', dehighlight);
+  };
 
   var findElem = function(e) {
     var $elem = $(e.target);
@@ -151,13 +161,10 @@ nonsenseEngine.enableVoting = function() {
     findElem(e).animate({backgroundColor: exitColor});
   }
 
-  $voters = $('.' + targetClass);
-  $voters.bind('click', submit);
-  $voters.children().bind('click', submit);
-
-  $voters.bind('mouseenter', highlight);
-  $voters.bind('mouseleave', dehighlight);
-};
+  return {
+    enable: enable
+  };
+})();
 
 nonsenseEngine.verticalCentering = (function() {
   var enableFor = function(sel) {
