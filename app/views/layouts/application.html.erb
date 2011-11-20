@@ -33,14 +33,12 @@
 
 
 <div class="main-body<%= yield :extra_body_class %>">
-  <div class="margin-box">
-    <% flash.each do |key, value| %>
-      <% unless key == :voting_response %>
-        <div class="flash <%= key %>"><%= value %></div>
-      <% end %>
+  <% flash.each do |key, value| %>
+    <% unless key == :voting_response %>
+      <div class="flash <%= key %>"><%= value %></div>
     <% end %>
-    <%= yield %>
-  </div>
+  <% end %>
+  <%= yield %>
 </div>
 <div class="clear"></div>
 </body>

@@ -98,7 +98,8 @@ body {
   -moz-border-radius: 5px;
   border-width: 1px;
   border-style: solid;
-  width: 1000px;
+  width: 960px;
+  padding: 20px;
   background-color: #fcfcfc;
   min-height: 600px;
   min-width: 784px;
@@ -107,11 +108,6 @@ body {
   margin-bottom: 50px;
   margin-left: auto;
   margin-right: auto; }
-
-.margin-box {
-  width: 95%;
-  min-width: 744px;
-  margin: 20px; }
 
 a.logo-link {
   float: left;
