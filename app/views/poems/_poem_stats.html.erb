@@ -13,7 +13,7 @@
   <% if poem.parent %>
     <strong>Parents:</strong> <%= link_to "Mother", poem_path(poem.parent) %>
     <% if poem.second_parent %>
-      | <%= link_to "Father", poem_path(poem.parent) %>
+      | <%= link_to "Father", poem_path(poem.second_parent) %>
     <% end %>
     <br />
   <% end %>
