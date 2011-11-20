@@ -6,13 +6,7 @@ var nonsenseEngine = {};
 nonsenseEngine.inheritenceView = ( function() {
 
   var enable = function() {
-    $(".new-text").css("background-color", "#9f9");
-    $(".altered-text").css("background-color", "#f95");
-    $(".from-first-parent").css("background-color", "#dda");
-    $(".from-second-parent").css("background-color", "#aad");
-    $(".deleted-text").css("display", "inline");
-    $(".deleted-text").css("background-color", "#777");
-    $(".deleted-text").css("text-color", "#ccc");
+    $('.poem').addClass('with-inheritence');
 
     $('#inheritence-enabler').addClass("disabled-link")
     $('#inheritence-enabler').bind('click', function(e) {
@@ -27,9 +21,7 @@ nonsenseEngine.inheritenceView = ( function() {
   };
 
   var disable = function() {
-    $(".new-text, .from-first-parent, .from-second-parent, .altered-text")
-      .css("background-color", "transparent");
-    $(".deleted-text").css("display", "none");
+    $('.poem').removeClass('with-inheritence');
 
     $('#inheritence-disabler').addClass("disabled-link")
     $('#inheritence-disabler').bind('click', function(e) {

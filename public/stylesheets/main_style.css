@@ -496,6 +496,21 @@ header {
 .poem {
   margin-bottom: 20px;
   z-index: 2; }
+  .poem .deleted-text {
+    display: none; }
+
+.with-inheritence .new-text {
+  background-color: #9f9; }
+.with-inheritence .altered-text {
+  background-color: #f95; }
+.with-inheritence .from-first-parent {
+  background-color: #dda; }
+.with-inheritence .from-second-parent {
+  background-color: #aad; }
+.with-inheritence .deleted-text {
+  display: inline;
+  background-color: #777;
+  text-color: #ccc; }
 
 .poem-stats ul {
   height: 200px;

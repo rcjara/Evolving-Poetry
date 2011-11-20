@@ -504,6 +504,34 @@ header {
 .poem {
   margin-bottom: $padding;
   z-index: 2;
+
+  .deleted-text {
+    display: none;
+  }
+}
+
+.with-inheritence {
+  .new-text {
+    background-color: #9f9;
+  }
+
+  .altered-text {
+    background-color: #f95;
+  }
+
+  .from-first-parent {
+    background-color: #dda;
+  }
+
+  .from-second-parent {
+    background-color: #aad;
+  }
+
+  .deleted-text {
+    display: inline;
+    background-color: #777;
+    text-color: #ccc;
+  }
 }
 
 .poem-stats ul {
