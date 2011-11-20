@@ -167,6 +167,7 @@ nonsenseEngine.markov = ( function() {
         display       = disp,
         walkBackIndex = 0,
         maxLength     = 0,
+        maxNumWords   = 75,
         retractDelay  = 2500,
         expandDelay   = 0;
 
@@ -188,7 +189,7 @@ nonsenseEngine.markov = ( function() {
       maxLength = language.length();
       walkBackIndex = language.walkBackIndex();
 
-      if(maxLength > 75) {
+      if(maxLength > maxNumWords) {
         maxLength = 3;
         walkBackIndex = 0;
       }
@@ -205,13 +206,10 @@ nonsenseEngine.markov = ( function() {
 
       display.walkBack(walkBackIndex);
 
-      if(walkBackIndex == 0) {
-        console.log("walkBackIndex was 0");
-        words = language.genWords();
-      } else {
-        words = language.genWords(language.lastWord(),
-          maxLength, exclude);
-      }
+      console.log("Expanding - last word: " + language.lastWord() );
+      words = language.genWords(language.lastWord(),
+        maxLength, exclude);
+
       display.addWords(words, sentBegin);
       var delay = display.appearAll();
 
