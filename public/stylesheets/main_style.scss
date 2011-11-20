@@ -46,7 +46,7 @@ $fam_tree_leaf_padding: $padding / 2;
 
 
 $high_light_color: #3297FD;
-::-moz-selection{ background: $high_light_color; color:#fff; text-shadow: none; }
+::-moz-selection { background: $high_light_color; color:#fff; text-shadow: none; }
 ::selection { background:$high_light_color; color:#fff; text-shadow: none; }
 
 p {
