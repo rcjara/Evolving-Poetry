@@ -32,7 +32,7 @@
 <%= render 'layouts/header' %>
 
 
-<div class="main-body">
+<div class="main-body<%= yield :extra_body_class %>">
   <div class="margin-box">
     <% flash.each do |key, value| %>
       <% unless key == :voting_response %>

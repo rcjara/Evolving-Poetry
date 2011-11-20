@@ -1,15 +1,12 @@
 <div class="language">
-  <h3><%= language.name %></h3>
-  <div class="left-language">
+  <h2><%= language.name %></h2>
     <p><%= language.description %></p>
     <p>Featuring works by <%= author_links(language) %>
     with a total of <%=pluralize language.total_votes, "vote" %></p>
 
     <% if language.active? %>
       <p>This language is still active, which means you can take part
-      in its evolution.  Head to an <%= link_to "evolution chamber",
-      evolution_chamber_path(language.id) %> to affect how this
-      language's poems develop.</p>
+      in its evolution.  </p>
     <% else %>
       <p>This language is <strong>inactive</strong>, meaning that you no
       new poems are being born and you cannot affect the score of old
@@ -20,8 +17,7 @@
     <% if able_to_view?(language) %>
       <p><%= link_to "More info", language %></p>
     <% end %>
-  </div>
-  <div class="right-language">
+
     <div class="centered">
       <strong>Top Poems</strong><br />
       <%= carousel_counter(language) %>
@@ -37,6 +33,10 @@
         <% end %>
       </ul>
     </div>
-  </div>
-  <div class="clear"></div>
+    <%= link_to evolution_chamber_path(language.id) do %>
+      <div class="call-to-action">
+        <p class="label">Evolve</p>
+        <p class="description"><%= language.name %></p>
+      </div>
+    <% end %>
 </div>

@@ -14,6 +14,7 @@ $black: #000000;
 $dark: #333;
 $text_color: #444;
 $main_color: #666666;
+$action_color: #f09050;
 $sub_color_1: $main_color + $dif;
 $sub_color_2: $main_color - $dif;
 $sub_color_3: $main_color - (2 * $dif);
@@ -65,15 +66,14 @@ h1, h2, h3 {
   width: 100%;
 }
 
-h1 {
-  letter-spacing: 1px;
-}
 
 h2 {
-  margin-bottom: 20px;
+  font-size: 18px;
+  line-height: 24px;
 }
 
 h3 {
+  margin-bottom: 20px;
 }
 
 hr.small {
@@ -82,10 +82,18 @@ hr.small {
   margin-right: auto;
 }
 
-.centered {
+@mixin centered {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
+}
+
+.centered {
+  @include centered;
+}
+
+.transparent {
+  opacity: 0.0;
 }
 
 @mixin logo {
@@ -95,6 +103,7 @@ hr.small {
   color: $sub_color_2;
   letter-spacing: 1px;
   font-family: Arial Black, sans serif;
+  margin-bottom: 2px;
 }
 
 h1 {
@@ -107,7 +116,7 @@ a {
 }
 
 a, a:active, a:visited {
-  color: #6078a0;
+  color: #6063a0;
 }
 
 a:hover {
@@ -155,7 +164,6 @@ body {
 
 .main-body {
   @include rounded-corners;
-  opacity: 0.9;
   width: $overall_width;
   background-color: $white;
   min-height: $minimum_height;
@@ -236,12 +244,6 @@ header {
  * Main Body
  */
 
-.main-body {
-  width: $overall_width;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .main-left-column {
   float: left;
   width: 450px;
@@ -282,16 +284,16 @@ header {
 }
 
 
-@mixin shadows($box-shadow-color) {
-  -webkit-box-shadow: 1px 1px 1px $box-shadow-color;
-  box-shadow: 1px 1px 1px $box-shadow-color;
+@mixin shadows($box-shadow-color, $size: 1px) {
+  -webkit-box-shadow: $size $size $size $box-shadow-color;
+  box-shadow: $size $size $size $box-shadow-color;
 }
 
-@mixin button {
+@mixin button($button-padding: 14px) {
   margin-bottom: 15px;
-  @include rounded-corners(20px);
+  @include rounded-corners($button-padding);
   @include shadows(#999);
-  padding: 20px;
+  padding: $button-padding;
 
   p {
     text-align: center;
@@ -302,10 +304,14 @@ header {
     line-height: $default_line_height + 2;
     color: $white;
     text-shadow: $black 1px 1px;
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
 
   p.description {
-    color: $dark;
+    color: $black;
+    margin-top: 0px;
+    margin-bottom: 0px;
     font-weight: normal;
   }
 }
@@ -344,21 +350,23 @@ header {
 
   .button {
     @include button;
-    @include button-gradient(#1e5799);
+    @include button-gradient(#5e5799);
+    @include centered;
+    width: 80%;
   }
 
   .button:hover {
-    @include button-gradient(#1e5799, 50%);
+    @include button-gradient(#5e5799, 50%);
     border-color: $grey;
   }
 
   .call-to-action {
-    @include button;
-    @include button-gradient( #f09050 );
+    @include button(20px);
+    @include button-gradient( $action_color );
   }
 
   .call-to-action:hover {
-    @include button-gradient( #f09050, 50%);
+    @include button-gradient( $action_color, 50%);
     border-color: $grey;
   }
 }
@@ -379,6 +387,15 @@ header {
 /*
  * Language Styles
  */
+.main-body-languages {
+  width: $overall_width;
+  min-height: $minimum_height;
+  min-width: $minimum_width;
+  margin-top: $header_height - 2 * $header_padding + 10px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .language {
   @include rounded-corners;
@@ -388,35 +405,55 @@ header {
   background-color: $grey;
   min-height: 400px;
   margin-top: 25px;
-}
 
-.left-languages-column {
-  width: $overall_width / 2 - 4 * $padding;
-  padding: $padding;
-  height: $sub_header_height;
-  float: left;
-}
-
-.right-languages-column {
-  width: $overall_width / 2 - 4 * $padding;
-  float: right;
-  height: $sub_header_height;
-  overflow-y: auto;
-}
-
-.left-language {
-  width: 45%;
-  float: left;
-
-  p {
-    margin-bottom: 15px;
+  .call-to-action {
+    @include button(15px);
+    @include button-gradient( $action_color );
+    @include centered;
+    margin-top: 50px;
+    width: 250px;
   }
+
+  .call-to-action:hover {
+    @include button-gradient( $action_color, 50%);
+    border-color: $grey;
+  }
+
+  .left {
+    width: 45%;
+    float: left;
+
+    p {
+      margin-bottom: 15px;
+    }
+  }
+
+  .right {
+    width: 45%;
+    float: right;
+    z-index: 1;
+  }
+
 }
 
-.right-language {
-  width: 45%;
-  float: right;
-  z-index: 1;
+.languages {
+  .left {
+    width: (2 * $overall_width / 5) - 4 * $padding;
+    padding: 30px;
+    @include rounded_corners;
+    background-color: $white;
+    position: fixed;
+    top: 250px;
+
+    p {
+      margin-top: 12px;
+    }
+  }
+
+  .right {
+    width: (3 * $overall_width / 5) - 4 * $padding;
+    float: right;
+  }
 }
 
 .poem-stat-combo {
@@ -437,6 +474,8 @@ header {
   min-height: 300px;
 
   li {
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 15px;
     @include rounded_corners;
     padding: $padding;

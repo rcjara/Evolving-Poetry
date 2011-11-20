@@ -2,7 +2,8 @@ class LanguagesController < ApplicationController
   # GET /languages
   def index
     @title     = "Languages"
-    @languages = Language.visible.paginate(:page => params[:page])
+    @languages = Language.visible.order("-total_votes").
+      paginate(:page => params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
