@@ -17,6 +17,7 @@ gem 'faker'
 
 
 group :development do
+  gem 'pry'
   gem 'rspec-rails'
   gem 'annotate-models'
   gem 'nifty-generators', '>= 0.4.0'

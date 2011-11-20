@@ -210,7 +210,7 @@ class Poem < ActiveRecord::Base
   end
 
   def family_members
-    array = self.language.poems.where('family = ? OR second_family = ?', self.family, self.family).order('id')
+    array = self.language.poems.where('family = ?', self.family).order('id')
     hash = {}
     array.each do |p|
       hash[p.id] = p
@@ -219,11 +219,15 @@ class Poem < ActiveRecord::Base
   end
 
   def get_tree_children(fam_members)
-    fam_members.values.select{ |p| p.parent == self || p.second_parent == self }
+    fam_members.values.select{ |p| p.parent == self }
   end
 
   def lines_array(immediate_children)
-    end_point = immediate_children.length - 1
+    last_index = immediate_children.reverse.index { |o| !o.nil? }
+    last_index ||= 0
+
+    end_point = immediate_children.length - 1 - last_index
+
     return ["|"] if end_point == 0
     immediate_children.collect.with_index do |child, i|
       if i == 0
