@@ -150,6 +150,11 @@ describe Poem do
       @poem.children.length.should == 1
     end
 
+    it "should show that it has a child" do
+      @poem.num_children.should == 1
+    end
+
+
     describe "the language" do
       it "should have one more poem than it did before" do
         @language.poems.length.should == @num_poems + 1
@@ -159,7 +164,7 @@ describe Poem do
 
   end
 
-  describe "after voting against a poem 4 times" do
+  describe "after voting against a poem so that it is barely alive" do
     before(:each) do
       @num_poems = @language.poems.alive.length
       (-Constants::STILL_ALIVE_CUTOFF + 1).times{@poem.vote_against!}
@@ -168,7 +173,7 @@ describe Poem do
     end
 
     it "should have 4 votes against it" do
-      @poem.votes_against.should == 4
+      @poem.votes_against.should == (-Constants::STILL_ALIVE_CUTOFF + 1)
     end
 
     it "should be dead" do

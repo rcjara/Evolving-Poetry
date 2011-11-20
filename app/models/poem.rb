@@ -81,7 +81,6 @@ class Poem < ActiveRecord::Base
 
   def bear_child
     self.score = 0
-    self.save
 
     if(rand(Constants::SEX_ODDS + Constants::MUTATE_ODDS) < Constants::MUTATE_ODDS)
       asexually_reproduce!
@@ -100,8 +99,13 @@ class Poem < ActiveRecord::Base
     new_markov_poem = markov_asexual
     self.children.build(:family => self.family, :language_id => self.language_id,
       :programmatic_text => new_markov_poem.to_prog_text,
-      :full_text => new_markov_poem.display).tap do |new_poem|
-        language.increment_asexual_poems! if new_poem.save
+      :full_text => new_markov_poem.display).
+    tap do |new_poem|
+      if new_poem.save
+        language.increment_asexual_poems!
+        self.num_poems += 1
+        self.save
+      end
     end
   end
 
@@ -122,7 +126,11 @@ class Poem < ActiveRecord::Base
     new_poem.save
     other_poem.second_children << new_poem
 
-    language.increment_sexual_poems! if new_poem.save
+    if new_poem.save
+      language.increment_sexual_poems!
+      self.num_poems += 1
+      self.save
+    end
 
     new_poem
   end
