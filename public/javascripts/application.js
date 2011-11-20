@@ -159,34 +159,27 @@ nonsenseEngine.enableVoting = function() {
   $voters.bind('mouseleave', dehighlight);
 };
 
+nonsenseEngine.verticalCentering = (function() {
+  var enableFor = function(sel) {
+    var $elem = $(sel);
 
-nonsenseEngine.paragraphZoom = function() {
-  var $ps = $('.second-row p');
+    var recalculate = function() {
+      var top_pos = ($(window).height() - $elem.height() ) / 2 - 25;
+      if(top_pos < 100) {
+        top_pos = 100;
+      }
 
-  var findElem = function(e) {
-    $elem = $(e.target);
-    while(!$elem.is("p") ) {
-      $elem = $elem.parent();
-    }
+      $elem.css({
+        position: 'fixed',
+        top: top_pos + 'px'
+      });
+    };
 
-    return $elem;
+    recalculate();
+    $(window).resize(recalculate);
   };
 
-  $ps.bind('mousemove', function(e) {
-    var $elem   = findElem(e),
-        offsetY = $elem.offset().top,
-        height  = $elem.height(),
-        relY    = e.pageY - offsetY,
-        offMid  = Math.abs(relY - 0.5 * height) / 2.0;
-    console.log("offsetY: " + offsetY + " height: " + height + " relY: " + relY + " offMid " + offMid);
-    $elem.css('font-size', (1 - offMid) * 13 + 'px');
-    $elem.css('line-height', (1 - offMid) * 16 + 'px');
-  });
-
-  $ps.bind('mouseleave', function(e) {
-    $elem = findElem(e);
-    $elem.css('font-size', '13px');
-    $elem.css('line-height', '16px');
-  });
-};
-
+  return {
+    enableFor: enableFor
+  };
+})();
