@@ -21,7 +21,7 @@ module ApplicationHelper
 
   def page_title
     extra = @title ? " | " + @title : ""
-    "Non-Sense Engine" + extra
+    "Nonsense Engine" + extra
   end
 
   def proper_list(array)
