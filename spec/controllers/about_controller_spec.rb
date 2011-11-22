@@ -8,11 +8,4 @@ describe AboutController do
     end
   end
 
-  describe "GET 'points'" do
-    it "should be successful" do
-      get 'points'
-      response.should be_success
-    end
-  end
-
 end

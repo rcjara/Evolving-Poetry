@@ -103,7 +103,7 @@ class Poem < ActiveRecord::Base
     tap do |new_poem|
       if new_poem.save
         language.increment_asexual_poems!
-        self.num_poems += 1
+        self.num_children += 1
         self.save
       end
     end
@@ -128,7 +128,7 @@ class Poem < ActiveRecord::Base
 
     if new_poem.save
       language.increment_sexual_poems!
-      self.num_poems += 1
+      self.num_children += 1
       self.save
     end
 
