@@ -1,3 +1,9 @@
+//= require jquery
+//= require jquery_ujs
+//= require jquery_color
+//= require_self
+//= require_tree .
+
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript-include-tag :defaults
 //
@@ -60,7 +66,7 @@ nonsenseEngine.fullSize = ( function() {
     $backdrop.css({opacity: 0.85});
 
     $close_btn = $('<img />');
-    $close_btn.attr('src', '../images/close_button.png')
+    $close_btn.attr('src', '<%= asset_path 'close_button.png' %>')
     $close_btn.addClass('close-btn');
     $close_btn.prependTo(document.body);
     $close_btn.bind('click', close);
@@ -138,6 +144,7 @@ nonsenseEngine.voting = (function() {
     while( !$elem.hasClass(targetClass) ) {
       $elem = $elem.parent();
     }
+    console.log('elem.found: ' + targetClass);
     return $elem;
   }
 
