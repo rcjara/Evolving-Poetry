@@ -6,6 +6,7 @@ gem 'rails', '3.1.3'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'rake', '0.8.7'
+gem 'jquery-rails'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'haml'
 gem 'sass'
@@ -14,7 +15,11 @@ gem 'rails3-generators'
 gem 'will_paginate', '~> 3.0.2'
 gem 'faker'
 
-
+group :assets do
+  gem 'sass-rails'
+  gem 'coffee-rails'
+  gem 'uglifier'
+end
 
 group :development do
   gem 'pry'
