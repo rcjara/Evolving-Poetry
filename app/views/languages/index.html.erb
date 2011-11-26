@@ -1,9 +1,11 @@
 <%= content_for :additional_head do %>
   <%= javascript_include_tag "rjcarousel" %>
+  <%= javascript_include_tag "rjfolding" %>
 <% end %>
 
 <%= content_for :document_ready do %>
   $('.carousel').initRJCarousel({counter: true, center: true}).next();
+  $('.folding').initRJFolding({folded: true});
   nonsenseEngine.verticalCentering.enableFor('#languages-description');
 <% end %>
 

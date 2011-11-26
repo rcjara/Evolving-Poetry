@@ -1,4 +1,5 @@
 module ApplicationHelper
+  #RJCarousel
   def carousel_id(obj)
     [obj.class.to_s, obj.id, "carousel"].join('-')
   end
@@ -19,6 +20,20 @@ module ApplicationHelper
     raw( %{<div class="carousel-counter" id="#{carousel_id(obj)}-counter"></div>} )
   end
 
+  # RJFolder
+  def fold_region_id(obj)
+    [obj.class.to_s, obj.id, "folding"].join('-')
+  end
+
+  def fold_link_id(obj)
+    fold_region_id(obj) + '-folder'
+  end
+
+  def unfold_link_id(obj)
+    fold_region_id(obj) + '-unfolder'
+  end
+
+  #general
   def page_title
     extra = @title ? " | " + @title : ""
     "Nonsense Engine" + extra

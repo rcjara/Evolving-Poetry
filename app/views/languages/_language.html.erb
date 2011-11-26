@@ -18,20 +18,26 @@
       <p><%= link_to "More info", language %></p>
     <% end %>
 
-    <div class="centered">
-      <strong>Top Poems</strong><br />
-      <%= carousel_counter(language) %>
-      <%= clear %>
-      <%= carousel_prev_link(language) %> | <%= carousel_next_link(language) %><br />
-    </div>
-    <div class="carousel" id="<%= carousel_id(language) %>">
-      <ul>
-        <% language.poems.top_5.each do |poem| %>
-            <li>
-              <%= render poem %>
-            </li>
-        <% end %>
-      </ul>
+    <p>
+      <%= link_to "View Top Poems", '#', :id => unfold_link_id(language) %>
+      <%= link_to "Hide Top Poems", '#', :id => fold_link_id(language) %>
+    </p>
+    <div class="folding" id="<%= fold_region_id(language) %>">
+      <div class="centered">
+        <strong>Top Poems</strong><br />
+        <%= carousel_counter(language) %>
+        <%= clear %>
+        <%= carousel_prev_link(language) %> | <%= carousel_next_link(language) %><br />
+      </div>
+      <div class="carousel" id="<%= carousel_id(language) %>">
+        <ul>
+          <% language.poems.top_5.each do |poem| %>
+              <li>
+                <%= render poem %>
+              </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
     <%= link_to evolution_chamber_path(language.id) do %>
       <div class="call-to-action">

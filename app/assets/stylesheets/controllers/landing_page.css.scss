@@ -1,0 +1,83 @@
+@import '../global_settings.scss';
+
+/*
+ * Landing Page
+ */
+
+.main-left-column {
+  float: left;
+  width: 450px;
+
+  #markov-container {
+    margin-top: 75px;
+    width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+
+    span {
+      font-size: 20px;
+      line-height: 28px;
+    }
+
+    .one {
+      background-color: #ccf;
+    }
+
+    .two {
+      background-color: #ff7;
+    }
+
+    .three {
+      background-color: #f95;
+    }
+
+    .four {
+      background-color: #7f7;
+    }
+
+  }
+}
+
+.main-right-column {
+  float: right;
+  width: 45%;
+}
+
+/* $button-bottom: #1e5799;
+ * $button-mid-point: #2989d8;
+ * $button-split: #207cca;
+ * $button-top: #7db9e8;
+ */
+
+
+.home-links {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: $padding;
+  margin-bottom: $padding;
+
+  .button {
+    @include button;
+    @include button-gradient(#5e5799);
+    @include centered;
+    width: 80%;
+  }
+
+  .button:hover {
+    @include button-gradient(#5e5799, 50%);
+    border-color: $grey;
+  }
+
+  .call-to-action {
+    @include button(20px);
+    @include button-gradient( $action_color );
+  }
+
+  .call-to-action:hover {
+    @include button-gradient( $action_color, 50%);
+    border-color: $grey;
+  }
+}
+
+

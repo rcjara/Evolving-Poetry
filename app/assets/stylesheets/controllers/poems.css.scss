@@ -1,0 +1,151 @@
+@import '../global_settings.scss';
+
+/* Poem */
+.poem {
+  margin-bottom: $padding;
+  z-index: 2;
+
+  .deleted-text {
+    display: none;
+  }
+}
+
+.with-inheritence {
+  .new-text {
+    background-color: #9f9;
+  }
+
+  .altered-text {
+    background-color: #f95;
+  }
+
+  .from-first-parent {
+    background-color: #dda;
+  }
+
+  .from-second-parent {
+    background-color: #aad;
+  }
+
+  .deleted-text {
+    display: inline;
+    background-color: #777;
+    text-color: #ccc;
+  }
+}
+
+.poem-stats ul {
+  height: 200px;
+  overflow: auto;
+}
+
+
+/* Family Tree */
+.left-text {
+  width: 50%;
+  float: left;
+  text-align: right;
+}
+
+.right-text {
+  width: 50%;
+  float: right;
+  text-align: left;
+}
+
+.family-tree {
+  overflow: auto;
+}
+
+@mixin fam-tree-leaf-mixin {
+  float: left;
+  padding: $fam_tree_leaf_padding;
+  font-size: $default_font_size / 2.0;
+  line-height: $default_line_height / 2.0;
+}
+.fam-tree-leaf {
+  @include fam-tree-leaf-mixin;
+  cursor: pointer;
+  width: $fam_tree_line_width;
+}
+
+.fam-tree-leaf-self {
+  @include fam-tree-leaf-mixin;
+  cursor: pointer;
+  width: $fam_tree_line_width - 4px;
+  border-style: solid;
+  border-color: $dark;
+  border-width: 2px;
+}
+
+.fam-tree-row {
+  min-height: $fam_tree_line_height;
+}
+
+.fam-tree-line-container {
+  width: $fam_tree_line_width + 2 * $fam_tree_leaf_padding;
+  height: $fam_tree_line_height;
+  float: left;
+}
+
+.fam-tree-line-level {
+  width: $fam_tree_line_width + 2 * $fam_tree_leaf_padding;
+  height: $fam_tree_line_height / 2;
+}
+
+.fam-tree-unmarked {
+  float: left;
+  height: $fam_tree_line_height / 2;
+  width: $fam_tree_line_width / 2 + $fam_tree_leaf_padding;
+}
+
+.fam-tree-marked-right {
+  float: left;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #666;
+  height: $fam_tree_line_height / 2;
+  width: $fam_tree_line_width / 2 + $fam_tree_leaf_padding - 1;
+}
+
+.fam-tree-marked-bottom {
+  float: left;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #666;
+  height: $fam_tree_line_height / 2 - 1;
+  width: $fam_tree_line_width / 2 + $fam_tree_leaf_padding;
+}
+
+.full-sized-poem {
+  @include rounded-corners;
+  display: none;
+  width: 2.0 * $fam_tree_line_width;
+  min-height: 200px;
+  padding: $padding;
+  position: fixed;
+  top: 200px;
+  background-color: $white;
+  border-color: #222;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  display: none;
+  background-color: $black;
+}
+
+.close-btn {
+  position: fixed;
+  display: none;
+  z-index: 10;
+}
+
+.inheritence-container {
+  margin-bottom: 20px;
+}
+
