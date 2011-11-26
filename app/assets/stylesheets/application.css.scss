@@ -650,6 +650,7 @@ header {
 }
 
 /* Evolution Chamber */
+
 @mixin voting {
   @include rounded-corners;
   cursor: pointer;
@@ -675,6 +676,41 @@ header {
   }
 }
 
+
+$transition_length: 1s;
+
+@mixin basic-transition($property) {
+  -webkit-transition: $property $transition_length;
+     -moz-transition: $property $transition_length;
+      -ms-transition: $property $transition_length;
+       -o-transition: $property $transition_length;
+          transition: $property $transition_length;
+}
+
+@mixin pulse-animation($ani_name) {
+  -webkit-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+     -moz-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+      -ms-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+       -o-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+          animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+}
+
+@mixin fade-to($color) {
+  to { background-color: $color; }
+}
+
+        @keyframes fade-blue { @include fade-to(#ddf); }
+     @-o-keyframes fade-blue { @include fade-to(#ddf); }
+    @-ms-keyframes fade-blue { @include fade-to(#ddf); }
+   @-moz-keyframes fade-blue { @include fade-to(#ddf); }
+@-webkit-keyframes fade-blue { @include fade-to(#ddf); }
+
+        @keyframes fade-grey { @include fade-to(#eef); }
+     @-o-keyframes fade-blue { @include fade-to(#eef); }
+    @-ms-keyframes fade-blue { @include fade-to(#eef); }
+   @-moz-keyframes fade-grey { @include fade-to(#eef); }
+@-webkit-keyframes fade-grey { @include fade-to(#eef); }
+
 .evolution-chamber {
   margin-bottom: 30px;
 
@@ -693,6 +729,12 @@ header {
     width: $poem_width;
     margin-left: auto;
     margin-right: auto;
+    @include basic-transition(background-color);
+  }
+
+  .voting-container:hover {
+    background-color: #ddf;
+    @include basic-transition(background-color);
   }
 }
 
