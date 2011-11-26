@@ -1,6 +1,5 @@
 //= require jquery
 //= require jquery_ujs
-//= require jquery_color
 //= require_self
 //= require_tree .
 
@@ -125,18 +124,13 @@ nonsenseEngine.fullSize = ( function() {
 
 // This function assumes the class 'voting-container'
 nonsenseEngine.voting = (function() {
-  var enterColor  = '#DDF',
-      exitColor   = '#EEE',
-      targetClass = 'voting-container',
+  var targetClass = 'voting-container',
       $voters;
 
   var enable = function() {
     $voters = $('.' + targetClass);
     $voters.bind('click', submit);
     $voters.children().bind('click', submit);
-
-    //$voters.bind('mouseenter', highlight);
-    //$voters.bind('mouseleave', dehighlight);
   };
 
   var findElem = function(e) {
@@ -151,14 +145,6 @@ nonsenseEngine.voting = (function() {
   var submit = function(e) {
     findElem(e).find('form').submit();
   };
-
-  var highlight = function(e) {
-    findElem(e).animate({backgroundColor: enterColor});
-  }
-
-  var dehighlight = function(e) {
-    findElem(e).animate({backgroundColor: exitColor});
-  }
 
   return {
     enable: enable
