@@ -1,0 +1,159 @@
+/* Colors */
+$white: #FCFCFC;
+$grey: #EEEEEE;
+$dif: #181818;
+$black: #000000;
+$dark: #333;
+$text_color: #444;
+$main_color: #666666;
+$action_color: #f09050;
+$sub_color_1: $main_color + $dif;
+$sub_color_2: $main_color - $dif;
+$sub_color_3: $main_color - (2 * $dif);
+$sub_color_4: $main_color - (3 * $dif);
+
+$high_light_color: #3297FD;
+
+/* Size Settings */
+
+$default_font_size: 14px;
+$default_line_height: 18px;
+$logo_font_size: 22px;
+$logo_line_height: 27px;
+$header_height: 100px;
+$header_padding: 20px;
+$padding: 20px;
+$overall_width: 1000px;
+$sub_header_height: 100px;
+
+$minimum_height: 600px;
+$minimum_body_height: 800px;
+$minimum_width: 784px;
+
+
+/* animation settings */
+
+$transition_length: 1s;
+/* poem settings */
+$poem_width: 400px - 2 * $padding;
+
+/* Family tree settings */
+$fam_tree_line_width: $poem_width / 2;
+$fam_tree_line_height: 100px;
+$fam_tree_leaf_padding: $padding / 2;
+
+/* Mixins */
+
+@mixin centered {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin logo {
+  font-size: $logo_font_size;
+  line-height: $default_line_height;
+  text-decoration: none;
+  color: $sub_color_2;
+  letter-spacing: 1px;
+  font-family: Arial Black, sans serif;
+  margin-bottom: 2px;
+}
+
+@mixin top_bottom_gradient {
+  background: -moz-linear-gradient(top, $white, $main_color);
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from($white), to($main_color));
+}
+
+@mixin rounded-corners ($radius: 5px) {
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-width: 1px;
+  border-style: solid;
+}
+
+@mixin shadows($box-shadow-color, $size: 1px) {
+  -webkit-box-shadow: $size $size $size $box-shadow-color;
+  box-shadow: $size $size $size $box-shadow-color;
+}
+
+@mixin button($button-padding: 14px) {
+  margin-bottom: 15px;
+  @include rounded-corners($button-padding);
+  @include shadows(#999);
+  padding: $button-padding;
+
+  p {
+    text-align: center;
+  }
+
+  p.label {
+    font-size: $default_font_size + 2;
+    line-height: $default_line_height + 2;
+    color: $white;
+    text-shadow: $black 1px 1px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  p.description {
+    color: $black;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: normal;
+  }
+}
+
+@mixin button-gradient($base-color, $base-bright: 45%) {
+  $hue: hue($base-color);
+  $saturation: saturation($base-color);
+  $button-bottom:    hsl( $hue, $saturation, $base-bright + 0);
+  $button-mid-point: hsl( $hue - 5, $saturation + 2, $base-bright + 10);
+  $button-split:     hsl( $hue - 5, $saturation + 5, $base-bright + 5);
+  $button-top:       hsl( $hue - 1, $saturation + 3, $base-bright + 20 );
+
+  background: $button-bottom; /* Old browsers */
+  background: -moz-linear-gradient(top, $button-top 0%, $button-mid-point 50%, $button-split 51%, $button-bottom 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$button-top), color-stop(50%,$button-mid-point), color-stop(51%,$button-split), color-stop(100%,$button-bottom)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* IE10+ */
+  background: linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$button-top', endColorstr='$button-bottom',GradientType=0 ); /* IE6-9 */
+}
+
+/* Animation Mixin */
+
+@mixin basic-transition($property) {
+          transition: $property $transition_length;
+       -o-transition: $property $transition_length;
+      -ms-transition: $property $transition_length;
+     -moz-transition: $property $transition_length;
+  -webkit-transition: $property $transition_length;
+}
+
+@mixin pulse-animation($ani_name) {
+          animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+       -o-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+      -ms-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+     -moz-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+  -webkit-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+}
+
+@mixin fade-to($color) {
+  to { background-color: $color; }
+}
+
+        @keyframes fade-blue { @include fade-to(#ddf); }
+     @-o-keyframes fade-blue { @include fade-to(#ddf); }
+    @-ms-keyframes fade-blue { @include fade-to(#ddf); }
+   @-moz-keyframes fade-blue { @include fade-to(#ddf); }
+@-webkit-keyframes fade-blue { @include fade-to(#ddf); }
+
+        @keyframes fade-grey { @include fade-to(#eef); }
+     @-o-keyframes fade-blue { @include fade-to(#eef); }
+    @-ms-keyframes fade-blue { @include fade-to(#eef); }
+   @-moz-keyframes fade-grey { @include fade-to(#eef); }
+@-webkit-keyframes fade-grey { @include fade-to(#eef); }
+

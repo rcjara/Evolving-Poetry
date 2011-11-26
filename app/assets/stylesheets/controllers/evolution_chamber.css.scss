@@ -1,0 +1,55 @@
+/* Evolution Chamber */
+@import '../global_settings.scss';
+
+@mixin voting {
+  @include rounded-corners;
+  cursor: pointer;
+  border-color: #222;
+  padding: $padding;
+  background-color: $grey;
+}
+
+.voting-response {
+  padding: 10px;
+
+  .for {
+    padding: 10px;
+  }
+
+  .against {
+    padding: 10px;
+  }
+
+  img.voting {
+    float: left;
+    margin-right: 15px;
+  }
+}
+
+.evolution-chamber {
+  margin-bottom: 30px;
+
+  .left-column {
+    float: left;
+    width: 50%;
+  }
+
+  .right-column {
+    float: right;
+    width: 50%;
+  }
+
+  .voting-container {
+    @include voting;
+    width: $poem_width;
+    margin-left: auto;
+    margin-right: auto;
+    @include basic-transition(background-color);
+  }
+
+  .voting-container:hover {
+    background-color: #ddf;
+    @include basic-transition(background-color);
+  }
+}
+
