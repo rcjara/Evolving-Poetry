@@ -1,18 +1,9 @@
 <div class="language">
   <h2><%= language.name %></h2>
-    <p><%= language.description %></p>
     <p>Featuring works by <%= author_links(language) %>
-    with a total of <%=pluralize language.total_votes, "vote" %></p>
+    with a total of <%=pluralize language.total_votes, "vote" %>.</p>
 
-    <% if language.active? %>
-      <p>This language is still active, which means you can take part
-      in its evolution.  </p>
-    <% else %>
-      <p>This language is <strong>inactive</strong>, meaning that you no
-      new poems are being born and you cannot affect the score of old
-      poems.  You are free to look at the poems that were created and
-      evolved in this language, however.</p>
-    <% end %>
+    <p><%= language.description %></p>
 
     <% if able_to_view?(language) %>
       <p><%= link_to "More info", language %></p>
@@ -39,10 +30,21 @@
         </ul>
       </div>
     </div>
-    <%= link_to evolution_chamber_path(language.id) do %>
-      <div class="call-to-action">
-        <p class="label">Evolve</p>
-        <p class="description"><%= language.name %></p>
-      </div>
+
+    <% if language.active? %>
+      <p>This language is still <strong>active</strong>, which means you can take part
+      in its evolution.  </p>
+      <%= link_to evolution_chamber_path(language.id) do %>
+        <div class="call-to-action">
+          <p class="label">Evolve</p>
+          <p class="description"><%= language.name %></p>
+        </div>
+      <% end %>
+    <% else %>
+      <p>This language is <strong>inactive</strong>, meaning that you no
+      new poems are being born and you cannot affect the score of old
+      poems.  You are free to look at the poems that were created and
+      evolved in this language, however.</p>
     <% end %>
+
 </div>

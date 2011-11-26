@@ -19,14 +19,13 @@
   padding: $padding;
   border-color: $text_color;
   background-color: $grey;
-  min-height: 400px;
   margin-top: 25px;
 
   .call-to-action {
     @include button(15px);
     @include button-gradient( $action_color );
     @include centered;
-    margin-top: 50px;
+    margin-top: 25px;
     width: 250px;
   }
 
@@ -35,21 +34,9 @@
     border-color: $grey;
   }
 
-  .left {
-    width: 45%;
-    float: left;
-
-    p {
-      margin-bottom: 15px;
-    }
+  p {
+    margin-bottom: 15px;
   }
-
-  .right {
-    width: 45%;
-    float: right;
-    z-index: 1;
-  }
-
 }
 
 .languages {
