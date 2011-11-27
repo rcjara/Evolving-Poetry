@@ -12,6 +12,7 @@ $sub_color_2: $main_color - $dif;
 $sub_color_3: $main_color - (2 * $dif);
 $sub_color_4: $main_color - (3 * $dif);
 
+$link_color: #6063a0;
 $high_light_color: #3297FD;
 
 /* Size Settings */
@@ -43,6 +44,14 @@ $fam_tree_line_height: 100px;
 $fam_tree_leaf_padding: $padding / 2;
 
 /* Mixins */
+
+@mixin basic-body {
+  min-width: $minimum_width;
+  margin-top: $header_height - 2 * $header_padding + 10px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 @mixin centered {
   text-align: center;
@@ -79,7 +88,6 @@ $fam_tree_leaf_padding: $padding / 2;
 }
 
 @mixin button($button-padding: 14px) {
-  margin-bottom: 15px;
   @include rounded-corners($button-padding);
   @include shadows(#999);
   padding: $button-padding;
@@ -103,6 +111,19 @@ $fam_tree_leaf_padding: $padding / 2;
     margin-bottom: 0px;
     font-weight: normal;
   }
+}
+
+@mixin small-button($button-color, $button-brightness: 45%) {
+  @include button(2px);
+  @include button-gradient($button-color, $button-brightness);
+  font-size: $default_font_size - 2px;
+  font-weight: none;
+  cursor: pointer;
+  margin-left: 10px;
+  font-weight: normal;
+  width: 50px;
+  float: left;
+  text-align: center;
 }
 
 @mixin button-gradient($base-color, $base-bright: 45%) {

@@ -61,6 +61,7 @@
     @include button;
     @include button-gradient(#5e5799);
     @include centered;
+    margin-bottom: 15px;
     width: 80%;
   }
 
@@ -72,6 +73,7 @@
   .call-to-action {
     @include button(20px);
     @include button-gradient( $action_color );
+    margin-bottom: 15px;
   }
 
   .call-to-action:hover {

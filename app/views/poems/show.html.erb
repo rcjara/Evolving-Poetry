@@ -1,27 +1,48 @@
+<%= content_for :additional_head do %>
+  <%= javascript_include_tag "rjfolding" %>
+<% end %>
+
 <%= content_for :document_ready do %>
   nonsenseEngine.inheritenceView.enable();
   $('.fam-tree-leaf').bind( 'click', nonsenseEngine.fullSize.open);
   $('.fam-tree-leaf-self').bind( 'click', nonsenseEngine.fullSize.open);
+  $('.folding').initRJFolding({folded: true});
 <% end %>
 
-<div id="container">
+<%= content_for :extra_body_class do %>-poem<% end %>
 
-  <% unless @poem.alive %>
-    <h1>Deceased</h1>
-  <% end %>
+<div class="margin-box">
+  <div id="container">
 
-  <div class="left-column">
-    <%= render @poem %>
+    <% unless @poem.alive %>
+      <h1>Deceased</h1>
+    <% end %>
+
+    <div class="left-column">
+      <%= render @poem %>
+    </div>
+    <div class="right-column">
+      <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
+    </div>
+    <div class="clear"></div>
   </div>
-  <div class="right-column">
-    <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
-  </div>
-  <div class="clear"></div>
 </div>
-<hr>
-<h3>Family Tree</h3>
-<%= render 'shared/inheritence_view_setter' %>
-<div class="family-tree">
-  <%= family_tree(@poem) %>
-  <div class="clear"></div>
+
+<div class="divider">
+  <div class="centered">
+    <div class="left">Family Tree</div>
+    <div id="folding-unfolder" class="small-green-button">View</div>
+    <div id="folding-folder" class="small-red-button">Close</div>
+    <%= clear %>
+  </div>
+</div>
+
+<div id="folding" class="folding">
+  <div class="margin-box">
+    <%= render 'shared/inheritence_view_setter' %>
+    <div class="family-tree">
+      <%= family_tree(@poem) %>
+      <%= clear %>
+    </div>
+  </div>
 </div>

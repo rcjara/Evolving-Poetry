@@ -4,13 +4,8 @@
  * Language Styles
  */
 .main-body-languages {
+  @include basic-body;
   width: $overall_width;
-  min-height: $minimum_height;
-  min-width: $minimum_width;
-  margin-top: $header_height - 2 * $header_padding + 10px;
-  margin-bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .language {

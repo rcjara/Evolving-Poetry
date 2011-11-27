@@ -1,6 +1,14 @@
 @import '../global_settings.scss';
 
 /* Poem */
+.main-body-poem {
+  @include basic-body;
+  @include rounded-corners;
+  width: $overall_width;
+  background-color: $white;
+  border-color: $black;
+}
+
 .poem {
   margin-bottom: $padding;
   z-index: 2;
@@ -34,9 +42,46 @@
   }
 }
 
+
+
+.small-red-button {
+  @include small-button(#D99, 50%);
+}
+
+.small-red-button:hover {
+  @include small-button(#D99, 55%);
+}
+
+.small-green-button {
+  @include small-button($link_color, 55%);
+}
+
+.small-green-button:hover {
+  @include small-button($link_color, 60%);
+}
+
 .poem-stats ul {
   height: 200px;
   overflow: auto;
+}
+
+.divider {
+  @include button-gradient($main_color, 68%);
+  padding: 5px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  .centered {
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .left {
+      padding: 2px;
+      float: left;
+    }
+  }
 }
 
 

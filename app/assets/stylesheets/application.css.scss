@@ -67,7 +67,7 @@ a {
 }
 
 a, a:active, a:visited {
-  color: #6063a0;
+  color: $link_color;
 }
 
 a:hover {
@@ -100,29 +100,6 @@ body {
   min-height: $minimum_body_height;
 }
 
-.main-body {
-  @include rounded-corners;
-  width: $overall_width - 2 * $padding;
-  padding: $padding;
-  background-color: $white;
-  min-height: $minimum_height;
-  min-width: $minimum_width;
-  border-color: $black;
-  margin-top: $header_height - 2 * $header_padding + 10px;
-  margin-bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-a.logo-link {
-  float: left;
-  @include logo;
-}
-
-a.logo-link:hover {
-  color: $main_color;
-}
-
 header {
   @include button-gradient($main_color, 68%);
   width: 100%;
@@ -153,6 +130,31 @@ header {
     margin-left: 20px;
     float: right;
   }
+}
+
+
+.main-body {
+  @include rounded-corners;
+  @include basic-body;
+  width: $overall_width - 2 * $padding;
+  padding: $padding;
+  min-height: $minimum_height;
+  background-color: $white;
+  border-color: $black;
+}
+
+.margin-box {
+  width: $overall_width - 2 * $padding;
+  margin: $padding;
+}
+
+a.logo-link {
+  float: left;
+  @include logo;
+}
+
+a.logo-link:hover {
+  color: $main_color;
 }
 
 
