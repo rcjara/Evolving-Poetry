@@ -9,6 +9,13 @@
   border-color: $black;
 }
 
+.poem-header {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .poem {
   margin-bottom: $padding;
   z-index: 2;
@@ -16,6 +23,15 @@
   .deleted-text {
     display: none;
   }
+}
+
+.stats-box {
+  @include rounded-corners;
+  position: relative;
+  float: right;
+  top: 0px;
+  width: 300px;
+  padding: $padding;
 }
 
 .with-inheritence {

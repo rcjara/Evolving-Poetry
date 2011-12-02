@@ -12,20 +12,23 @@
 <%= content_for :extra_body_class do %>-poem<% end %>
 
 <div class="margin-box">
-  <div id="container">
 
-    <% unless @poem.alive %>
-      <h1>Deceased</h1>
-    <% end %>
+  <p class="poem-header"><%= poem_link @poem %> <br />
+  generated from <%= link_to @poem.language.name, @language %>
+  <% unless @poem.alive %>
+    <br /><strong>Deceased</strong>
+  <% end %>
+  </p>
 
-    <div class="left-column">
-      <%= render @poem %>
-    </div>
-    <div class="right-column">
-      <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
-    </div>
-    <div class="clear"></div>
+  <div class="left-column">
+    <%= render @poem %>
   </div>
+
+  <div class="stats-box">
+    <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
+  </div>
+  <%= clear %>
+
 </div>
 
 <div class="divider">
