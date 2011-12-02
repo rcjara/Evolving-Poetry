@@ -7,6 +7,12 @@
   width: $overall_width;
   background-color: $white;
   border-color: $black;
+
+  .left {
+    float: left;
+    width: 475px;
+  }
+
 }
 
 .poem-header {
@@ -30,8 +36,10 @@
   position: relative;
   float: right;
   top: 0px;
+  background-color: $grey;
   width: 300px;
   padding: $padding;
+  z-index: 2;
 }
 
 .with-inheritence {
@@ -89,17 +97,98 @@
   margin-bottom: 20px;
 
   .centered {
-    width: 150px;
+    width: 185px;
     margin-left: auto;
     margin-right: auto;
 
-    .left {
+    .label {
       padding: 2px;
       float: left;
     }
   }
 }
 
+
+@mixin fam-tree-leaf-mixin {
+  padding: $fam_tree_leaf_padding;
+  font-size: $default_font_size / 2.0;
+  line-height: $default_line_height / 2.0;
+  cursor: pointer;
+
+  .label {
+    text-align: center;
+    font-size: $default_font_size + 2;
+    line-height: $default_line_height + 2;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+}
+
+/* Parent view */
+
+.parent-with-mate {
+  float: left;
+  @include fam-tree-leaf-mixin;
+  width: $fam_tree_line_width;
+}
+
+.language-parent {
+  width: $poem_width - 30;
+
+  .label {
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+.parent-alone {
+  @include fam-tree-leaf-mixin;
+  width: $fam_tree_line_width;
+}
+
+.short-t-container {
+  width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2 ;
+  height: $fam_tree_line_height / 2;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.short-line-container {
+  width: $fam_tree_line_width + 2 * $fam_tree_leaf_padding;
+  height: $fam_tree_line_height / 2;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
+}
+
+.fam-tree-marked-top-right {
+  float: left;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #666;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #666;
+  height: $fam_tree_line_height / 2;
+  width: ($fam_tree_line_width / 2 + $fam_tree_leaf_padding) / 4 - 1;
+}
+
+.fam-tree-marked-top {
+  float: left;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #666;
+  height: $fam_tree_line_height / 2;
+  width: ($fam_tree_line_width / 2 + $fam_tree_leaf_padding) / 4;
+}
+
+.centered-poem {
+  @include rounded_corners;
+  padding: $padding;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: $poem_width;
+}
 
 /* Family Tree */
 .left-text {
@@ -118,21 +207,15 @@
   overflow: auto;
 }
 
-@mixin fam-tree-leaf-mixin {
-  float: left;
-  padding: $fam_tree_leaf_padding;
-  font-size: $default_font_size / 2.0;
-  line-height: $default_line_height / 2.0;
-}
 .fam-tree-leaf {
   @include fam-tree-leaf-mixin;
-  cursor: pointer;
+  float: left;
   width: $fam_tree_line_width;
 }
 
 .fam-tree-leaf-self {
   @include fam-tree-leaf-mixin;
-  cursor: pointer;
+  float: left;
   width: $fam_tree_line_width - 4px;
   border-style: solid;
   border-color: $dark;
@@ -188,6 +271,7 @@
   top: 200px;
   background-color: $white;
   border-color: #222;
+  z-index: 9;
 }
 
 .backdrop {
@@ -198,6 +282,7 @@
   width: 100%;
   display: none;
   background-color: $black;
+  z-index: 8;
 }
 
 .close-btn {

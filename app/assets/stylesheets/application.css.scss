@@ -53,6 +53,12 @@ hr.small {
   @include centered;
 }
 
+.auto-margins {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
 .transparent {
   opacity: 0.0;
 }

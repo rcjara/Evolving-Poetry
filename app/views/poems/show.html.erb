@@ -3,7 +3,7 @@
 <% end %>
 
 <%= content_for :document_ready do %>
-  nonsenseEngine.inheritenceView.enable();
+  nonsenseEngine.inheritenceView.disable();
   $('.fam-tree-leaf').bind( 'click', nonsenseEngine.fullSize.open);
   $('.fam-tree-leaf-self').bind( 'click', nonsenseEngine.fullSize.open);
   $('.folding').initRJFolding({folded: true});
@@ -20,12 +20,12 @@
   <% end %>
   </p>
 
-  <div class="left-column">
-    <%= render @poem %>
+  <div class="left">
+    <%= render partial: "poem_with_parents", locals: { poem: @poem } %>
   </div>
 
   <div class="stats-box">
-    <%= render :partial => "poem_stats", :locals => { :poem => @poem } %>
+    <%= render partial: "poem_stats", locals: { poem: @poem } %>
   </div>
   <%= clear %>
 
@@ -33,7 +33,7 @@
 
 <div class="divider">
   <div class="centered">
-    <div class="left">Family Tree</div>
+    <div class="label">Full Family Tree</div>
     <div id="folding-unfolder" class="small-green-button">View</div>
     <div id="folding-folder" class="small-red-button">Close</div>
     <%= clear %>

@@ -113,6 +113,32 @@ module PoemsHelper
     render :partial => "poem_leaf", :locals => {:poem => poem, :mark_as_this_poem => mark_as_this_poem}
   end
 
+#############################
+# Lines for the parent view #
+#############################
+
+  def short_vertical_line
+    html = <<-eol
+      <div class="short-line-container">
+        <div class="fam-tree-marked-right"></div>
+        <div class="fam-tree-unmarked"></div>
+        #{clear}
+      </div>
+    eol
+    html.html_safe
+  end
+
+  def narrow_t
+    html = <<-eol
+      <div class="short-t-container">
+        <div class="fam-tree-marked-top-right"></div>
+        <div class="fam-tree-marked-top"></div>
+        #{clear}
+      </div>
+    eol
+    html.html_safe
+  end
+
 ##############################
 # Lines for the family trees #
 ##############################

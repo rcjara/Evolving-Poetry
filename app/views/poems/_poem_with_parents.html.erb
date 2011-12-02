@@ -1,0 +1,35 @@
+<% if poem.parent && poem.second_parent %>
+  <div class="auto-margins">
+    <div class="parent-with-mate">
+      <p class="label">Mother</p>
+      <%= render poem.parent %>
+    </div>
+    <%= narrow_t %>
+    <div class="parent-with-mate">
+      <p class="label">Father</p>
+      <%= render poem.second_parent %>
+    </div>
+    <%= clear %>
+  </div>
+  <div class="centered-poem">
+    <%= render poem %>
+  </div>
+<% elsif poem.parent %>
+  <div class="parent-alone auto-margins">
+    <p class="label">Mother</p>
+    <%= render poem.parent %>
+  </div>
+  <%= short_vertical_line %>
+  <div class="centered-poem">
+    <%= render poem %>
+  </div>
+<% else %>
+  <div class="language-parent auto-margins">
+    <p class="label">Parentless</p>
+    <p>This poem was generated directly by <%= link_to @poem.language.name, @language %>.</p>
+  </div>
+  <%= short_vertical_line %>
+  <div class="centered-poem">
+    <%= render poem %>
+  </div>
+<% end %>
