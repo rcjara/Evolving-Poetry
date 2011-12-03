@@ -13,12 +13,15 @@ gem 'authlogic'
 gem 'rails3-generators'
 gem 'will_paginate', '~> 3.0.2'
 gem 'faker'
-gem 'activerecord-postgresql-adapter'
 
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
   gem 'uglifier'
+end
+
+group :production do
+  gem 'pg'
 end
 
 group :development do
