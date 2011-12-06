@@ -7,7 +7,21 @@ describe EvolutionChamberController do
     @poem2 = @language.gen_poem!
   end
 
-  describe "vote" do
+  describe "GET #show" do
+    it "should be a success" do
+      get :evolution_chamber, id: @language.id
+      response.should be_success
+    end
+  end
+
+  describe "GET #random" do
+    it "should redirect to a valid evolution chamber" do
+      get :random
+      response.should redirect_to(evolution_chamber_path(@language.id))
+    end
+  end
+
+  describe "POST #vote" do
     before(:each) do
       @params = {:vote_for => @poem1.id, :vote_against => @poem2.id}
     end
@@ -23,16 +37,15 @@ describe EvolutionChamberController do
       @poem1.votes_for.should == 1
       @poem1.votes_against.should == 0
     end
-    
+
     it "poem2 should have 1 vote for" do
       post :vote, @params
       @poem2.reload
       @poem2.votes_for.should == 0
       @poem2.votes_against.should == 1
     end
-    
-    
+
   end
-  
-  
+
+
 end

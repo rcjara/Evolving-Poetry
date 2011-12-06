@@ -1,0 +1,21 @@
+#evolution_chamber_random GET    /evolution_chamber/random(.:format)     {:controller=>"evolution_chamber", :action=>"random"}
+#               languages GET    /languages(.:format)                    {:action=>"index", :controller=>"languages"}
+#                language GET    /languages/:id(.:format)                {:action=>"show", :controller=>"languages"}
+#                    poem GET    /poems/:id(.:format)                    {:action=>"show", :controller=>"poems"}
+#                 authors GET    /authors(.:format)                      {:action=>"index", :controller=>"authors"}
+#       evolution_chamber GET    /evolution_chamber/:id(.:format)        {:action=>"show", :controller=>"evolution_chamber"}
+#                    work GET    /works/:id(.:format)                    {:action=>"show", :controller=>"works"}
+#           user_sessions POST   /user_sessions(.:format)                {:action=>"create", :controller=>"user_sessions"}
+#        new_user_session GET    /user_sessions/new(.:format)            {:action=>"new", :controller=>"user_sessions"}
+#            user_session DELETE /user_sessions/:id(.:format)            {:action=>"destroy", :controller=>"user_sessions"}
+                   users GET    /users(.:format)                        {:action=>"index", :controller=>"users"}
+                         POST   /users(.:format)                        {:action=>"create", :controller=>"users"}
+                new_user GET    /users/new(.:format)                    {:action=>"new", :controller=>"users"}
+               edit_user GET    /users/:id/edit(.:format)               {:action=>"edit", :controller=>"users"}
+                    user GET    /users/:id(.:format)                    {:action=>"show", :controller=>"users"}
+                         PUT    /users/:id(.:format)                    {:action=>"update", :controller=>"users"}
+                         DELETE /users/:id(.:format)                    {:action=>"destroy", :controller=>"users"}
+#              pages_home GET    /pages/home(.:format)                   {:controller=>"pages", :action=>"home"}
+#             about_index GET    /about(.:format)                        {:action=>"index", :controller=>"about"}
+#                   about GET    /about/:id(.:format)                    {:action=>"show", :controller=>"about"}
+#  evolution_chamber_vote POST   /evolution_chamber/vote(.:format)       {:controller=>"evolution_chamber", :action=>"vote"}
