@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user_session, :current_user, :signed_in?
-  http_basic_authenticate_with name: "writer's group", password: "is awesome"
+#  http_basic_authenticate_with name: "writer's group", password: "is awesome"
 
   def award_point!(num = 1)
     current_user.award_point!(num) if current_user

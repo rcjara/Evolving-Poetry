@@ -5,4 +5,7 @@ icons/thumbs_down.png: icons/thumbs_down-c36e25a2824540daf01a897495ffaf0d.png
 icons/thumbs_up.png: icons/thumbs_up-3e47bb957c2884b64484d2f153ad5d23.png
 rails.png: rails-e4b51606cd77fda2615e7439907bfc92.png
 application.js: application-7caffcd7e50306e39d10f25ae411cd6e.js
+markov.js: markov-8932ec8ac281efec6b3802c23a60ef10.js
 application.css: application-12bc9beffc55863c3de1d87926f75c36.css
+rjcarousel.js: rjcarousel-7b744ab6a4e81765bd56225b32c8ed71.js
+rjfolding.js: rjfolding-51c998d18f8aced277fc90f7c224f40e.js

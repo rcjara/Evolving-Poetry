@@ -9,7 +9,7 @@ describe EvolutionChamberController do
 
   describe "GET #show" do
     it "should be a success" do
-      get :evolution_chamber, id: @language.id
+      get :show, id: @language.id
       response.should be_success
     end
   end

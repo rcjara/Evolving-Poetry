@@ -3,10 +3,6 @@ require 'spec_helper'
 describe UserSessionsController do
   render_views
 
-  before(:each) do
-    activate_authlogic
-  end
-
   describe "GET 'new'" do
     it "should be successful" do
       get 'new'
