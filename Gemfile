@@ -21,6 +21,8 @@ group :assets do
 end
 
 group :production do
+  gem 'foreman'
+  gem 'thin'
   gem 'therubyracer'
   gem 'pg'
 end
