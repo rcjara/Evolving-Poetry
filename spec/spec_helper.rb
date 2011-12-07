@@ -107,9 +107,9 @@ EOS
 end
 
 def work_create(author)
-  author.works.build(:title => "test title",
-    :content => work_content).tap do |a|
-    a.save
+  author.works.build(title: 'test title',
+    content: work_content).tap do |a|
+      a.save
   end
 end
 

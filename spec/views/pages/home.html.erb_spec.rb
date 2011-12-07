@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "pages/home.html.erb" do
+
   describe "when a user is signed in" do
     before(:each) do
       view.should_receive(:signed_in?).and_return(true)
@@ -9,6 +10,10 @@ describe "pages/home.html.erb" do
 
     it "should render properly" do
       render
+    end
+
+    it "should render properly with the layout included" do
+      render, :layout 'application'
     end
 
   end
