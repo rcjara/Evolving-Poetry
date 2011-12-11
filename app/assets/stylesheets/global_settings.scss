@@ -84,7 +84,18 @@ $fam_tree_leaf_padding: $padding / 2;
 
 @mixin shadows($box-shadow-color, $size: 1px) {
   -webkit-box-shadow: $size $size $size $box-shadow-color;
+  -moz-box-shadow: $size $size $size $box-shadow-color;
+  -ms-box-shadow: $size $size $size $box-shadow-color;
+  -o-box-shadow: $size $size $size $box-shadow-color;
   box-shadow: $size $size $size $box-shadow-color;
+}
+
+@mixin shadow-inset($color: rgba(0, 0, 0, 0.5), $x: 2px, $y: 2px, $blur: 8px) {
+  -webkit-box-shadow: inset $x $y $blur $color;
+  -moz-box-shadow: inset $x $y $blur $color;
+  -ms-box-shadow: inset $x $y $blur $color;
+  -o-box-shadow: inset $x $y $blur $color;
+  box-shadow: inset $x $y $blur $color;
 }
 
 @mixin button($button-padding: 14px) {

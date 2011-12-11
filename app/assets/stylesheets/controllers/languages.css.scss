@@ -10,6 +10,7 @@
 
 .language {
   @include rounded-corners;
+  @include shadow-inset;
   display: block;
   padding: $padding;
   border-color: $text_color;
@@ -39,6 +40,7 @@
     width: (2 * $overall_width / 5) - 4 * $padding;
     padding: 30px;
     @include rounded_corners;
+    @include shadow-inset;
     background-color: $white;
     position: fixed;
     top: 250px;
