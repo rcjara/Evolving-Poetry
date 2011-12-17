@@ -13,8 +13,8 @@
 
 <div class="margin-box">
 
-  <p class="poem-header"><%= poem_link @poem %> <br />
-  generated from <%= link_to @poem.language.name, @language %>
+  <h2><%= poem_link @poem %> </h2>
+  <p class="poem-header">generated from <%= link_to @poem.language.name, @language %>
   <% unless @poem.alive %>
     <br /><strong>Deceased</strong>
   <% end %>

@@ -59,16 +59,17 @@
           </p>
         </li>
       <% end %>
-      <% unless signed_in? %>
-        <li>
-          <%= link_to "Log in", signin_path %>
-          or
-          <%= link_to "Sign up", signup_path %>
-          <br />
-          You don't have to have an account to use the site, but you gain access to more features.  You can find out why it's a good idea to sign up
-          <%= link_to "here", signup_path %>.
-        </li>
-      <% end %>
+    </ul>
+    <% unless signed_in? %>
+      <p>
+        <%= link_to "Log in", signin_path %>
+        or
+        <%= link_to "Sign up", signup_path %>
+        <br />
+        You don't have to have an account to use the site, but you gain access to more features.  You can find out why it's a good idea to sign up
+        <%= link_to "here", signup_path %>.
+      </p>
+    <% end %>
     </ul>
   </div>
 </div>

@@ -54,8 +54,14 @@
   width: 90%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: $padding;
+  margin-top: 40px;
   margin-bottom: $padding;
+
+  h1 {
+    @include logo;
+    font-size: 27px;
+    line-height: 26px;
+  }
 
   .button {
     @include button;
@@ -65,14 +71,22 @@
     width: 80%;
   }
 
+  ul {
+    margin-top: 1.5 * $padding;
+    margin-bottom: 2 * $padding;
+  }
+
   .button:hover {
     @include button-gradient(#5e5799, 50%);
     border-color: $grey;
   }
 
   .call-to-action {
-    @include button(20px);
+    @include button;
     @include button-gradient( $action_color );
+    @include centered;
+    @include ne-transform( scale(1.1) );
+    width: 80%;
     margin-bottom: 15px;
   }
 

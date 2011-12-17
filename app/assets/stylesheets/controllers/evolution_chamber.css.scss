@@ -45,12 +45,13 @@
     width: $poem_width;
     margin-left: auto;
     margin-right: auto;
-    @include basic-transition(background-color);
+    @include shadow-inset(rgba(0, 0, 0, 0.2), -1px, -1px, 8px);
+    @include basic-transition(all);
   }
 
   .voting-container:hover {
     background-color: #ccf;
-    @include basic-transition(background-color);
+    @include basic-transition(all);
   }
 }
 

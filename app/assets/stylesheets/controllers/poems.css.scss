@@ -4,6 +4,7 @@
 .main-body-poem {
   @include basic-body;
   @include rounded-corners;
+  @include shadow-inset;
   width: $overall_width;
   background-color: $white;
   border-color: $black;
@@ -33,6 +34,7 @@
 
 .stats-box {
   @include rounded-corners;
+  @include shadows(#ccc);
   position: relative;
   float: right;
   top: 0px;

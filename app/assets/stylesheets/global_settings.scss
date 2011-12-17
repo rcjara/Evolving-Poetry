@@ -84,18 +84,18 @@ $fam_tree_leaf_padding: $padding / 2;
 
 @mixin shadows($box-shadow-color, $size: 1px) {
   -webkit-box-shadow: $size $size $size $box-shadow-color;
-  -moz-box-shadow: $size $size $size $box-shadow-color;
-  -ms-box-shadow: $size $size $size $box-shadow-color;
-  -o-box-shadow: $size $size $size $box-shadow-color;
-  box-shadow: $size $size $size $box-shadow-color;
+     -moz-box-shadow: $size $size $size $box-shadow-color;
+      -ms-box-shadow: $size $size $size $box-shadow-color;
+       -o-box-shadow: $size $size $size $box-shadow-color;
+          box-shadow: $size $size $size $box-shadow-color;
 }
 
 @mixin shadow-inset($color: rgba(0, 0, 0, 0.5), $x: 2px, $y: 2px, $blur: 8px) {
   -webkit-box-shadow: inset $x $y $blur $color;
-  -moz-box-shadow: inset $x $y $blur $color;
-  -ms-box-shadow: inset $x $y $blur $color;
-  -o-box-shadow: inset $x $y $blur $color;
-  box-shadow: inset $x $y $blur $color;
+     -moz-box-shadow: inset $x $y $blur $color;
+      -ms-box-shadow: inset $x $y $blur $color;
+       -o-box-shadow: inset $x $y $blur $color;
+          box-shadow: inset $x $y $blur $color;
 }
 
 @mixin button($button-padding: 14px) {
@@ -111,7 +111,7 @@ $fam_tree_leaf_padding: $padding / 2;
     font-size: $default_font_size + 2;
     line-height: $default_line_height + 2;
     color: $white;
-    text-shadow: $black 1px 1px;
+    text-shadow: rgb(0, 0, 0) 0px 0px 4px;
     margin-top: 0px;
     margin-bottom: 0px;
   }
@@ -121,6 +121,7 @@ $fam_tree_leaf_padding: $padding / 2;
     margin-top: 0px;
     margin-bottom: 0px;
     font-weight: normal;
+    text-shadow: rgba(255, 255, 255, 0.4) 1px 1px 1px;
   }
 }
 
@@ -149,43 +150,51 @@ $fam_tree_leaf_padding: $padding / 2;
   background: -moz-linear-gradient(top, $button-top 0%, $button-mid-point 50%, $button-split 51%, $button-bottom 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$button-top), color-stop(50%,$button-mid-point), color-stop(51%,$button-split), color-stop(100%,$button-bottom)); /* Chrome,Safari4+ */
   background: -webkit-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* IE10+ */
+  background: -o-linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* Opera 11.10+ */
   background: linear-gradient(top, $button-top 0%,$button-mid-point 50%,$button-split 51%,$button-bottom 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$button-top', endColorstr='$button-bottom',GradientType=0 ); /* IE6-9 */
+}
+
+@mixin ne-transform($type) {
+  -webkit-transform: $type;
+     -moz-transform: $type;
+      -ms-transform: $type;
+       -o-transform: $type;
+          transform: $type;
 }
 
 /* Animation Mixin */
 
 @mixin basic-transition($property) {
-          transition: $property $transition_length;
-       -o-transition: $property $transition_length;
-      -ms-transition: $property $transition_length;
-     -moz-transition: $property $transition_length;
   -webkit-transition: $property $transition_length;
+     -moz-transition: $property $transition_length;
+      -ms-transition: $property $transition_length;
+       -o-transition: $property $transition_length;
+          transition: $property $transition_length;
 }
 
 @mixin pulse-animation($ani_name) {
-          animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
-       -o-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
-      -ms-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
-     -moz-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
   -webkit-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+     -moz-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+      -ms-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+       -o-animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
+          animation: $ani_name 2s ease-in-out $transition_length infinite alternate;
 }
 
 @mixin fade-to($color) {
   to { background-color: $color; }
 }
 
-        @keyframes fade-blue { @include fade-to(#ddf); }
-     @-o-keyframes fade-blue { @include fade-to(#ddf); }
-    @-ms-keyframes fade-blue { @include fade-to(#ddf); }
-   @-moz-keyframes fade-blue { @include fade-to(#ddf); }
 @-webkit-keyframes fade-blue { @include fade-to(#ddf); }
+   @-moz-keyframes fade-blue { @include fade-to(#ddf); }
+    @-ms-keyframes fade-blue { @include fade-to(#ddf); }
+     @-o-keyframes fade-blue { @include fade-to(#ddf); }
+        @keyframes fade-blue { @include fade-to(#ddf); }
 
-        @keyframes fade-grey { @include fade-to(#eef); }
-     @-o-keyframes fade-blue { @include fade-to(#eef); }
-    @-ms-keyframes fade-blue { @include fade-to(#eef); }
-   @-moz-keyframes fade-grey { @include fade-to(#eef); }
 @-webkit-keyframes fade-grey { @include fade-to(#eef); }
+   @-moz-keyframes fade-grey { @include fade-to(#eef); }
+    @-ms-keyframes fade-blue { @include fade-to(#eef); }
+     @-o-keyframes fade-blue { @include fade-to(#eef); }
+        @keyframes fade-grey { @include fade-to(#eef); }
 
