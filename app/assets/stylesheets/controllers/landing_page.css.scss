@@ -78,7 +78,8 @@
 
   .button:hover {
     @include button-gradient(#5e5799, 50%);
-    border-color: $grey;
+    @include shadows(#555, 0px);
+    border-color: rgba(0, 0, 0, 0.2);
   }
 
   .call-to-action {
@@ -92,7 +93,8 @@
 
   .call-to-action:hover {
     @include button-gradient( $action_color, 50%);
-    border-color: $grey;
+    @include shadows(#555, 0px);
+    border-color: rgba(0, 0, 0, 0.2);
   }
 }
 

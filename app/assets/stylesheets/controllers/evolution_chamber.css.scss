@@ -45,7 +45,7 @@
     width: $poem_width;
     margin-left: auto;
     margin-right: auto;
-    @include shadow-inset(rgba(0, 0, 0, 0.2), -1px, -1px, 8px);
+    @include shadow-inset(rgba(0, 0, 0, 0.2), 8px, -1px, -1px);
     @include basic-transition(all);
   }
 
