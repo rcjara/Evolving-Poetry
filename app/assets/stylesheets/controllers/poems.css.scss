@@ -1,5 +1,8 @@
 @import '../global_settings.scss';
 
+$parent_width: 150px;
+$narrow_t_width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2;
+
 /* Poem */
 .main-body-poem {
   @include basic-body;
@@ -128,12 +131,6 @@
 
 /* Parent view */
 
-.parent-with-mate {
-  float: left;
-  @include fam-tree-leaf-mixin;
-  width: $fam_tree_line_width;
-}
-
 .language-parent {
   width: $poem_width - 30;
 
@@ -144,15 +141,58 @@
 }
 
 .parent-alone {
-  @include fam-tree-leaf-mixin;
-  width: $fam_tree_line_width;
+  text-align: center;
+  width: $poem_width - 30;
 }
 
-.short-t-container {
-  width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2 ;
-  height: $fam_tree_line_height / 2;
+.parents-container {
   margin-left: auto;
   margin-right: auto;
+  width: $parent_width * 2 + $narrow_t_width;
+
+  .parent-with-mate {
+    float: left;
+    text-align: center;
+    width: $parent_width;
+  }
+
+  .narrow-t-container {
+    float: left;
+    width: $narrow_t_width;
+
+    .short-t-gap {
+      width: narrow_t_width;
+      height: 31px;
+    }
+
+    .short-t-container {
+      width: narrow_t_width;
+      height: $fam_tree_line_height / 2;
+      float: left;
+
+      .fam-tree-marked-top-right {
+        float: left;
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-right-color: #666;
+        border-top-style: solid;
+        border-top-width: 1px;
+        border-top-color: #666;
+        height: $fam_tree_line_height / 2;
+        width: $narrow_t_width / 2 - 1;
+      }
+
+      .fam-tree-marked-top {
+        float: left;
+        border-top-style: solid;
+        border-top-width: 1px;
+        border-top-color: #666;
+        height: $fam_tree_line_height / 2;
+        width: $narrow_t_width / 2;
+      }
+    }
+  }
+
 }
 
 .short-line-container {
@@ -161,27 +201,6 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 15px;
-}
-
-.fam-tree-marked-top-right {
-  float: left;
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-right-color: #666;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #666;
-  height: $fam_tree_line_height / 2;
-  width: ($fam_tree_line_width / 2 + $fam_tree_leaf_padding) / 4 - 1;
-}
-
-.fam-tree-marked-top {
-  float: left;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: #666;
-  height: $fam_tree_line_height / 2;
-  width: ($fam_tree_line_width / 2 + $fam_tree_leaf_padding) / 4;
 }
 
 .centered-poem {

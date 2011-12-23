@@ -12,4 +12,6 @@ module Constants
   MAX_WALK_ATTEMPTS = 20
 
   POEM_ORDERING = "(votes_for - votes_against) / (votes_against + 1.0) DESC"
+
+  POEM_NAME = "Nameless Poem #"
 end

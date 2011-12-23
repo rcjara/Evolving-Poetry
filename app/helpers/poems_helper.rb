@@ -5,11 +5,26 @@ module PoemsHelper
 #######################
   def poem_link(poem)
     if poem.id
-      link_to 'Nameless Poem #' + poem.id.to_s, poem
+      link_to Constants::POEM_NAME + poem.id.to_s, poem
     else
       "Poem titled: Still forming in the nonsense womb."
     end
   end
+
+  def poem_id_link(p_id)
+    if p_id
+      link_to Constants::POEM_NAME + p_id.to_s, poem_path(p_id)
+    end
+  end
+
+  def mother_link(poem)
+    poem_id_link poem.parent_id
+  end
+
+  def father_link(poem)
+    poem_id_link poem.second_parent_id
+  end
+
 
 #######################
 # Text helper methods #
@@ -122,7 +137,6 @@ module PoemsHelper
       <div class="short-line-container">
         <div class="fam-tree-marked-right"></div>
         <div class="fam-tree-unmarked"></div>
-        #{clear}
       </div>
     eol
     html.html_safe
@@ -130,10 +144,12 @@ module PoemsHelper
 
   def narrow_t
     html = <<-eol
-      <div class="short-t-container">
-        <div class="fam-tree-marked-top-right"></div>
-        <div class="fam-tree-marked-top"></div>
-        #{clear}
+      <div class="narrow-t-container">
+        <div class="short-t-gap"></div>
+        <div class="short-t-container">
+          <div class="fam-tree-marked-top-right"></div>
+          <div class="fam-tree-marked-top"></div>
+        </div>
       </div>
     eol
     html.html_safe
