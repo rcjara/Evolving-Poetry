@@ -182,7 +182,7 @@ class Poem < ActiveRecord::Base
     self_line = [self] + [nil] * (children_trees_array[0].length - 1)
 
     final_array = if add_lines
-      [self_line, lines_array(children_trees_array[0])] + children_trees_array
+      [self_line, lines_array(children_trees_array[0]) ] + children_trees_array
     else
       [self_line] + children_trees_array
     end
