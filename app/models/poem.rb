@@ -144,101 +144,12 @@ class Poem < ActiveRecord::Base
     MarkovPoem.from_prog_text(self.programmatic_text, self.language.markov)
   end
 
-# Making Family Trees (A guide)
-# fam_tree_struct
-#   -- find the first family member, call sub_fam_tree on it passing in family members(for quick reference)
-#
-# sub_fam_tree
-#   -- find your children...
-#   -- make two lines, with you at top, and all your children's sub arrays in the second
-
-  def display_fam_tree_struct(with_lines)
-    tree = if with_lines
-      fam_tree_struct_with_lines
-    else
-      fam_tree_struct
-    end
-
-    FamilyTreeCompressor::string(tree)
-  end
-
-  def fam_tree_struct(attr = {})
-    add_lines = true if attr[:add_lines]
-
-    fam_members = family_members
-    fam_members.values.first.sub_fam_tree(fam_members, add_lines)
-  end
-
-  def fam_tree_struct_with_lines
-    fam_tree_struct :add_lines => true
-  end
-
-  def sub_fam_tree(fam_members, add_lines = false)
-    tree_children = get_tree_children(fam_members)
-    return [[self]] if tree_children.empty?
-
-    children_trees       = tree_children.collect { |p| p.sub_fam_tree(fam_members, add_lines) }
-    children_trees_array = collapse_child_trees(children_trees, add_lines)
-    self_line = [self] + [nil] * (children_trees_array[0].length - 1)
-
-    final_array = if add_lines
-      [self_line, lines_array(children_trees_array[0]) ] + children_trees_array
-    else
-      [self_line] + children_trees_array
-    end
-
-    if add_lines
-      FamilyTreeCompressor::compress(final_array)
-    else
-      final_array
-    end
-  end
-
-  def collapse_child_trees(array_of_arrays, add_lines)
-    max_depth = array_of_arrays.inject(0){|depth, array| array.length > depth ? array.length : depth }
-    final_array = max_depth.times.collect{ [] }
-
-    array_of_arrays.each do |array|
-      this_length = array[0].length
-      (0...max_depth).each do |i|
-        to_add = array[i] ? array[i] : [nil] * this_length
-        final_array[i] += to_add
-      end
-    end
-
-    final_array
-  end
-
   def family_members
-    array = self.language.poems.where('family = ?', self.family).order('id')
-    hash = {}
-    array.each do |p|
-      hash[p.id] = p
-    end
-    hash
+    self.language.poems.where('family = ?', self.family).order('id')
   end
 
-  def get_tree_children(fam_members)
-    fam_members.values.select{ |p| p.parent == self }
+  def family_tree(opts = {})
+    FamilyTree.new(family_members).structure(opts)
   end
-
-  def lines_array(immediate_children)
-    last_index = immediate_children.reverse.index { |o| !o.nil? }
-    last_index ||= 0
-
-    end_point = immediate_children.length - 1 - last_index
-
-    return ["|"] if end_point == 0
-    immediate_children.collect.with_index do |child, i|
-      if i == 0
-        "["
-      elsif i == end_point
-        "]"
-      else
-        child ? "T" : "-"
-      end
-    end
-  end
-
 end
 

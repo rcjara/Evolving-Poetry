@@ -94,7 +94,7 @@ module PoemsHelper
 #######################
 
   def family_tree(poem)
-    struct = poem.fam_tree_struct_with_lines
+    struct = poem.family_tree
     struct.collect do |line|
       middle_text = line.collect { |elem| struct_elem(elem, poem) }.join("\n")
       line_width = line.length * 200;
