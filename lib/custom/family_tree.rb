@@ -38,25 +38,20 @@ class FamilyTree
   def sub_tree(parent, pre_opts = {})
     opts = {lines: true}.merge pre_opts
 
-    tree_children = children_hash[parent]
-    return [[parent]] if tree_children.empty?
+    immediate_children = children_hash[parent]
+    return [[parent]] if immediate_children.empty?
 
-    children_trees       = tree_children.collect { |p| sub_tree(p) }
-    children_trees_array = collapse_child_trees(children_trees)
+    sub_trees          = immediate_children.collect { |p| sub_tree(p) }
+    gathered_sub_trees = collapse_child_trees(sub_trees)
 
     #extra nils if the children trees are longer than one
-    parent_line = [parent] + [nil] * (children_trees_array[0].length - 1)
-
-    final_array = if opts[:lines]
-      [parent_line, lines_array(children_trees_array[0]) ] + children_trees_array
-    else
-      [parent_line] + children_trees_array
-    end
+    parent_line = [parent] + [nil] * (gathered_sub_trees[0].length - 1)
 
     if opts[:lines]
-      FamilyTreeCompressor::compress(final_array)
+      array = [parent_line, lines_array(gathered_sub_trees[0]) ] + gathered_sub_trees
+      FamilyTreeCompressor::compress(array)
     else
-      final_array
+      [parent_line] + gathered_sub_trees
     end
   end
 
@@ -65,9 +60,9 @@ class FamilyTree
     final_array = max_depth.times.collect{ [] }
 
     lines.each do |line|
-      this_length = line[0].length
+      width = line[0].length
       (0...max_depth).each do |i|
-        to_add = line[i] ? line[i] : [nil] * this_length
+        to_add = line[i] ? line[i] : [nil] * width
         final_array[i] += to_add
       end
     end
