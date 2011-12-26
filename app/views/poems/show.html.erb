@@ -29,18 +29,20 @@
   </div>
   <%= clear %>
 
+  <%= render partial: "children", locals: { poem: @poem } %>
+
 </div>
 
 <div class="divider">
   <div class="centered">
     <div class="label">Full Family Tree</div>
-    <div id="folding-unfolder" class="small-green-button">View</div>
-    <div id="folding-folder" class="small-red-button">Close</div>
+    <div id="ft-container-unfolder" class="small-green-button">View</div>
+    <div id="ft-container-folder" class="small-red-button">Close</div>
     <%= clear %>
   </div>
 </div>
 
-<div id="folding" class="folding">
+<div id="ft-container" class="folding">
   <div class="margin-box">
     <%= render 'shared/inheritence_view_setter' %>
     <div class="family-tree">

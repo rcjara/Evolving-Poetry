@@ -151,5 +151,13 @@ class Poem < ActiveRecord::Base
   def family_tree(opts = {})
     FamilyTree.new(family_members).structure(opts)
   end
+
+  def bastards
+    ChildrenWithFathers.new(self.children).bastards
+  end
+
+  def children_by_father
+    ChildrenWithFathers.new(self.children).by_father
+  end
 end
 

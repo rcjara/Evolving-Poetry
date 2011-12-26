@@ -2,6 +2,8 @@
 
 $parent_width: 150px;
 $narrow_t_width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2;
+$poem_width: $parent_width * 2 + $narrow_t_width;
+$left_width: 475px;
 
 /* Poem */
 .main-body-poem {
@@ -14,7 +16,7 @@ $narrow_t_width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2;
 
   .left {
     float: left;
-    width: 475px;
+    width: $left_width;
   }
 
 }
@@ -143,6 +145,18 @@ $narrow_t_width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2;
 .parent-alone {
   text-align: center;
   width: $poem_width - 30;
+}
+
+.no-children-notice {
+  margin-left: ($left_width - $poem_width) / 2;
+  margin-right: auto;
+  width: $poem_width;
+
+  h3 {
+    font-size: $default_font_size;
+    line-height: $default_line_height;
+    margin-bottom: 5px;
+  }
 }
 
 .parents-container {

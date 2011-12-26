@@ -1,0 +1,21 @@
+<% if poem.children.empty? %>
+  <div class="no-children-notice">
+    <h3>This poem has no children.</h3>
+    <p>
+      <% if poem.alive? %>
+        It may have some soon, though, if it gets voted on enough.
+      <% else %>
+        It was unable to reproduce before it died. Now it will
+        never have any descendants.
+      <% end %>
+    </p>
+  </div>
+<% else %>
+  <div class="children-container">
+    <% unless poem.bastards.empty? %>
+    <% end %>
+
+    <% unless poem.by_father.empty? %>
+    <% end %>
+  </div>
+<% end %>
