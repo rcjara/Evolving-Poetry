@@ -4,6 +4,7 @@ module CustomHelper
 
     def initialize(parent = nil, second_parent_id = nil)
       @parent = parent
+      @second_parent_id = second_parent_id
     end
 
     def inspect
