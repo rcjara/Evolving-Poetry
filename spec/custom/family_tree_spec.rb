@@ -1,15 +1,7 @@
+require_relative "custom_helper"
+include CustomHelper
+
 describe FamilyTree do
-  class PoemStub
-    attr_reader :parent
-
-    def initialize(parent = nil)
-      @parent = parent
-    end
-
-    def inspect
-      "<p>"
-    end
-  end
 
   describe "basic family tree" do
     before(:each) do
@@ -87,6 +79,28 @@ p p . p
 EOS
         end
       end
+
+      describe "Alt Fourth Generation" do
+        before(:each) do
+          @p8  = PoemStub.new @p4
+          @p9  = PoemStub.new @p5
+          @p10 = PoemStub.new @p5
+          @p11 = PoemStub.new @p5
+          @p12 = PoemStub.new @p8
+          @all_poems += [@p8, @p9, @p10, @p11, @p12]
+        end
+
+        it "should have the right family tree structure with lines" do
+          tree.structure.should == [[@p1, nil, nil,  nil,  nil],
+                                    ['[', 'T', '-',  ']',  nil],
+                                    [@p2, @p3, nil,  @p4,  nil],
+                                    [nil, '[', ']',  '[',  ']'],
+                                    [nil, @p5, @p6,  @p7,  @p8],
+                                    [nil, '[', 'T',  ']',  '|'],
+                                    [nil, @p9, @p10, @p11, @p12]]
+        end
+      end
+
     end
   end
 
