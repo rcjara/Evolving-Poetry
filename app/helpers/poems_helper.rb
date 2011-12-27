@@ -159,11 +159,7 @@ module PoemsHelper
 # Lines for the family trees #
 ##############################
 
-  def line_template(ul = nil, ur = nil, ll = nil, lr = nil)
-    ur ||= "unmarked"
-    ul ||= "unmarked"
-    lr ||= "unmarked"
-    ll ||= "unmarked"
+  def line_template(ul = 'unmarked', ur = 'unmarked', ll = 'unmarked', lr = 'unmarked')
     html = <<-eol
     <div class="fam-tree-line-container">
       <div class="fam-tree-line-level">

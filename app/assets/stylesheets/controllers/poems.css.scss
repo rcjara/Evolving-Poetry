@@ -4,6 +4,7 @@ $parent_width: 150px;
 $narrow_t_width: $fam_tree_line_width / 4 + $fam_tree_leaf_padding / 2;
 $poem_width: $parent_width * 2 + $narrow_t_width;
 $left_width: 475px;
+$children_margin: ($left_width - $poem_width) / 2;
 
 /* Poem */
 .main-body-poem {
@@ -147,18 +148,6 @@ $left_width: 475px;
   width: $poem_width - 30;
 }
 
-.no-children-notice {
-  margin-left: ($left_width - $poem_width) / 2;
-  margin-right: auto;
-  width: $poem_width;
-
-  h3 {
-    font-size: $default_font_size;
-    line-height: $default_line_height;
-    margin-bottom: 5px;
-  }
-}
-
 .parents-container {
   margin-left: auto;
   margin-right: auto;
@@ -207,6 +196,60 @@ $left_width: 475px;
     }
   }
 
+}
+
+.no-children-notice {
+  margin-left: $children_margin;
+  width: $poem_width;
+
+  h3 {
+    font-size: $default_font_size;
+    line-height: $default_line_height;
+    margin-bottom: 5px;
+  }
+}
+
+$children_list_width: 150px;
+$short_line_height: 25px;
+
+.children-container {
+  margin-top: $padding / 2;
+  margin-left: $children_margin;
+  width: $overall_width - $children_margin - $padding;
+  overflow-x: auto;
+
+  .children-list {
+    float: left;
+    width: $children_list_width;
+    margin-left: 15px;
+
+    .short-line-container {
+      margin-top: 5px;
+      margin-bottom: 5px;
+      height: $short_line_height;
+    }
+
+    .fam-tree-marked-right {
+      width: $children_list_width / 2 - 1;
+      height: $short_line_height;
+    }
+
+    .fam-tree-unmarked {
+      height: $short_line_height;
+    }
+
+    li.first {
+      text-align: center;
+    }
+  }
+
+  .children-by-father-container {
+    float: left;
+
+    p {
+      text-align: center;
+    }
+  }
 }
 
 .short-line-container {

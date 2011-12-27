@@ -13,9 +13,40 @@
 <% else %>
   <div class="children-container">
     <% unless poem.bastards.empty? %>
+      <div class="children-list">
+        <ul>
+          <li class="first">
+            <strong>Children by Mitosis</strong>
+            <%= short_vertical_line %>
+          </li>
+          <% poem.bastards.each do |child| %>
+            <li>
+              <%= poem_link(child) %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     <% end %>
-
-    <% unless poem.by_father.empty? %>
-    <% end %>
+    <% unless poem.children_by_father.empty? %>
+      <div class="children-by-father-container">
+        <p><strong>Children by Sexual Reproduction</strong></p>
+        <% poem.children_by_father.each_pair do |father_id, children| %>
+          <div class="children-list">
+            <ul>
+              <li class="first">
+                <strong>Father:</strong> <br />
+                <%= poem_id_link(father_id) %>
+                <%= short_vertical_line %>
+              </li>
+              <% children.each do |child| %>
+                <li>
+                  <%= poem_link(child) %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 <% end %>

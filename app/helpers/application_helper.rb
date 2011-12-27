@@ -52,7 +52,7 @@ module ApplicationHelper
   end
 
   def date_fmt(time)
-    time.to_date.to_s(:long_ordinal)
+    time.to_date.to_s(:abbrev_ordinal)
   end
 
   def time_fmt(time)
