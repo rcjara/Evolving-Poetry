@@ -213,15 +213,44 @@ $children_list_width: 150px;
 $short_line_height: 25px;
 
 .children-container {
-  margin-top: $padding / 2;
   margin-left: $children_margin;
   width: $overall_width - $children_margin - $padding;
   overflow-x: auto;
 
+  .left-lines {
+    width: 50%;
+    height: $short_line_height;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #666;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-left-color: #666;
+    float: right;
+  }
+
+  .right-lines {
+    width: 50%;
+    height: $short_line_height;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #666;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: #666;
+    float: left;
+  }
+
+  .bastards-container {
+    float: left;
+    width: $children_list_width + $padding;
+  }
+
   .children-list {
     float: left;
     width: $children_list_width;
-    margin-left: 15px;
+    padding-left: $padding / 2;
+    padding-right: $padding / 2;
 
     .short-line-container {
       margin-top: 5px;
@@ -248,6 +277,9 @@ $short_line_height: 25px;
 
     p {
       text-align: center;
+    }
+
+    .lists-container {
     }
   }
 }
