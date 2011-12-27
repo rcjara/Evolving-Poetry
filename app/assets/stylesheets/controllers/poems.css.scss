@@ -241,8 +241,20 @@ $short_line_height: 25px;
     float: left;
   }
 
+  .short-line-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: $short_line_height;
+  }
+
   .bastards-container {
     float: left;
+    width: $children_list_width + $padding;
+  }
+
+  .bastards-container-centered {
+    float: left;
+    margin-left: ($poem_width - ($children_list_width + $padding) ) / 2;
     width: $children_list_width + $padding;
   }
 
@@ -252,11 +264,6 @@ $short_line_height: 25px;
     padding-left: $padding / 2;
     padding-right: $padding / 2;
 
-    .short-line-container {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      height: $short_line_height;
-    }
 
     .fam-tree-marked-right {
       width: $children_list_width / 2 - 1;
@@ -267,8 +274,16 @@ $short_line_height: 25px;
       height: $short_line_height;
     }
 
-    li.first {
-      text-align: center;
+    ul {
+      width: $children_list_width;
+
+      li {
+        width: $children_list_width;
+      }
+
+      li.first {
+        text-align: center;
+      }
     }
   }
 
@@ -278,8 +293,20 @@ $short_line_height: 25px;
     p {
       text-align: center;
     }
+  }
 
-    .lists-container {
+  .children-by-father-container-aligned {
+    float: left;
+
+    .spacer {
+      float: left;
+      width: 90px;
+      height: 5px;
+    }
+
+    p {
+      margin-left: 65px;
+      text-align: center;
     }
   }
 }

@@ -12,33 +12,52 @@
   </div>
 <% else %>
   <div class="children-container">
+
     <% unless poem.bastards.empty? %>
-      <div class="bastards-container">
-        <% unless poem.children_by_father.empty? %>
-          <div class="left-lines"></div>
+      <% if poem.children_by_father.empty? %>
+        <div class="bastards-container-centered">
+      <% else %>
+        <div class="bastards-container">
+          <div class="left-lines">
+          </div>
           <%= clear %>
-        <% end %>
-        <div class="children-list">
-          <ul>
-            <li class="first">
-              <strong>Children by Mitosis</strong>
-              <%= short_vertical_line %>
-            </li>
-            <% poem.bastards.each do |child| %>
-              <li>
-                <%= poem_link(child) %>
+      <% end %>
+
+          <div class="children-list">
+            <ul>
+
+              <li class="first">
+                <strong>Children by Mitosis</strong>
+                <%= short_vertical_line %>
               </li>
-            <% end %>
-          </ul>
+
+              <% poem.bastards.each do |child| %>
+                <li>
+                  <%= poem_link(child) %>
+                </li>
+              <% end %>
+
+            </ul>
+          </div>
+
         </div>
-      </div>
     <% end %>
+
     <% unless poem.children_by_father.empty? %>
-      <div class="children-by-father-container">
-        <div class="right-lines"></div>
-        <%= clear %>
-        <p><strong>Children by Sexual Reproduction</strong></p>
+      <% if poem.bastards.empty? %>
+        <div class="children-by-father-container-aligned">
+      <% else %>
+        <div class="children-by-father-container">
+          <div class="right-lines"></div>
+          <%= clear %>
+      <% end %>
+        <p><strong>Children by Sexual Reproduction:</strong></p>
         <div class="lists-container">
+          <% if poem.children_by_father.length == 1 %>
+            <div class="spacer">
+            </div>
+          <% end %>
+
           <% poem.children_by_father.each_pair do |father_id, children| %>
             <div class="children-list">
               <ul>
@@ -56,7 +75,7 @@
             </div>
           <% end %>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 <% end %>
