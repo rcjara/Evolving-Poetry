@@ -5,7 +5,7 @@ gem 'rails', '3.1.3'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'rake', '0.8.7'
+# gem 'rake', '0.8.7'
 gem 'jquery-rails'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'haml'
@@ -40,7 +40,7 @@ group :test do
   gem 'rspec'
   gem 'webrat'
   gem 'factory_girl_rails'
-  gem 'spork', '~> 0.9.0.rc'
+  gem 'spork-rails'
   gem 'jasmine'
   gem 'mocha'
   gem 'simplecov', '>= 0.4.2'
