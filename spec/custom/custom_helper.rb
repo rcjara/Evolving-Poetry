@@ -8,7 +8,11 @@ module CustomHelper
     end
 
     def inspect
-      "<p>"
+      '<p>'
+    end
+
+    def to_s
+      'p'
     end
   end
 end
