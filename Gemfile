@@ -27,21 +27,23 @@ group :production do
   gem 'pg'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'cucumber-rails'
+  gem 'spork-rails'
+  gem 'jasmine'
+  gem 'webrat'
+end
+
 group :development do
   gem 'pry'
-  gem 'rspec-rails'
   gem 'annotate-models'
   gem 'nifty-generators', '>= 0.4.0'
   gem 'graph', '2.3.0'
-  gem 'jasmine'
 end
 
 group :test do
-  gem 'rspec'
-  gem 'webrat'
   gem 'factory_girl_rails'
-  gem 'spork-rails'
-  gem 'jasmine'
   gem 'mocha'
   gem 'simplecov', '>= 0.4.2'
 end
