@@ -27,14 +27,6 @@ group :production do
   gem 'pg'
 end
 
-group :development, :test do
-  gem 'rspec-rails'
-  gem 'cucumber-rails'
-  gem 'spork-rails'
-  gem 'jasmine'
-  gem 'webrat'
-end
-
 group :development do
   gem 'pry'
   gem 'annotate-models'
@@ -43,8 +35,13 @@ group :development do
 end
 
 group :test do
+  gem 'jasmine'
   gem 'factory_girl_rails'
-  gem 'mocha'
   gem 'simplecov', '>= 0.4.2'
+  gem 'spork-rails'
+  gem 'rspec-rails'
+  #gem 'mocha'
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
 end
 
