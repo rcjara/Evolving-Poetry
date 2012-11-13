@@ -149,7 +149,7 @@ class Poem < ActiveRecord::Base
   end
 
   def family_tree(opts = {})
-    FamilyTree.new(family_members).structure(opts)
+    FamilyTree::Tree.new(family_members).structure
   end
 
   def bastards
