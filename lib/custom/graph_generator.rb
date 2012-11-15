@@ -115,14 +115,12 @@ class GraphGenerator
 
   def self.handle_danglers!(lang, found, okay, excluded)
     dangler = dangler(found)
-    if dangler
-      ident = dangler.identifier
-      found.delete(ident)
-      dangler.children.each { |child| okay[child] -= 1 }
-      excluded << ident
-      false
-    else
-      true
-    end
+    return true unless dangler
+
+    ident = dangler.identifier
+    found.delete(ident)
+    dangler.children.each { |child| okay[child] -= 1 }
+    excluded << ident
+    false
   end
 end

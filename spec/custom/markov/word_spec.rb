@@ -1,22 +1,10 @@
 include MarkovHelper
 
-describe MarkovWord do
+describe Markov::Word do
   shared_examples_for "any word" do
-    it "should be able to duplicate itself and still equal itself" do
-      new_word = @word.dup
-      @word.should == new_word
-    end
-
-    it "should not be able to duplicate itself, alter the new version and then still equal itself" do
-      new_word = @word.dup
-      new_word.add_child("velma")
-      @word.should_not == new_word
-    end
-
     it "should have an identifier that is downcased" do
       @word.identifier.to_s.should == @word.identifier.to_s.downcase
     end
-
   end
 
   shared_examples_for "a non-terminating word" do
@@ -49,7 +37,7 @@ describe MarkovWord do
 
   context "simple word" do
     before(:each) do
-      @word = MarkovWord.new("TEST", :__begin__)
+      @word = Markov::Word.new("TEST", :__begin__)
     end
 
     it "should have a lower case identifier" do
@@ -164,7 +152,7 @@ describe MarkovWord do
       end
 
       it "should get all of its children eventually" do
-        results = (1..30).collect { |throw_away| @word.get_random_child }
+        results = (1..30).collect { |_| @word.get_random_child }
         results.uniq.sort{ |a,b| a.to_s <=> b.to_s }.should == @children.sort{ |a,b| a.to_s <=> b.to_s }
       end
 
@@ -174,20 +162,20 @@ describe MarkovWord do
     context "shouting vs. non shouting words" do
       before(:each) do
         @non_shouting_words = ["apple","dog","bear"]
-        @shouting_words = ["APPLE","DOG","BEAR"]
+        @shouting_words     = ["APPLE","DOG","BEAR"]
         @non_shouting_markov_words = nouns_to_markov_words(@non_shouting_words)
         @shouting_markov_words = nouns_to_markov_words(@shouting_words)
       end
 
       it "should have its non-shouting words be non-shouting" do
         @non_shouting_markov_words.each do |word|
-          word.shoutable?.should == false
+          word.should_not be_shoutable
         end
       end
 
       it "should have its shouting words be shoutable" do
         @shouting_markov_words.each do |word|
-          word.shoutable?.should == true
+          word.should be_shoutable
         end
       end
 
@@ -205,13 +193,13 @@ describe MarkovWord do
 
       it "should have its non-shouting words fail the shoutable test after being displayed" do
         @non_shouting_markov_words.each do |word|
-          MarkovWord.shoutable_test?(word.display).should == false
+          Markov::Word.shoutable_test?(word.display).should == false
         end
       end
 
       it "should have its shouting words pass the shoutable test after being displayed" do
         @shouting_markov_words.each do |word|
-          MarkovWord.shoutable_test?(word.display({:shout => true}) ).should == true
+          Markov::Word.shoutable_test?(word.display({:shout => true}) ).should == true
         end
       end
 
@@ -241,7 +229,7 @@ describe MarkovWord do
     context "on creating punctuation words" do
       before(:each) do
         @words = [".", "!", "?", "zaps.", "pow!",
-          "fun?", ",", ":", ";", "...."].collect{ |word| MarkovWord.new(word,  :__begin__) }
+          "fun?", ",", ":", ";", "...."].collect{ |word| Markov::Word.new(word,  :__begin__) }
       end
 
       it "each word should be punctuation" do
@@ -259,7 +247,7 @@ describe MarkovWord do
 
     context "on creating non-punctuation words" do
       before(:each) do
-        @words = ["this","that","the","other","thing","yay",":)"].collect{ |word| MarkovWord.new(word, :__begin__) }
+        @words = ["this","that","the","other","thing","yay",":)"].collect{ |word| Markov::Word.new(word, :__begin__) }
       end
 
       it "each word should not be punctuation" do

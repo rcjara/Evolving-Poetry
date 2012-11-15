@@ -12,11 +12,11 @@ module MarkovHelper
   end
 
   def nouns_to_markov_words(nouns)
-    nouns.collect { |noun| MarkovWord.new(noun, "the") }
+    nouns.collect { |noun| Markov::Word.new(noun, "the") }
   end
 
   def poe_language
-    MarkovLanguage.new.tap do |lang|
+    Markov::Language.new.tap do |lang|
       text = File.read(File.expand_path(File.dirname(__FILE__) + '/../../lib/works/edgar_allan_poe.txt'))
       lang.add_snippet(text)
     end

@@ -125,7 +125,7 @@ class Language < ActiveRecord::Base
   end
 
   def reload_language
-    @@languages[name] = MarkovLanguage.new
+    @@languages[name] = Markov::Language.new
 
     authors.each do |author|
       author.works.each do |work|

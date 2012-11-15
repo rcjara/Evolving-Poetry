@@ -1,6 +1,6 @@
 describe GraphGenerator do
   before(:all) do
-    @lang = MarkovLanguage.new
+    @lang = Markov::Language.new
     text = File.read( Rails.root.
       join('lib/works/nonsense_welcome.txt').to_s )
     text.split(/\n/)[1...-1].each do |line|

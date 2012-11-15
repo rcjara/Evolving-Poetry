@@ -1,6 +1,6 @@
-describe MarkovLanguage do
+describe Markov::Language do
   before(:each) do
-    @lang = MarkovLanguage.new
+    @lang = Markov::Language.new
     @lang.add_snippet(work_content)
   end
 
@@ -64,7 +64,7 @@ describe MarkovLanguage do
 
   describe "the word delimeter regex" do
     before(:each) do
-      @words = "Take this kiss upon the brow! ".scan(MarkovLanguage::WORD_REGEX)
+      @words = "Take this kiss upon the brow! ".scan(Markov::Language::WORD_REGEX)
     end
 
     it "should have 7 @words in it" do

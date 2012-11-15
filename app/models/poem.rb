@@ -90,7 +90,9 @@ class Poem < ActiveRecord::Base
   end
 
   def markov_asexual
-    MarkovPoem.from_prog_text(self.programmatic_text, self.language.markov, :strip => true).tap do |markov_poem|
+    Markov::Poem.from_prog_text(self.programmatic_text,
+                                self.language.markov,
+                                strip: true).tap do |markov_poem|
       (rand(Constants::MAX_MUTATIONS) + 1).times{ markov_poem.mutate!(self.language.markov) }
     end
   end
@@ -141,7 +143,7 @@ class Poem < ActiveRecord::Base
   end
 
   def markov_form
-    MarkovPoem.from_prog_text(self.programmatic_text, self.language.markov)
+    Markov::Poem.from_prog_text(self.programmatic_text, self.language.markov)
   end
 
   def family_members

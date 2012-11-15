@@ -65,7 +65,7 @@ describe Poem do
 
   describe "programmatic text stuff" do
     before(:each) do
-      @markov_form = MarkovPoem.from_prog_text(@poem.programmatic_text, @poem.language.markov)
+      @markov_form = Markov::Poem.from_prog_text(@poem.programmatic_text, @poem.language.markov)
     end
 
     it "should be able to recreate the display text from the markov form" do

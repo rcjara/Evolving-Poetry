@@ -1,4 +1,4 @@
-describe MarkovPoem do
+describe Markov::Poem do
   before(:all) do
     @lang = poe_language
   end
@@ -10,7 +10,7 @@ describe MarkovPoem do
 
     describe "without stripping tags" do
       before(:each) do
-        @p = MarkovPoem.from_prog_text(@text_with_span_tags, @lang)
+        @p = Markov::Poem.from_prog_text(@text_with_span_tags, @lang)
       end
 
       it "should display properly" do
@@ -25,7 +25,7 @@ describe MarkovPoem do
 
     describe "with stripping out tags" do
       before(:each) do
-        @p = MarkovPoem.from_prog_text(@text_with_span_tags, @lang, {:strip => true})
+        @p = Markov::Poem.from_prog_text(@text_with_span_tags, @lang, {:strip => true})
       end
 
       it "should display properly" do
@@ -46,7 +46,7 @@ describe MarkovPoem do
 
     describe "without stripping tags" do
       before(:each) do
-        @p = MarkovPoem.from_prog_text(@text_with_deleted_tags, @lang)
+        @p = Markov::Poem.from_prog_text(@text_with_deleted_tags, @lang)
       end
 
       it "should display properly" do
@@ -61,7 +61,7 @@ describe MarkovPoem do
 
     describe "with stripping out tags" do
       before(:each) do
-        @p = MarkovPoem.from_prog_text(@text_with_deleted_tags, @lang, :strip => true)
+        @p = Markov::Poem.from_prog_text(@text_with_deleted_tags, @lang, :strip => true)
       end
 
       it "should display properly" do
@@ -120,7 +120,7 @@ describe MarkovPoem do
   describe "multiline stripping" do
     before(:each) do
       @text_to_strip = "take BEGINDELETED this kiss ENDDELETED upon BREAK BEGINDELETED the brow ENDDELETED BREAK BEGINNEWTEXT and ENDSPAN raven !"
-      @p = MarkovPoem.from_prog_text(@text_to_strip, @lang, :strip => true)
+      @p = Markov::Poem.from_prog_text(@text_to_strip, @lang, :strip => true)
     end
 
     it "should have the right programmatic text" do
@@ -181,7 +181,7 @@ describe MarkovPoem do
 
       describe "and then stripping out tags" do
         before(:each) do
-          @p = MarkovPoem.from_prog_text(@p.to_prog_text, @lang, :strip => true)
+          @p = Markov::Poem.from_prog_text(@p.to_prog_text, @lang, :strip => true)
         end
 
         it "should be back to 4 lines" do

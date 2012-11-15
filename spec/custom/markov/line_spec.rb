@@ -1,6 +1,6 @@
 include MarkovHelper
 
-describe MarkovLine do
+describe Markov::Line do
   shared_examples_for "any line" do
     it "it's display length should equal it's num_chars" do
       @line.display.length.should == @line.num_chars + %{<p>}.length + %{</p>}.length
@@ -14,7 +14,7 @@ describe MarkovLine do
 
   describe "basic adding of words" do
     before(:each) do
-      @line = MarkovLine.new
+      @line = Markov::Line.new
       @lang.words[0..5].each do |word|
         @line.add_word( @lang.fetch_word(word) )
       end
@@ -55,7 +55,7 @@ describe MarkovLine do
     describe "to/from programmatic text" do
       before(:each) do
         @text = @line.to_prog_text
-        @line2 = MarkovLine.line_from_prog_text(@text, @lang)
+        @line2 = Markov::Line.line_from_prog_text(@text, @lang)
       end
 
       it "text should contain only all upper or lower case words" do
@@ -94,7 +94,7 @@ describe MarkovLine do
   describe "a line of programmatic text" do
     before(:each) do
       @text = "lie by SHOUT poetry primeval SHOUT disaster measure encircles seen death watches"
-      @line = MarkovLine.line_from_prog_text(@text, @lang)
+      @line = Markov::Line.line_from_prog_text(@text, @lang)
     end
 
     it "should display properly" do
@@ -103,7 +103,7 @@ describe MarkovLine do
 
     it "should only contain MarkovWords" do
       @line.words.each do |word_hash|
-        word_hash[:word].class.should == MarkovWord
+        word_hash[:word].class.should == Markov::Word
       end
     end
 
