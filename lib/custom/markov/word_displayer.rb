@@ -23,12 +23,12 @@ module Markov
       @tags = tags
     end
 
-    def display(new_sentence = false)
+    def display(new_sentence = false, use_tags = true)
       word.identifier.to_s.dup.tap do |dw|
         dw.capitalize!    if word.proper? || new_sentence
         dw.insert(0, ' ') unless word.punctuation?
 
-        tags.each { |tag| execute_tag(tag, dw) }
+        tags.each { |tag| execute_tag(tag, dw) } if use_tags
       end
     end
 
@@ -49,7 +49,7 @@ module Markov
     end
 
     def num_chars
-      display.length
+      display(false, false).length
     end
 
     def add_tag(tag)

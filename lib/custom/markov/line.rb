@@ -4,23 +4,21 @@ module Markov
 
     def initialize
       @words = []
-      @num_chars = 0
     end
 
     def num_chars
-      @num_chars == 0 ? 0 : @num_chars - 1
+      raw_chars = words.map(&:num_chars).inject(&:+)
+      raw_chars > 0 ? raw_chars - 1 : raw_chars
     end
 
     def add_word(word, tags = [])
       displayer = WordDisplayer.new(word, tags)
-      @words << displayer
-      @num_chars += displayer.num_chars
+      @words.push displayer
     end
 
     def push_word(word, tags = [])
       displayer = WordDisplayer.new(word, tags)
-      @words.insert(0, displayer)
-      @num_chars += displayer.num_chars
+      @words.unshift displayer
     end
 
     def length
@@ -56,16 +54,11 @@ module Markov
       words.empty?
     end
 
-    #Removed the last word hash from words
+    #Removed the last WordDisplayer from words
     #Return whether the remaining word is a valid sentence end
     def remove_last_word
       return nil unless words.length > 1
-      removed = words.pop
-
-      #question, do I remove the attr from the display?
-      #Right now this could only make more characters than it should remove,
-      #but in the future, I might have attr for which this makes sense
-      @num_chars -= removed.num_chars
+      words.pop
 
       new_last_word = words.last.word
       new_last_word.terminates? || new_last_word.sentence_end?
@@ -75,26 +68,22 @@ module Markov
     #Return whether the remaining word is a valid sentence end
     def remove_first_word
       return nil unless words.length > 1
-      removed = words.slice!(0)
-
-      #question, do I remove the attr from the display?
-      #Right now this could only make more characters than it should remove,
-      #but in the future, I might have attr for which this makes sense
-      @num_chars -= removed.num_chars
-
+      words.shift
       new_first_word = words.first.word
       new_first_word.sentence_begin?
     end
 
-    def display(sentence_begin = true)
+    def unwrapped_sentence(sentence_begin = true)
       ends = words.collect(&:sentence_end?)
       beginnings = [sentence_begin] + ends[0...-1]
-      sentence = words.zip(beginnings)
-                      .collect { |w, b| w.display(b) }
-                      .join
-                      .strip
+      words.zip(beginnings)
+           .collect { |w, b| w.display(b) }
+           .join
+           .strip
+    end
 
-      "<p>" + sentence + "</p>"
+    def display(sentence_begin = true)
+      "<p>" + unwrapped_sentence(sentence_begin) + "</p>"
     end
 
     def to_prog_text
