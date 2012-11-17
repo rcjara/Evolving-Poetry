@@ -191,18 +191,6 @@ describe Markov::Word do
         end
       end
 
-      it "should have its non-shouting words fail the shoutable test after being displayed" do
-        @non_shouting_markov_words.each do |word|
-          Markov::Word.shoutable_test?(word.display).should == false
-        end
-      end
-
-      it "should have its shouting words pass the shoutable test after being displayed" do
-        @shouting_markov_words.each do |word|
-          Markov::Word.shoutable_test?(word.display({:shout => true}) ).should == true
-        end
-      end
-
       it "none of these shouting, non shouting words should equal eachother" do
         all_words = @non_shouting_markov_words + @shouting_markov_words
         all_words.each_with_index do |word, i|

@@ -101,12 +101,6 @@ describe Markov::Line do
       @line.display.should == display_line("Lie by POETRY primeval DISASTER measure encircles seen death watches")
     end
 
-    it "should only contain MarkovWords" do
-      @line.words.each do |word_hash|
-        word_hash[:word].class.should == Markov::Word
-      end
-    end
-
     it "should not be deleted" do
       @line.should_not be_deleted
     end
@@ -141,8 +135,8 @@ describe Markov::Line do
     end
 
     it "should have a last word that ends the sentence" do
-      w = @line.words.last[:word]
-      (w.terminates? || w.sentence_end?).should be_true
+      w = @line.words.last
+      expect(w.terminates? || w.sentence_end?).to be_true
     end
 
   end
@@ -187,8 +181,7 @@ describe Markov::Line do
     end
 
     it "should have a first word that could begin the sentence" do
-      w = @line.words.first[:word]
-      w.sentence_begin?.should be_true
+      expect(@line.words.first.sentence_begin?).to be_true
     end
   end
 

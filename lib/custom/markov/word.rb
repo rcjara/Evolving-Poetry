@@ -2,75 +2,37 @@ module Markov
   class Word
     attr_reader :identifier, :count, :parents_count, :children_count, :shout_count, :children
 
-    PUNCTUATION_REGEX = /[\.\,\:\;\!\?]/
+    PUNCTUATION_REGEX  = /[\.\,\:\;\!\?]/
     SENTENCE_END_REGEX = /^\.|^\?|^\!/
 
     def initialize(ident, parent, sentence_begin = false)
-      @identifier = Word.downcase(ident)
-      @punctuation = Word.is_punctuation_test?(ident)
-      @sentence_end = Word.is_sentence_end_test?(ident)
-      @begin = ident == :__begin__
+      @identifier    = Word.downcase(ident)
+      @punctuation   = Word.is_punctuation_test?(ident)
+      @sentence_end  = Word.is_sentence_end_test?(ident)
+      @begin         = ident == :__begin__
 
-      @count, @parents_count, @children_count, @shout_count = 0, 0, 0, 0
-      @parents = Hash.new(0)
-      @children = Hash.new(0)
+      @count = @parents_count = @children_count = @shout_count = 0
+      @parents    = Hash.new(0)
+      @children   = Hash.new(0)
 
-      @proper = true
-      @shoutable = false
-      @speakable = false
+      @proper     = true
+      @shoutable  = false
+      @speakable  = false
       @terminates = false
 
       add_parent(parent, ident, sentence_begin)
     end
 
-    def dup
-      other = Word.new("","")
-      other.parents = @parents.dup
-      other.children = @children.dup
-      other.proper = @proper
-      other.shoutable = @shoutable
-      other.speakable = @speakable
-      other.terminates = @terminates
-      other.punctuation = @punctuation
-      other.sentence_begin = @sentence_begin
-      other.begin = @begin
-      other.sentence_end = @sentence_end
-      other.identifier = @identifier.is_a?(String) ? @identifier.dup : @identifier
-      other.count = @count
-      other.parents_count = @parents_count
-      other.children_count = @children_count
-      other.shout_count = @shout_count
-      other
-    end
-
-    def ==(other)
-      return false unless @identifier == other.identifier
-      return false unless @count == other.count
-      return false unless @shout_count == other.shout_count
-      return false unless speak_count == other.speak_count
-      return false unless @proper == other.proper?
-      return false unless @shoutable == other.shoutable?
-      return false unless @speakable == other.speakable?
-      return false unless @terminates == other.terminates?
-      return false unless @children == other.children
-      return false unless @parents == other.parents
-      return false unless @sentence_begin == other.sentence_begin?
-      return false unless @begin == other.is_begin?
-      return false unless @parents == other.parents
-
-      true
-    end
-
     def speak_count
-      @count - @shout_count
+      count - shout_count
     end
 
     def num_parents
-      @parents.length
+      parents.length
     end
 
     def num_children
-      @children.length
+      children.length
     end
 
     def add_identifier(ident)
@@ -116,28 +78,16 @@ module Markov
       get_random_relative(@parents, @parents_count)
     end
 
-    def display(options = {}, first = false)
-      return "" if is_begin?
-
-      display_word = @identifier.dup
-      display_word.capitalize! if first | proper?
-      display_word = " " + display_word unless punctuation?
-      display_word.upcase! if options[:shout]
-
-      display_word.insert(0, %{<span class="new-text">})           if options[:beginnewtext]
-      display_word.insert(0, %{<span class="altered-text">})       if options[:beginalteredtext]
-      display_word.insert(0, %{<span class="deleted-text">})       if options[:begindeleted]
-      display_word.insert(0, %{<span class="from-first-parent">})  if options[:fromfirstparent]
-      display_word.insert(0, %{<span class="from-second-parent">}) if options[:fromsecondparent]
-
-      display_word.insert(-1, %{</span>}) if options[:endspan]
-      display_word.insert(-1, %{</span>}) if options[:enddeleted]
-
-      display_word
-    end
-
     def should_shout?
       rand(count) < shout_count
+    end
+
+    def has_multiple_parents?
+      num_parents > 1
+    end
+
+    def has_multiple_children?
+      num_children > 1
     end
 
     class << self
@@ -155,10 +105,6 @@ module Markov
 
       def shoutable_test?(word)
         word.is_a?(String) && word.strip.length > 1 && word == word.upcase
-      end
-
-      def speakable_test?(word)
-        !Word.shoutable_test?(word)
       end
 
       def is_sentence_end_test?(word)
@@ -212,14 +158,6 @@ module Markov
       @sentence_begin
     end
 
-    def sorted_children
-      sorted_hash(@children)
-    end
-
-    def sorted_parents
-      sorted_hash(@parents)
-    end
-
     private
 
     def get_random_relative(relatives, count)
@@ -230,11 +168,6 @@ module Markov
         return key if running_index > index
         running_index
       end
-    end
-
-    def sorted_hash(hash)
-      pairs = hash.each_pair.collect{|w, n| { word: w, occurances: n } }
-      pairs.sort{|a, b| b[:occurances] <=> a[:occurances] }
     end
 
     protected
