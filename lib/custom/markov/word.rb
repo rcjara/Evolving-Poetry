@@ -23,6 +23,15 @@ module Markov
       add_parent(parent, ident, sentence_begin)
     end
 
+    def ==(other)
+      instance_variables.each do |var|
+        return false unless instance_variable_get(var) ==
+                            other.instance_variable_get(var)
+      end
+
+      true
+    end
+
     def speak_count
       count - shout_count
     end

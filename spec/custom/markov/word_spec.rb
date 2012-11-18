@@ -1,6 +1,23 @@
 include MarkovHelper
 
 describe Markov::Word do
+  context "==" do
+    subject { Markov::Word.new('word', 'a') }
+
+    it "should equal a word that was made with the same inputs" do
+      second_word = Markov::Word.new('word', 'a')
+      expect(subject).to eq(second_word)
+    end
+
+    it "should not equal a word that was made the same way and then altered" do
+
+      second_word = Markov::Word.new('word', 'a')
+      second_word.add_parent('the', 'word', false)
+      expect(subject).not_to eq(second_word)
+    end
+
+  end
+
   shared_examples_for "any word" do
     it "should have an identifier that is downcased" do
       @word.identifier.to_s.should == @word.identifier.to_s.downcase
