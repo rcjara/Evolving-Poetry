@@ -1,6 +1,7 @@
 module Markov
   class Word
-    attr_reader :identifier, :count, :parents_count, :children_count, :shout_count, :children
+    attr_reader :identifier, :count, :parents_count, :children_count,
+                :shout_count, :parents, :children
 
     PUNCTUATION_REGEX  = /[\.\,\:\;\!\?]/
     SENTENCE_END_REGEX = /^\.|^\?|^\!/
@@ -179,11 +180,5 @@ module Markov
       end
     end
 
-    protected
-
-    attr_reader :parents
-    attr_writer :parents, :children, :proper, :shoutable, :speakable,
-      :terminates, :punctuation, :sentence_end, :identifier, :count,
-      :parents_count, :children_count, :shout_count, :begin, :sentence_begin
   end
 end

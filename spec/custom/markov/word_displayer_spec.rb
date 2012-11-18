@@ -1,7 +1,7 @@
 describe Markov::WordDisplayer do
   let(:word) { double( identifier: "word",
-                        proper?: false,
-                        punctuation?: false ) }
+                       proper?: false,
+                       punctuation?: false ) }
   let(:tags) { [] }
   subject { Markov::WordDisplayer.new(word, tags) }
 

@@ -118,29 +118,6 @@ describe Markov::Line do
 
   end
 
-  describe "when altering a tail" do
-    before(:each) do
-      @line = @lang.gen_line
-      @orig_display = @line.display
-      @orig_first_word = @line.words.first
-      @line.alter_tail!(@lang)
-    end
-
-    it "should have a new display" do
-      @line.display.should_not == @orig_display
-    end
-
-    it "should have the same first word" do
-      @line.words.first.should == @orig_first_word
-    end
-
-    it "should have a last word that ends the sentence" do
-      w = @line.words.last
-      expect(w.terminates? || w.sentence_end?).to be_true
-    end
-
-  end
-
   describe "when marked as from first_parent" do
     before(:each) do
       @line = @lang.gen_line
@@ -148,7 +125,7 @@ describe Markov::Line do
     end
 
     it "should have a display with the right tags" do
-      @line.display.should =~ /^\<p\>\<span class\="from-first-parent"\>.*?\<\/span\>\<\/p\>$/
+      @line.display.should =~ /^<p><span class="from-first-parent">.*?<\/span><\/p>$/
     end
   end
 
@@ -159,32 +136,9 @@ describe Markov::Line do
     end
 
     it "should have a display with the right tags" do
-      @line.display.should =~ /^\<p\>\<span class\="from-second-parent"\>.*?\<\/span\>\<\/p\>$/
+      @line.display.should =~ /^<p><span class="from-second-parent">.*?<\/span><\/p>$/
     end
   end
-
-
-  describe "altering a front" do
-    before(:each) do
-      @line = @lang.gen_line
-      @orig_display = @line.display
-      @orig_last_word = @line.words.last
-      @line.alter_front!(@lang)
-    end
-
-    it "should have a new display" do
-      @line.display.should_not == @orig_display
-    end
-
-    it "should have the same last word" do
-      @line.words.last.should == @orig_last_word
-    end
-
-    it "should have a first word that could begin the sentence" do
-      expect(@line.words.first.sentence_begin?).to be_true
-    end
-  end
-
 
 end
 

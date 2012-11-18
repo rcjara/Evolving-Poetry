@@ -15,7 +15,6 @@ describe Markov::Word do
       second_word.add_parent('the', 'word', false)
       expect(subject).not_to eq(second_word)
     end
-
   end
 
   shared_examples_for "any word" do
