@@ -1,4 +1,5 @@
-require_relative "custom_helper"
+require_relative "../support/custom_helper"
+
 include CustomHelper
 
 describe ChildrenWithFathers do

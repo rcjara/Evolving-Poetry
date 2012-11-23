@@ -1,4 +1,3 @@
-require_relative "../custom_helper"
 include CustomHelper
 
 describe FamilyTree::Tree do
