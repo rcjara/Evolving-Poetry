@@ -6,14 +6,13 @@ describe Markov::Word do
 
     it "should equal a word that was made with the same inputs" do
       second_word = Markov::Word.new('word', 'a')
-      expect(subject).to eq(second_word)
+      expect( subject ).to eq(second_word)
     end
 
     it "should not equal a word that was made the same way and then altered" do
-
       second_word = Markov::Word.new('word', 'a')
       second_word.add_parent('the', 'word', false)
-      expect(subject).not_to eq(second_word)
+      expect( subject ).not_to eq(second_word)
     end
   end
 
@@ -30,24 +29,16 @@ describe Markov::Word do
   end
 
   shared_examples_for "a word that hasn't had any children added" do
-    it "should show that it has no children" do
-      @word.num_children.should == 0
-    end
-
     it "should show a children count of 0" do
-      @word.children_count.should == 0
+      @word.children.count.should == 0
     end
 
     it_should_behave_like "a non-terminating word"
   end
 
   shared_examples_for "a word that hasn't had any parents added" do
-    it "should show that it has 1 parent" do
-      @word.num_parents.should == 0
-    end
-
     it "should show a parents count of 1" do
-      @word.parents_count.should == 0
+      @word.parents.count.should == 0
     end
   end
 
@@ -107,12 +98,8 @@ describe Markov::Word do
         @word.proper?.should == true
       end
 
-      it "should have two parents" do
-        @word.num_parents.should == 2
-      end
-
       it "should have a parents count of 2" do
-        @word.parents_count.should == 2
+        @word.parents.count.should == 2
       end
 
       it "should have a shout count of 2" do
@@ -121,15 +108,6 @@ describe Markov::Word do
 
       it "should have a speak count of 2" do
         @word.speak_count.should == 2
-      end
-
-      it "should be able to get one of its parents" do
-        @parents.include?(@word.get_random_parent).should == true
-      end
-
-      it "should get all of its parents eventually" do
-        results = (1..30).collect { |throw_away| @word.get_random_parent }
-        results.uniq.sort{ |a,b| a.to_s <=> b.to_s }.should == @parents.sort{ |a,b| a.to_s <=> b.to_s }
       end
 
       it_should_behave_like "any word"
@@ -147,12 +125,8 @@ describe Markov::Word do
         @word.count.should == 1
       end
 
-      it "should have three children" do
-        @word.num_children.should == 3
-      end
-
       it "should have a children count of 3" do
-        @word.children_count.should == 3
+        @word.children.count.should == 3
       end
 
       it "should have a shout count of 1" do
@@ -161,15 +135,6 @@ describe Markov::Word do
 
       it "should have a speak count of 0" do
         @word.speak_count.should == 0
-      end
-
-      it "should be able to get one of its children" do
-        @children.include?(@word.get_random_child).should == true
-      end
-
-      it "should get all of its children eventually" do
-        results = (1..30).collect { |_| @word.get_random_child }
-        results.uniq.sort{ |a,b| a.to_s <=> b.to_s }.should == @children.sort{ |a,b| a.to_s <=> b.to_s }
       end
 
       it_should_behave_like "a word that hasn't had any parents added"
