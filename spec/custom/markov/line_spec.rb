@@ -8,8 +8,21 @@ describe Markov::Line do
 
   end
 
+  let(:lang) { poe_language }
+
   before(:all) do
     @lang = poe_language
+  end
+
+  describe ".+" do
+    let(:wd) { double() }
+
+    it "should be able to + a WordDisplayer" do
+      line = Markov::Line.new
+      line += wd
+      expect(line.length).to eq(1)
+    end
+
   end
 
   describe "basic adding of words" do

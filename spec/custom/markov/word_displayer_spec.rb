@@ -1,9 +1,34 @@
 describe Markov::WordDisplayer do
-  let(:word) { double( identifier: "word",
-                       proper?: false,
-                       punctuation?: false ) }
+  let(:default_word_attributes) do
+    { identifier: "word",
+      proper?: false,
+      punctuation?: false }
+  end
+
+  let(:word) { double(default_word_attributes) }
   let(:tags) { [] }
+
   subject { Markov::WordDisplayer.new(word, tags) }
+
+  context "#new_with_rand_tags" do
+    subject { Markov::WordDisplayer.new_with_rand_tags(word) }
+
+    context "a word guaranteed to be shouted" do
+      let(:word) do
+        double( { shout_prob: 1.0 }.merge(default_word_attributes) )
+      end
+
+      its(:tags) { should include(:shout) }
+    end
+
+    context "a word guaranteed to be spoken" do
+      let(:word) do
+        double( { shout_prob: 0.0 }.merge(default_word_attributes) )
+      end
+
+      its(:tags) { should_not include(:shout) }
+    end
+  end
 
   context ".display" do
     context "without any tags should display its word properly" do

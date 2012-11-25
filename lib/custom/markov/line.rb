@@ -2,8 +2,12 @@ module Markov
   class Line
     attr_reader :words
 
-    def initialize
-      @words = []
+    def initialize(words = [])
+      @words = words
+    end
+
+    def +(word_displayer)
+      self.class.new(@words + [word_displayer])
     end
 
     def num_chars

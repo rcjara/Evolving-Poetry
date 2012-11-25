@@ -23,6 +23,12 @@ module Markov
       @tags = tags
     end
 
+    def self.new_with_rand_tags(word)
+      tags = []
+      tags << :shout if rand < word.shout_prob
+      self.new(word, tags)
+    end
+
     def display(new_sentence = false, use_tags = true)
       word.identifier.to_s.dup.tap do |dw|
         dw.capitalize!    if word.proper? || new_sentence

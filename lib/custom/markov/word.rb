@@ -39,6 +39,7 @@ module Markov
     def add_identifier(ident)
       @count += 1
       @proper &&= Word.proper_test? ident
+
       if Word.shoutable_test?(ident)
         @shoutable = true
         @shout_count += 1
@@ -75,16 +76,16 @@ module Markov
       parents.get_random_item
     end
 
-    def should_shout?
-      rand(count) < shout_count
+    def shout_prob
+       shout_count.to_f / count
     end
 
     def has_multiple_parents?
-      parents.items.length > 1
+      parents.length > 1
     end
 
     def has_multiple_children?
-      children.items.length > 1
+      children.length > 1
     end
 
     class << self

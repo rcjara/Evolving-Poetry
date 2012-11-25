@@ -14,6 +14,10 @@ module Markov
       items == other.items
     end
 
+    def length
+      @items.length
+    end
+
     def keys
       @items.keys
     end

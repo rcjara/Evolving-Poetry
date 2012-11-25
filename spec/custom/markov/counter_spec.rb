@@ -29,7 +29,7 @@ describe Markov::Counter do
   end
 
   describe ".get_random_item" do
-    describe "from a counter with three items" do
+    describe "from a counter with two items" do
       subject {
         Markov::Counter.new.tap do |c|
           c.add_item('hello')
