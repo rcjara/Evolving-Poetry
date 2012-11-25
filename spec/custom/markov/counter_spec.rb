@@ -1,8 +1,7 @@
 describe Markov::Counter do
   describe "on creation" do
-    it "should have a count of zero" do
-      expect(subject.count).to eq(0)
-    end
+    it { should be_empty }
+    its(:count) { should eq(0) }
 
     it "should show any words having a count of zero" do
       expect(subject['word']).to eq(0)

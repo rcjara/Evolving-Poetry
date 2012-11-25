@@ -14,6 +14,10 @@ module Markov
       items == other.items
     end
 
+    def empty?
+      items.empty?
+    end
+
     def length
       @items.length
     end
