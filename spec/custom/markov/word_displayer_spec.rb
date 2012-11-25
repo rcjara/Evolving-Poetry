@@ -15,7 +15,7 @@ describe Markov::WordDisplayer do
 
     context "a word guaranteed to be shouted" do
       let(:word) do
-        double( { shout_prob: 1.0 }.merge(default_word_attributes) )
+        double( {count: 1, shout_count: 1}.merge(default_word_attributes) )
       end
 
       its(:tags) { should include(:shout) }
@@ -23,7 +23,7 @@ describe Markov::WordDisplayer do
 
     context "a word guaranteed to be spoken" do
       let(:word) do
-        double( { shout_prob: 0.0 }.merge(default_word_attributes) )
+        double( {count: 1, shout_count: 0}.merge(default_word_attributes) )
       end
 
       its(:tags) { should_not include(:shout) }
@@ -99,7 +99,15 @@ describe Markov::WordDisplayer do
         expect(subject.to_prog_text).to eq("BEGINNEWTEXT SHOUT word")
       end
     end
+  end
 
+  context "#word_shout_prob" do
+    it "should return a probability" do
+      word = double('word')
+      word.should_receive(:shout_count).and_return(3)
+      word.should_receive(:count).and_return(4)
+      expect( Markov::WordDisplayer.word_shout_prob(word) ).to eq(0.75)
+    end
   end
 end
 

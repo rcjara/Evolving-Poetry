@@ -1,234 +1,196 @@
 include MarkovHelper
 
 describe Markov::Word do
+  let(:a)         { Markov::Word.new('a') }
+  let(:the)       { Markov::Word.new('the') }
+  let(:__begin__) { Markov::Word.new(:__begin__) }
+
   context "==" do
-    subject { Markov::Word.new('word', 'a') }
+    subject { Markov::Word.new('word').add_parent(a) }
 
     it "should equal a word that was made with the same inputs" do
-      second_word = Markov::Word.new('word', 'a')
+      second_word = Markov::Word.new('word').add_parent(a)
       expect( subject ).to eq(second_word)
     end
 
     it "should not equal a word that was made the same way and then altered" do
-      second_word = Markov::Word.new('word', 'a')
-      second_word.add_parent('the', 'word', false)
+      second_word = Markov::Word.new('word').add_parent(a)
+      second_word.add_parent(the)
       expect( subject ).not_to eq(second_word)
     end
   end
 
-  shared_examples_for "any word" do
-    it "should have an identifier that is downcased" do
-      @word.identifier.to_s.should == @word.identifier.to_s.downcase
-    end
-  end
+  context ".new" do
+    context "a simple word" do
+      subject { Markov::Word.new("test") }
 
-  shared_examples_for "a non-terminating word" do
-    it "should show that it doesn't terminate" do
-      @word.terminates?.should == false
-    end
-  end
+      its(:identifier)  { should == "test" }
+      its(:count)       { should == 1 }
+      its(:shout_count) { should == 0 }
+      its(:speak_count) { should == 1 }
 
-  shared_examples_for "a word that hasn't had any children added" do
-    it "should show a children count of 0" do
-      @word.children.count.should == 0
-    end
+      it { should_not be_proper }
+      it { should_not be_shoutable }
+      it { should     be_speakable }
 
-    it_should_behave_like "a non-terminating word"
-  end
+      it { should_not be_begin }
+      it { should_not be_sentence_begin }
+      it { should_not be_sentence_end }
 
-  shared_examples_for "a word that hasn't had any parents added" do
-    it "should show a parents count of 1" do
-      @word.parents.count.should == 0
-    end
-  end
-
-  context "simple word" do
-    before(:each) do
-      @word = Markov::Word.new("TEST", :__begin__)
+      its(:children) { should be_empty }
+      its(:parents)  { should be_empty }
     end
 
-    it "should have a lower case identifier" do
-      @word.identifier.should == "test"
+    context "a shouted word" do
+      subject { Markov::Word.new("TEST") }
+
+      its(:shout_count) { should == 1 }
+      its(:speak_count) { should == 0 }
+
+      it { should be_proper }
+      it { should be_shoutable }
+      it { should_not be_speakable }
     end
 
-    it "should say that it is proper" do
-      @word.proper?.should == true
+    context "a proper word" do
+      subject { Markov::Word.new("Test") }
+
+      it { should be_proper }
+      it { should be_speakable }
+      it { should_not be_shoutable }
     end
 
-    it "should say that it can be all caps" do
-      @word.shoutable?.should == true
-    end
-
-    it "should not yet be speakable" do
-      @word.speakable?.should == false
-    end
-
-    it "should have a shout count of one" do
-      @word.shout_count.should == 1
-    end
-
-    it "should have a speak count of zero" do
-      @word.speak_count.should == 0
-    end
-
-    it_should_behave_like "any word"
-    it_should_behave_like "a word that hasn't had any children added"
-    it_should_behave_like "a word that hasn't had any parents added"
-
-    it "should show that it has a count of one" do
-      @word.count.should == 1
-    end
-
-    context "on adding some capitalized parent instances" do
-      before(:each) do
-        @parents = ["a", "the"]
-        @added_words = [ [:__begin__, "Test"], ["a", "TEST"],["the","Test"] ]
-        @added_words.each { |word_pair| @word.add_parent(*word_pair, false) }
-      end
-
-      it "should show a count of four" do
-        @word.count.should == 4
-      end
-
-      it "should be speakable" do
-        @word.speakable?.should == true
-      end
-
-      it "should be proper" do
-        @word.proper?.should == true
-      end
-
-      it "should have a parents count of 2" do
-        @word.parents.count.should == 2
-      end
-
-      it "should have a shout count of 2" do
-        @word.shout_count.should == 2
-      end
-
-      it "should have a speak count of 2" do
-        @word.speak_count.should == 2
-      end
-
-      it_should_behave_like "any word"
-      it_should_behave_like "a word that hasn't had any children added"
-    end
-
-    context "on adding some uncapitalized children instances" do
-      before(:each) do
-        @children = ["eats", "sucks", "blows"]
-        @added_words = [ ["Test", "eats"],["TEST", "sucks"],["test","blows"] ]
-        @children.each { |child| @word.add_child(child) }
-      end
-
-      it "should show a count of four" do
-        @word.count.should == 1
-      end
-
-      it "should have a children count of 3" do
-        @word.children.count.should == 3
-      end
-
-      it "should have a shout count of 1" do
-        @word.shout_count.should == 1
-      end
-
-      it "should have a speak count of 0" do
-        @word.speak_count.should == 0
-      end
-
-      it_should_behave_like "a word that hasn't had any parents added"
-    end
-
-    context "shouting vs. non shouting words" do
-      before(:each) do
-        @non_shouting_words = ["apple","dog","bear"]
-        @shouting_words     = ["APPLE","DOG","BEAR"]
-        @non_shouting_markov_words = nouns_to_markov_words(@non_shouting_words)
-        @shouting_markov_words = nouns_to_markov_words(@shouting_words)
-      end
-
-      it "should have its non-shouting words be non-shouting" do
-        @non_shouting_markov_words.each do |word|
-          word.should_not be_shoutable
+    context "punctuation" do
+      it "should register as punctuation" do
+        %w{. , : ; ! ?}.each do |punct|
+          expect( Markov::Word.new(punct) ).to be_punctuation
         end
       end
 
-      it "should have its shouting words be shoutable" do
-        @shouting_markov_words.each do |word|
-          word.should be_shoutable
+      it "should register as sentence end where appropriate" do
+        %w{. ! ?}.each do |punct|
+          expect( Markov::Word.new(punct) ).to be_sentence_end
         end
       end
 
-      it "should have its non-shouting have shout counts of 0" do
-        @non_shouting_markov_words.each do |word|
-          word.shout_count.should == 0
-        end
-      end
-
-      it "should have its shouting words have shout counts of 1" do
-        @shouting_markov_words.each do |word|
-          word.shout_count.should == 1
-        end
-      end
-
-      it "none of these shouting, non shouting words should equal eachother" do
-        all_words = @non_shouting_markov_words + @shouting_markov_words
-        all_words.each_with_index do |word, i|
-          all_words[(i + 1)..-1].each { |other_word| word.should_not == other_word }
+      it "should not register as a sentence end where innappropriate" do
+        %w{, : ;}.each do |punct|
+          expect( Markov::Word.new(punct) ).to_not be_sentence_end
         end
       end
 
     end
+  end
 
-    context "on adding a terminating child" do
-      before(:each) do
-        @word.add_child
-      end
+  context ".add_parent" do
+    subject { Markov::Word.new("TEST").add_parent(parent) }
 
-      it "should have a count of two" do
-        @word.count.should == 1
-      end
+    context "begin as parent" do
+      let(:parent) { double('parent', begin?: true,
+                                      sentence_begin?: false) }
 
-      it "should show that it terminates" do
-        @word.terminates?.should == true
-      end
+      it { should be_sentence_begin }
+      its(:parents)  { should_not be_empty }
     end
 
-    context "on creating punctuation words" do
-      before(:each) do
-        @words = [".", "!", "?", "zaps.", "pow!",
-          "fun?", ",", ":", ";", "...."].collect{ |word| Markov::Word.new(word,  :__begin__) }
-      end
+    context "add a word ending" do
+      let(:parent) { double('parent', begin?: false,
+                                      sentence_begin?: true) }
 
-      it "each word should be punctuation" do
-        @words.each { |word| word.punctuation?.should == true  }
-      end
-
-      it "the first three words should be sentence endings" do
-        @words[0..2].each { |word| word.sentence_end?.should be_true }
-      end
-
-      it "the last six words should not be sentence endings" do
-        @words[-7..-1].each { |word| word.sentence_end?.should be_false }
-      end
+      it { should be_sentence_begin }
+      its(:parents)  { should_not be_empty }
     end
 
-    context "on creating non-punctuation words" do
-      before(:each) do
-        @words = ["this","that","the","other","thing","yay",":)"].collect{ |word| Markov::Word.new(word, :__begin__) }
-      end
+    context "a normal word as parent" do
+      let(:parent) { double('parent', begin?: false,
+                                      sentence_begin?: false) }
 
-      it "each word should not be punctuation" do
-        @words.each { |word| word.punctuation?.should == false  }
-      end
+      it { should_not be_sentence_begin }
+      its(:parents)  { should_not be_empty }
 
-      it "each word should not be a sentence ending" do
-        @words.each { |word| word.sentence_end?.should == false  }
+      it "should send messages to the parent" do
+        parent = double('parent')
+        parent.should_receive(:begin?).and_return(false)
+        parent.should_receive(:sentence_begin?).and_return(false)
+        Markov::Word.new("hello").add_parent(parent)
       end
     end
   end
 
+  context ".add_text" do
+    subject do
+      Markov::Word.new('TEST').tap do |word|
+        %w{Test test TEST}.each { |ident| word.add_text(ident) }
+      end
+    end
+
+    its(:count)       { should == 4 }
+    its(:shout_count) { should == 2 }
+    its(:speak_count) { should == 2 }
+
+    it { should_not be_proper }
+    it { should be_shoutable }
+    it { should be_speakable }
+  end
+
+  context ".add_child" do
+    subject { Markov::Word.new("Test").add_child(double) }
+
+    its(:children) { should_not be_empty }
+  end
+
+  context ".has_multiple_children?" do
+    subject { Markov::Word.new('hello') }
+
+    context "with multiple children" do
+      it "should have multiple children if they are different children" do
+        child  = Markov::Word.new('child1')
+        child2 = Markov::Word.new('child2')
+        subject.add_child(child).add_child(child2)
+        expect(subject.has_multiple_children?).to be_true
+      end
+
+      it "should not have multiple children if they are the same child" do
+        child = double('child')
+        subject.add_child(child).add_child(child)
+        expect(subject.has_multiple_children?).to be_false
+      end
+    end
+
+    context "without multiple children" do
+      it "should show it does not have multiple children" do
+        child = double('child')
+        subject.add_child(child)
+        expect(subject.has_multiple_children?).to be_false
+      end
+    end
+  end
+
+  context ".has_multiple_parents?" do
+    subject { Markov::Word.new('hello') }
+
+    context "with multiple parents" do
+      it "should have multiple parents if they are different parents" do
+        parent  = Markov::Word.new('parent1')
+        parent2 = Markov::Word.new('parent2')
+        subject.add_parent(parent).add_parent(parent2)
+        expect(subject.has_multiple_parents?).to be_true
+      end
+
+      it "should not have multiple parents if they are the same parent" do
+        parent = double('parent').as_null_object
+        subject.add_parent(parent).add_parent(parent)
+        expect(subject.has_multiple_parents?).to be_false
+      end
+    end
+
+    context "without multiple parents" do
+      it "should show it does not have multiple parents" do
+        parent = double('parent').as_null_object
+        subject.add_parent(parent)
+        expect(subject.has_multiple_parents?).to be_false
+      end
+    end
+  end
 
 end
-

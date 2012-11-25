@@ -25,7 +25,7 @@ module Markov
 
     def self.new_with_rand_tags(word)
       tags = []
-      tags << :shout if rand < word.shout_prob
+      tags << :shout if rand < word_shout_prob(word)
       self.new(word, tags)
     end
 
@@ -80,6 +80,10 @@ module Markov
       else
         super
       end
+    end
+
+    def self.word_shout_prob(word)
+      word.shout_count.to_f / word.count
     end
   end
 end

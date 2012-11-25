@@ -2,25 +2,23 @@ module Markov
   class Word
     attr_reader :identifier, :count, :shout_count, :parents, :children
 
-    PUNCTUATION_REGEX  = /[\.\,\:\;\!\?]/
-    SENTENCE_END_REGEX = /^\.|^\?|^\!/
+    PUNCTUATION_REGEX  = /^[\.\,\:\;\!\?]$/
+    SENTENCE_END_REGEX = /^[\.\!\?]$/
 
-    def initialize(ident, parent, sentence_begin = false)
-      @identifier    = Word.downcase(ident)
-      @punctuation   = Word.is_punctuation_test?(ident)
-      @sentence_end  = Word.is_sentence_end_test?(ident)
-      @begin         = ident == :__begin__
+    def initialize(ident)
+      @identifier     = Word.identifier_for(ident)
+      @punctuation    = Word.is_punctuation_test?(ident)
+      @sentence_end   = Word.is_sentence_end_test?(ident)
+      @sentence_begin = false
+      @begin          = ident == :__begin__
 
       @count = @shout_count = 0
       @parents    = Counter.new
       @children   = Counter.new
 
       @proper     = true
-      @shoutable  = false
-      @speakable  = false
-      @terminates = false
 
-      add_parent(parent, ident, sentence_begin)
+      add_text(ident)
     end
 
     def ==(other)
@@ -36,36 +34,25 @@ module Markov
       count - shout_count
     end
 
-    def add_identifier(ident)
+    def add_text(ident)
       @count += 1
+      @shout_count += 1 if Word.shoutable_test?(ident)
       @proper &&= Word.proper_test? ident
 
-      if Word.shoutable_test?(ident)
-        @shoutable = true
-        @shout_count += 1
-      else
-        @speakable = true
-      end
+      self
     end
 
-    def add_parent(parent, ident, sent_begin)
-      @sentence_begin ||= sent_begin
-      add_identifier(ident)
-      unless parent == :__begin__
-        parents.add_item( Word.downcase(parent) )
-      end
+    def add_parent(parent)
+      @sentence_begin ||= parent.begin? || parent.sentence_begin?
+      parents.add_item( parent )
+
+      self
     end
 
-    def add_child(child = nil)
-      if child.nil?
-        @terminates = true
-      else
-        children.add_item( Word.downcase(child) )
-      end
-    end
+    def add_child(child)
+      children.add_item(child)
 
-    def child_can_begin?
-      @sentence_end || @begin
+      self
     end
 
     def get_random_child
@@ -74,10 +61,6 @@ module Markov
 
     def get_random_parent
       parents.get_random_item
-    end
-
-    def shout_prob
-       shout_count.to_f / count
     end
 
     def has_multiple_parents?
@@ -89,7 +72,7 @@ module Markov
     end
 
     class << self
-      def downcase(ident)
+      def identifier_for(ident)
         if ident && !ident.is_a?(Symbol)
           ident.downcase
         else
@@ -129,15 +112,11 @@ module Markov
     end
 
     def shoutable?
-      @shoutable
+      shout_count > 0
     end
 
     def speakable?
-      @speakable
-    end
-
-    def terminates?
-      @terminates
+      shout_count < count
     end
 
     def punctuation?
@@ -148,7 +127,7 @@ module Markov
       @sentence_end
     end
 
-    def is_begin?
+    def begin?
       @begin
     end
 
