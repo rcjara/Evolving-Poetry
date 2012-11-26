@@ -1,7 +1,4 @@
 module Markov
-  class ExcludeTooManyItemsException < Exception
-  end
-
   class Counter
     attr_reader :count, :items
 
@@ -39,10 +36,10 @@ module Markov
       return get_rand_from_hash(items, count) if excluding.empty?
 
       excluding  = Set.new(excluding)
-      rand_count = count - excluding.map{ |item| self[item] }.inject(&:+)
+      rand_count = count - excluding.map{ |item| self[item] }.inject(:+)
       rand_hash  = items.reject{ |key, _| excluding.include? key }
 
-      raise ExcludeTooManyItemsException.new if rand_hash.empty?
+      return nil if rand_hash.empty?
 
 
       get_rand_from_hash(rand_hash, rand_count)

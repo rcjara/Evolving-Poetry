@@ -1,5 +1,5 @@
 describe Markov::Counter do
-  describe "on creation" do
+  context "on creation" do
     it { should be_empty }
     its(:count) { should eq(0) }
 
@@ -9,8 +9,8 @@ describe Markov::Counter do
 
   end
 
-  describe ".add_item" do
-    describe "after adding one item" do
+  context ".add_item" do
+    context "after adding one item" do
       subject {
         Markov::Counter.new.tap do |c|
           c.add_item("hello")
@@ -25,35 +25,39 @@ describe Markov::Counter do
         expect( subject['hello'] ).to eq(1)
       end
     end
+
   end
 
-  describe ".get_random_item" do
-    describe "from a counter with two items" do
+  context ".get_random_item" do
+    context "from a counter with two items" do
+      let(:hello)   { double(identifier: 'hello') }
+      let(:goodbye) { double(identifier: 'goodbye') }
+
       subject {
         Markov::Counter.new.tap do |c|
-          c.add_item('hello')
-          c.add_item('goodbye')
+          c.add_item(hello)
+          c.add_item(goodbye)
         end
       }
 
       it "should be able to get back a word" do
-        expect( subject.get_random_item ).to match /^hello|goodbye$/
+        expect( subject.get_random_item.identifier ).to match /^hello|goodbye$/
       end
 
       it "should get all of its items eventually" do
         results = Set.new
         10.times { results.add( subject.get_random_item ) }
-        expect( results ).to eq( Set.new(['hello', 'goodbye']) )
+        expect( results ).to eq( Set.new([hello, goodbye]) )
       end
 
       it "should be able to exclude an item and only get back the other" do
         10.times do
-          expect( subject.get_random_item('hello') ).to eq('goodbye')
+          expect( subject.get_random_item(hello) ).to eq(goodbye)
         end
       end
 
-      it "should raise an error if you exclude too many items" do
-        expect { subject.get_random_item('hello', 'goodbye') }.to raise_error(Markov::ExcludeTooManyItemsException)
+      it "should return nil if too many items are excluded" do
+        expect( subject.get_random_item(hello, goodbye) ).to be_nil
       end
 
     end
