@@ -30,6 +30,10 @@ module Markov
       true
     end
 
+    def inspect
+      %|<Markov::Word "#{identifier}">|
+    end
+
     def speak_count
       count - shout_count
     end
@@ -55,12 +59,12 @@ module Markov
       self
     end
 
-    def get_random_child
-      children.get_random_item
+    def get_random_child(*excluding)
+      children.get_random_item(*excluding)
     end
 
-    def get_random_parent
-      parents.get_random_item
+    def get_random_parent(*excluding)
+      parents.get_random_item(*excluding)
     end
 
     def has_multiple_parents?

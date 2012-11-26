@@ -11,7 +11,7 @@ module Markov
     end
 
     def num_chars
-      raw_chars = words.map(&:num_chars).inject(&:+)
+      raw_chars = words.map(&:num_chars).inject(0, :+)
       raw_chars > 0 ? raw_chars - 1 : raw_chars
     end
 

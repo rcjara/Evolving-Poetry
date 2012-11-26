@@ -25,7 +25,7 @@ module Markov
     end
 
     def num_words
-      words.length - 1
+      words.length
     end
 
     def add_snippet(snippet)
