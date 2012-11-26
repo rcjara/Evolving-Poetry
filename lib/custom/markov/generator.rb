@@ -19,11 +19,10 @@ module Markov
       return BadContinueLineResult if prev_line.num_chars > language.limit
       return prev_line             if prev_word.sentence_end?
 
-      excluding = []
+      excluding = Set.new
       new_line  = BadContinueLineResult
 
       while new_line == BadContinueLineResult
-        #puts "excluding: " + excluding.map(&:identifier).join(' ')
         word = prev_word.get_random_child(excluding)
         excluding << word
 
@@ -38,3 +37,45 @@ module Markov
     end
   end
 end
+
+
+#    def gen_line
+#      line = Line.new
+#      current_word = @words[:__begin__]
+#
+#      walk(current_word, line, :forward)
+#    end
+#
+#    def walk(orig_word, line, direction = :forward, attempts = 0)
+#      orig_length = line.length
+#      current_word = orig_word
+#
+#      get_command, add_command, remove_command, terminate_command = if direction == :forward
+#        [:get_random_child, :add_word, :remove_last_word, :sentence_end?]
+#      else
+#        [:get_random_parent, :push_word, :remove_first_word, :sentence_begin?]
+#      end
+#
+#      while current_word = @words[current_word.send(get_command)]
+#        line.send(add_command, current_word)
+#        break if line.num_chars > @limit || current_word.send(terminate_command)
+#      end
+#
+#      while line.num_chars > @limit
+#        stop = false
+#        until stop.nil? || stop
+#          stop = line.send(remove_command)
+#          stop = nil if line.length <= orig_length
+#          #stop with a bad sentence (that is short enough) if attempts are too high
+#          stop = true if attempts > Constants::MAX_WALK_ATTEMPTS && line.num_chars <= @limit
+#        end
+#        return walk(orig_word, line, direction, attempts + 1) if stop.nil?
+#      end
+#
+#      line
+#    end
+#
+#    def gen_poem(num_lines)
+#      Poem.new( num_lines.times.collect{ gen_line } )
+#    end
+

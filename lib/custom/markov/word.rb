@@ -59,12 +59,12 @@ module Markov
       self
     end
 
-    def get_random_child(*excluding)
-      children.get_random_item(*excluding)
+    def get_random_child(excluding)
+      children.get_random_item(excluding)
     end
 
-    def get_random_parent(*excluding)
-      parents.get_random_item(*excluding)
+    def get_random_parent(excluding)
+      parents.get_random_item(excluding)
     end
 
     def has_multiple_parents?
