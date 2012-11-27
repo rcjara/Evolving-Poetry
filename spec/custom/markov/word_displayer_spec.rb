@@ -10,7 +10,7 @@ describe Markov::WordDisplayer do
 
   subject { Markov::WordDisplayer.new(word, tags) }
 
-  context "#new_with_rand_tags" do
+  describe "#new_with_rand_tags" do
     subject { Markov::WordDisplayer.new_with_rand_tags(word) }
 
     context "a word guaranteed to be shouted" do
@@ -30,7 +30,7 @@ describe Markov::WordDisplayer do
     end
   end
 
-  context ".display" do
+  describe ".display" do
     context "without any tags should display its word properly" do
 
       it "if the word has no attributes" do
@@ -78,14 +78,14 @@ describe Markov::WordDisplayer do
     end
   end
 
-  context ".add_tag" do
+  describe ".add_tag" do
     it "should be able to receive a tag" do
       subject.add_tag(:beginnewtext)
       expect(subject.has_tag? :beginnewtext).to be_true
     end
   end
 
-  context ".to_prog_text" do
+  describe ".to_prog_text" do
     context "A WordDisplayer with no tags" do
       it "should be able to convert itself to programmatic text" do
         expect(subject.to_prog_text).to eq("word")
@@ -101,7 +101,7 @@ describe Markov::WordDisplayer do
     end
   end
 
-  context "#word_shout_prob" do
+  describe "#word_shout_prob" do
     it "should return a probability" do
       word = double('word')
       word.should_receive(:shout_count).and_return(3)
