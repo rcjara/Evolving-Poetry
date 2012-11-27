@@ -1,4 +1,7 @@
 module Markov
+  class MarkEmptyLineException < Exception
+  end
+
   class Line
     attr_reader :words
 
@@ -30,12 +33,16 @@ module Markov
     end
 
     def deleted?
+      return false if words.empty?
       words.first.has_tag?(:begindeleted) && words.last.has_tag?(:enddeleted)
     end
 
     def mark!(begin_tag, end_tag = :endspan)
+      raise MarkEmptyLineException.new if words.empty?
       words.first.add_tag begin_tag
       words.last.add_tag end_tag
+
+      self
     end
 
     def mark_as_new!
@@ -63,9 +70,7 @@ module Markov
     def remove_last_word
       return nil unless words.length > 1
       words.pop
-
-      new_last_word = words.last.word
-      new_last_word.terminates? || new_last_word.sentence_end?
+      words.last.word.sentence_end?
     end
 
     #Removed the first word hash from words
@@ -174,7 +179,7 @@ module Markov
       possible_indices
     end
 
-    def self.line_from_prog_text(text, lang)
+    def self.new_from_prog_text(text, lang)
       line = Line.new
       tags = []
 
@@ -182,9 +187,9 @@ module Markov
         if word =~ /^[A-Z]+$/
           tags << word.downcase.to_sym
         else
-          mark_word = lang.fetch_word(word)
+          mark_word = lang.fetch(word)
           raise "Word not found: '#{word}'" unless mark_word
-          line.add_word lang.fetch_word(word), tags
+          line.add_word lang.fetch(word), tags
           tags = []
         end
       end
