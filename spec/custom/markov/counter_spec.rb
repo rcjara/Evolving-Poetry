@@ -1,15 +1,14 @@
 describe Markov::Counter do
-  context "on creation" do
+  describe ".new" do
     it { should be_empty }
     its(:count) { should eq(0) }
 
     it "should show any words having a count of zero" do
       expect(subject['word']).to eq(0)
     end
-
   end
 
-  context ".add_item" do
+  describe ".add_item" do
     context "after adding one item" do
       subject {
         Markov::Counter.new.tap do |c|
@@ -28,7 +27,7 @@ describe Markov::Counter do
 
   end
 
-  context ".get_random_item" do
+  describe ".get_random_item" do
     context "from a counter with two items" do
       let(:hello)   { double(identifier: 'hello') }
       let(:goodbye) { double(identifier: 'goodbye') }
