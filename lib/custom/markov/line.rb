@@ -2,6 +2,8 @@ module Markov
   class MarkEmptyLineException < Exception
   end
 
+  TAG_REGEX = /^[A-Z]+(-[A-Z]+)*$/
+
   class Line
     attr_reader :word_displayers
 
@@ -90,7 +92,7 @@ module Markov
         tags = []
 
         text.split(" ").each do |word|
-          if word =~ /^[A-Z]+$/
+          if word =~ TAG_REGEX
             tags << word.downcase.to_sym
           else
             markov_word = lang.fetch(word)

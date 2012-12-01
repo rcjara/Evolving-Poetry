@@ -148,5 +148,33 @@ describe Markov::Line do
 
     its(:multiple_parents_indices) { should eq([0, 2, 5]) }
   end
+
+  describe "tag regex" do
+    subject { Markov::TAG_REGEX }
+
+    it "should match upper case tags" do
+      expect( subject.match("TAG") ).not_to be_nil
+    end
+
+    it "should match upper case tags with dashes" do
+      expect( subject.match("VERY-DESCRIPTIVE-TAG") ).not_to be_nil
+    end
+
+    it "should not match non-upper case tags" do
+      expect( subject.match("TaG") ).to be_nil
+    end
+
+    it "should not match mixed case tags with dashes" do
+      expect( subject.match("MIXED-case-TAG") ).to be_nil
+    end
+
+    it "should not match punctuation" do
+      expect( subject.match(".") ).to be_nil
+    end
+
+    it "should not match solitary dashes" do
+      expect( subject.match("-") ).to be_nil
+    end
+  end
 end
 
