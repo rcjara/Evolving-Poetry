@@ -1,6 +1,11 @@
 describe Markov::Language do
 
-  context ".add_snippet" do
+  describe "#new" do
+    its(:words) { should be_empty }
+    its(:limit) { should eq(Constants::MAX_NUM_CHARS) }
+  end
+
+  describe ".add_snippet" do
     subject { Markov::Language.new.add_snippet(snippet) }
 
     context "a snippet with only one word repeated" do
@@ -11,28 +16,31 @@ describe Markov::Language do
     end
   end
 
-  context "real world example" do
+  context "real world example integration example" do
     subject { Markov::Language.new.add_snippet(work_content) }
 
-    it "should have the word 'you'" do
-      expect( subject.fetch("you") ).to_not be_nil
-    end
+    its(:words) { should_not be_empty }
 
-    it "you should not be the begin" do
-      expect( subject.fetch("you") ).to_not be_begin
-    end
-
-    it "should have a :__begin__" do
-      expect( subject.fetch(:__begin__) ).to_not be_nil
-    end
-
-    it ":__begin__ should be the begin" do
+    it "should have a word that begins the snippet" do
       expect( subject.fetch(:__begin__) ).to be_begin
     end
 
-    it "should have the word ','" do
-      expect( subject.fetch(',') ).to_not be_nil
+    it "should have words that don't begin" do
+      expect( subject.fetch("you") ).to_not be_begin
     end
+
+    it "should have words that begins a sentence" do
+      expect( subject.fetch('take') ).to be_sentence_begin
+    end
+
+    it "should have some punctuation" do
+      expect( subject.fetch('!') ).to_not be_nil
+    end
+
+    it "should not have words with punctuation attached" do
+      expect( subject.fetch('god!') ).to be_nil
+    end
+
 
     it "should have all of its words be Markov::Word" do
       subject.words(true).each do |word|
@@ -40,37 +48,8 @@ describe Markov::Language do
       end
     end
 
-    describe "a word that begins a sentence" do
-      let(:word) { subject.fetch('take') }
-
-      it "should not be nil" do
-        expect( word ).to_not be_nil
-      end
-
-      it "should be a sentence begin" do
-        expect( word ).to be_sentence_begin
-      end
-
-      it "should not be the begin" do
-        expect( word ).to_not be_begin
-      end
-    end
-
-    context "words with punctuation attached" do
-      it "should have the word 'god'" do
-        expect( subject.fetch('god') ).to_not be_nil
-      end
-
-      it "should not have the word 'god!'" do
-        expect( subject.fetch('god!') ).to be_nil
-      end
-    end
-
-
-    context "words which are always capitalized" do
-      it "should have the word 'i'" do
-        expect( subject.fetch('i') ).to_not be_nil
-      end
+    it "should have proper nouns" do
+      expect( subject.fetch('i') ).to be_proper
     end
   end
 
