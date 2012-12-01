@@ -20,7 +20,7 @@ describe Markov::Word do
     end
   end
 
-  context ".new" do
+  context "#new" do
     context "a simple word" do
       subject { Markov::Word.new("test") }
 

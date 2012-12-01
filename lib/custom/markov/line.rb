@@ -3,44 +3,39 @@ module Markov
   end
 
   class Line
-    attr_reader :words
+    attr_reader :word_displayers
 
-    def initialize(words = [])
-      @words = words
+    def initialize(word_displayers = [])
+      @word_displayers = word_displayers.dup
     end
 
     def +(word_displayer)
-      self.class.new(@words + [word_displayer])
+      self.class.new(@word_displayers + [word_displayer])
+    end
+
+    def <<(word_displayer)
+      word_displayers << word_displayer
     end
 
     def num_chars
-      raw_chars = words.map(&:num_chars).inject(0, :+)
+      raw_chars = word_displayers.map(&:num_chars).inject(0, :+)
       raw_chars > 0 ? raw_chars - 1 : raw_chars
     end
 
-    def add_word(word, tags = [])
-      displayer = WordDisplayer.new(word, tags)
-      @words.push displayer
-    end
-
-    def push_word(word, tags = [])
-      displayer = WordDisplayer.new(word, tags)
-      @words.unshift displayer
-    end
-
     def length
-      words.length
+      word_displayers.length
     end
 
     def deleted?
-      return false if words.empty?
-      words.first.has_tag?(:begindeleted) && words.last.has_tag?(:enddeleted)
+      return false if word_displayers.empty?
+      word_displayers.first.has_tag?(:begindeleted) &&
+              word_displayers.last.has_tag?(:enddeleted)
     end
 
     def mark!(begin_tag, end_tag = :endspan)
-      raise MarkEmptyLineException.new if words.empty?
-      words.first.add_tag begin_tag
-      words.last.add_tag end_tag
+      raise MarkEmptyLineException.new if empty?
+      word_displayers.first.add_tag begin_tag
+      word_displayers.last.add_tag end_tag
 
       self
     end
@@ -62,33 +57,16 @@ module Markov
     end
 
     def empty?
-      words.empty?
-    end
-
-    #Removed the last WordDisplayer from words
-    #Return whether the remaining word is a valid sentence end
-    def remove_last_word
-      return nil unless words.length > 1
-      words.pop
-      words.last.word.sentence_end?
-    end
-
-    #Removed the first word hash from words
-    #Return whether the remaining word is a valid sentence end
-    def remove_first_word
-      return nil unless words.length > 1
-      words.shift
-      new_first_word = words.first.word
-      new_first_word.sentence_begin?
+      word_displayers.empty?
     end
 
     def unwrapped_sentence(sentence_begin = true)
-      ends = words.collect(&:sentence_end?)
+      ends = word_displayers.collect(&:sentence_end?)
       beginnings = [sentence_begin] + ends[0...-1]
-      words.zip(beginnings)
-           .collect { |w, b| w.display(b) }
-           .join
-           .strip
+      word_displayers.zip(beginnings)
+                     .collect { |w, b| w.display(b) }
+                     .join
+                     .strip
     end
 
     def display(sentence_begin = true)
@@ -96,105 +74,40 @@ module Markov
     end
 
     def to_prog_text
-      words.collect(&:to_prog_text).join(' ')
-    end
-
-    def alter_tail!(lang)
-      possible_indices = multiple_children_indices
-      return false if possible_indices.empty?
-
-      orig_words = words.dup
-
-      index = possible_indices.sample
-      orig_child = words[index + 1]
-
-      done_looking = false
-      new_child = false
-      attempts = 0
-
-      until done_looking
-        words = orig_words[0..index]
-        lang.walk(words.last.word, self, :forward)
-        new_child = words[index + 1] != orig_child
-        done_looking =  new_child || attempts > Constants::MAX_ALTERING_ATTEMPTS
-        attempts += 1
-      end
-
-      if new_child #restore original words unless the change was a good one
-        mark_index = index + 1 >= words.length ? words.length - 1 : index + 1
-        words[mark_index].add_tag :beginalteredtext
-        words.last.add_tag :endspan
-      else
-        words = orig_words
-      end
-
-      new_child
-    end
-
-    def alter_front!(lang)
-      possible_indices = multiple_parents_indices
-      return false if possible_indices.empty?
-
-      orig_words = words.dup
-
-      index = possible_indices.sample
-      orig_parent = index - 1
-      done_looking = false
-      new_parent = false
-      attempts = 0
-
-      until done_looking
-        words = orig_words[index..-1]
-        start_length = words.length
-        lang.walk(words.first.word, self, :backward)
-        end_length = words.length
-        new_parent = words[index - 1] != orig_parent
-        done_looking = new_parent || attempts > Constants::MAX_ALTERING_ATTEMPTS
-        attempts += 1
-      end
-
-      if new_parent #restore original words unless the change was a good one
-        words.first.add_tag :beginalteredtext
-        words[end_length - start_length].add_tag :endspan
-      else
-        words = orig_words
-      end
-
-      new_parent
+      word_displayers.collect(&:to_prog_text).join(' ')
     end
 
     def multiple_children_indices
-      possible_indices = []
-      words[1..-1].each_with_index do |word, i|
-        possible_indices << (i + 1) if word.has_multiple_children?
-      end
-      possible_indices
+      indices :has_multiple_children?
     end
 
     def multiple_parents_indices
-      possible_indices = []
-      words[0...-1].each_with_index do |word, i|
-        possible_indices << i if word.has_multiple_parents?
-      end
-      possible_indices
+      indices :has_multiple_parents?
     end
 
     def self.new_from_prog_text(text, lang)
-      line = Line.new
-      tags = []
+      Line.new.tap do |line|
+        tags = []
 
-      text.split(" ").each do |word|
-        if word =~ /^[A-Z]+$/
-          tags << word.downcase.to_sym
-        else
-          mark_word = lang.fetch(word)
-          raise "Word not found: '#{word}'" unless mark_word
-          line.add_word lang.fetch(word), tags
-          tags = []
+        text.split(" ").each do |word|
+          if word =~ /^[A-Z]+$/
+            tags << word.downcase.to_sym
+          else
+            markov_word = lang.fetch(word)
+            raise "Word not found: '#{word}'" unless markov_word
+            line << WordDisplayer.new(markov_word, tags)
+            tags = []
+          end
         end
       end
+    end
 
-      line
+    private
+
+    def indices(method)
+      word_displayers.zip(0...length)
+                     .select { |word, _| word.send(method) }
+                     .map    { |_, i| i }
     end
   end
 end

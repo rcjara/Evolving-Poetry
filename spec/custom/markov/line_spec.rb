@@ -16,10 +16,13 @@ describe Markov::Line do
     it { should_not be_deleted }
     its(:length)    { should == 0 }
     its(:num_chars) { should == 0 }
+  end
 
-    it "should raise an error if you try to mark it" do
-      expect { subject.mark!(:some_random_tag) }.to raise_error(Markov::MarkEmptyLineException)
-    end
+  describe "#new_from_prog_text" do
+    let(:text) { "take this SHOUT kiss upon SHOUT the brow !" }
+    subject { Markov::Line.new_from_prog_text(text, lang) }
+
+    its(:display) { should == "<p>Take this KISS upon THE brow!</p>" }
   end
 
   describe ".+" do
@@ -44,14 +47,6 @@ describe Markov::Line do
     end
   end
 
-
-  describe "#new_from_prog_text" do
-    let(:text) { "take this SHOUT kiss upon SHOUT the brow !" }
-    subject { Markov::Line.new_from_prog_text(text, lang) }
-
-    its(:display) { should == "<p>Take this KISS upon THE brow!</p>" }
-  end
-
   describe ".to_prog_text" do
     subject { basic_line.to_prog_text }
 
@@ -69,7 +64,7 @@ describe Markov::Line do
     end
 
     it "should have the same number of words" do
-      expect( basic_line.words.length ).to eq(second_line.words.length)
+      expect( basic_line.word_displayers.length ).to eq(second_line.word_displayers.length)
     end
 
     it "should have the same display sentence" do
@@ -82,11 +77,19 @@ describe Markov::Line do
       it { should be_deleted }
 
       it "should have its first word have a begin-deleted tag" do
-        expect( subject.words.first.has_tag? :begindeleted ).to be_true
+        expect( subject.word_displayers.first.has_tag? :begindeleted ).to be_true
       end
 
       it "should have its last word have an end-deleted tag" do
-        expect( subject.words.last.has_tag? :enddeleted ).to be_true
+        expect( subject.word_displayers.last.has_tag? :enddeleted ).to be_true
+      end
+    end
+
+    context "an empty line" do
+      subject { Markov::Line.new }
+
+      it "should raise an error" do
+        expect { subject.mark_as_deleted! }.to raise_error(Markov::MarkEmptyLineException)
       end
     end
 
@@ -108,55 +111,42 @@ describe Markov::Line do
     end
   end
 
+  describe ".mark!" do
+    context "basic line" do
+      subject { basic_line.mark!(:some_tag) }
+
+      it "should have its first word have a some_tag" do
+        expect( subject.word_displayers.first.has_tag? :some_tag ).to be_true
+      end
+
+      it "should have its last word have an end-span tag" do
+        expect( subject.word_displayers.last.has_tag? :endspan ).to be_true
+      end
+    end
+
+    context "an empty line" do
+      subject { Markov::Line.new }
+
+      it "should raise an error" do
+        expect { subject.mark!(:some_tag) }.to raise_error(Markov::MarkEmptyLineException)
+      end
+    end
+  end
+
+  describe ".multiple_children_indices" do
+    let(:multi_word) { double(has_multiple_children?: true) }
+    let(:uni_word) { double(has_multiple_children?: false) }
+    subject { Markov::Line.new([multi_word, uni_word, uni_word, multi_word, multi_word, uni_word]) }
+
+    its(:multiple_children_indices) { should eq([0, 3, 4]) }
+  end
+
+  describe ".multiple_parents_indices" do
+    let(:multi_word) { double(has_multiple_parents?: true) }
+    let(:uni_word) { double(has_multiple_parents?: false) }
+    subject { Markov::Line.new([multi_word, uni_word, multi_word, uni_word, uni_word, multi_word]) }
+
+    its(:multiple_parents_indices) { should eq([0, 2, 5]) }
+  end
 end
-
-
-
-#  describe "a line of programmatic text" do
-#    before(:each) do
-#
-#      @line = Markov::Line.line_from_prog_text(@text, @lang)
-#    end
-#
-#
-#    it "should not be deleted" do
-#      @line.should_not be_deleted
-#    end
-#
-#    describe "after being marked as deleted" do
-#      before(:each) do
-#        @line.mark_as_deleted!
-#      end
-#
-#      it "should be deleted" do
-#        @line.should be_deleted
-#      end
-#
-#    end
-#
-#  end
-#
-#  describe "when marked as from first_parent" do
-#    before(:each) do
-#      @line = @lang.gen_line
-#      @line.mark_as_from_first_parent!
-#    end
-#
-#    it "should have a display with the right tags" do
-#      @line.display.should =~ /^<p><span class="from-first-parent">.*?<\/span><\/p>$/
-#    end
-#  end
-#
-#  describe "when marked as from second_parent" do
-#    before(:each) do
-#      @line = @lang.gen_line
-#      @line.mark_as_from_second_parent!
-#    end
-#
-#    it "should have a display with the right tags" do
-#      @line.display.should =~ /^<p><span class="from-second-parent">.*?<\/span><\/p>$/
-#    end
-#  end
-#
-#end
 

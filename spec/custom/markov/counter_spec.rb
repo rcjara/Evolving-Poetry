@@ -1,5 +1,5 @@
 describe Markov::Counter do
-  describe ".new" do
+  describe "#new" do
     it { should be_empty }
     its(:count) { should eq(0) }
 
