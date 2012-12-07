@@ -51,12 +51,12 @@ describe Markov::Counter do
 
       it "should be able to exclude an item and only get back the other" do
         10.times do
-          expect( subject.get_random_item(hello) ).to eq(goodbye)
+          expect( subject.get_random_item([hello]) ).to eq(goodbye)
         end
       end
 
       it "should return nil if too many items are excluded" do
-        expect( subject.get_random_item(hello, goodbye) ).to be_nil
+        expect( subject.get_random_item([hello, goodbye]) ).to be_nil
       end
 
     end

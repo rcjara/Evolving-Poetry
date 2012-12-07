@@ -32,7 +32,7 @@ module Markov
       @count += 1
     end
 
-    def get_random_item(excluding)
+    def get_random_item(excluding = [])
       return get_rand_from_hash(items, count) if excluding.empty?
 
       rand_count = count - excluding.map{ |item| self[item] }.inject(:+)
