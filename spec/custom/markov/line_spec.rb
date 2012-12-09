@@ -11,11 +11,26 @@ describe Markov::Line do
   end
 
   describe "#new" do
-    subject { Markov::Line.new }
+    context "empty line" do
+      subject { Markov::Line.new }
 
-    it { should_not be_deleted }
-    its(:length)    { should == 0 }
-    its(:num_chars) { should == 0 }
+      it { should_not be_deleted }
+      its(:length)    { should == 0 }
+      its(:num_chars) { should == 0 }
+    end
+
+    context "non-empty line" do
+      let(:wd1) { double('word_displayer 1') }
+      let(:wd2) { double('word_displayer 2') }
+
+      it "should duplicate its items" do
+        wd1.should_receive(:dup).and_return double()
+        wd2.should_receive(:dup).and_return double()
+
+        Markov::Line.new([wd1, wd2])
+      end
+    end
+
   end
 
   describe "#new_from_prog_text" do
@@ -134,16 +149,16 @@ describe Markov::Line do
   end
 
   describe ".multiple_children_indices" do
-    let(:multi_word) { double(has_multiple_children?: true) }
-    let(:uni_word) { double(has_multiple_children?: false) }
+    let(:multi_word) { double('multi_word', dup: double(has_multiple_children?: true)) }
+    let(:uni_word)   { double('uni_word',   dup: double(has_multiple_children?: false)) }
     subject { Markov::Line.new([multi_word, uni_word, uni_word, multi_word, multi_word, uni_word]) }
 
     its(:multiple_children_indices) { should eq([0, 3, 4]) }
   end
 
   describe ".multiple_parents_indices" do
-    let(:multi_word) { double(has_multiple_parents?: true) }
-    let(:uni_word) { double(has_multiple_parents?: false) }
+    let(:multi_word) { double('multi_word', dup: double(has_multiple_parents?: true)) }
+    let(:uni_word)   { double('uni_word',   dup: double(has_multiple_parents?: false)) }
     subject { Markov::Line.new([multi_word, uni_word, multi_word, uni_word, uni_word, multi_word]) }
 
     its(:multiple_parents_indices) { should eq([0, 2, 5]) }

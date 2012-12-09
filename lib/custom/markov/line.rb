@@ -8,7 +8,7 @@ module Markov
     attr_reader :word_displayers
 
     def initialize(word_displayers = [])
-      @word_displayers = word_displayers.dup
+      @word_displayers = word_displayers.collect { |wd| wd.dup }
     end
 
     def +(word_displayer)
