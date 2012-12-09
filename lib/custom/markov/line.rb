@@ -43,11 +43,7 @@ module Markov
     end
 
     def mark!(begin_tag, end_tag = :endspan)
-      raise MarkEmptyLineException.new if empty?
-      word_displayers.first.add_tag begin_tag
-      word_displayers.last.add_tag end_tag
-
-      self
+      mark_indices!(begin_tag, end_tag, 0, -1)
     end
 
     def mark_as_new!
@@ -56,6 +52,10 @@ module Markov
 
     def mark_as_deleted!
       mark!(:begindeleted, :enddeleted)
+    end
+
+    def mark_as_altered!(start_i, end_i)
+      mark_indices!(:beginalteredtext, :endspan, start_i, end_i)
     end
 
     def mark_as_from_first_parent!
@@ -118,6 +118,15 @@ module Markov
       word_displayers.zip(0...length)
                      .select { |word, _| word.send(method) }
                      .map    { |_, i| i }
+    end
+
+    def mark_indices!(first_tag, second_tag, first_i, second_i)
+      raise MarkEmptyLineException.new if empty?
+      word_displayers[first_i].add_tag  first_tag
+      word_displayers[second_i].add_tag second_tag
+
+      self
+
     end
   end
 end

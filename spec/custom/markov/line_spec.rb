@@ -160,6 +160,19 @@ describe Markov::Line do
     end
   end
 
+  describe ".mark_as_altered!" do
+    subject { basic_line.mark_as_altered!(1, 3) }
+
+    it "should have begin-altered-text tag at index 1" do
+      expect( subject.tags_at_index(1) ).to include(:beginalteredtext)
+    end
+
+    it "should have begin-altered-text tag at index 1" do
+      expect( subject.tags_at_index(3) ).to include(:endspan)
+    end
+  end
+
+
   describe ".multiple_children_indices" do
     let(:multi_word) { double('multi_word', dup: double(has_multiple_children?: true)) }
     let(:uni_word)   { double('uni_word',   dup: double(has_multiple_children?: false)) }
