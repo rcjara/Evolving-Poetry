@@ -33,6 +33,18 @@ describe Markov::Line do
 
   end
 
+  describe ".word_at" do
+    let(:word) { double('word') }
+    let(:word_displayer) { double(dup: double('word_displayer', word: word)) }
+
+    subject { Markov::Line.new([word_displayer]) }
+
+    it "should be able to grab the word from the double" do
+      expect( subject.word_at(0)).to eq(word)
+    end
+  end
+
+
   describe "#new_from_prog_text" do
     let(:text) { "take this SHOUT kiss upon SHOUT the brow !" }
     subject { Markov::Line.new_from_prog_text(text, lang) }
@@ -191,5 +203,6 @@ describe Markov::Line do
       expect( subject.match("-") ).to be_nil
     end
   end
+
 end
 

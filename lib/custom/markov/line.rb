@@ -11,6 +11,10 @@ module Markov
       @word_displayers = word_displayers.collect { |wd| wd.dup }
     end
 
+    def word_at(i)
+      word_displayers[i].word
+    end
+
     def +(word_displayer)
       self.class.new(@word_displayers + [word_displayer])
     end
