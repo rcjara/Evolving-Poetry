@@ -15,6 +15,10 @@ module Markov
       word_displayers[i].word
     end
 
+    def tags_at_index(i)
+      word_displayers[i].tags
+    end
+
     def +(word_displayer)
       self.class.new(@word_displayers + [word_displayer])
     end

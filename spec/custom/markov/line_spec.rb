@@ -91,7 +91,7 @@ describe Markov::Line do
     end
 
     it "should have the same number of words" do
-      expect( basic_line.word_displayers.length ).to eq(second_line.word_displayers.length)
+      expect( basic_line.length ).to eq(second_line.length)
     end
 
     it "should have the same display sentence" do
@@ -104,11 +104,11 @@ describe Markov::Line do
       it { should be_deleted }
 
       it "should have its first word have a begin-deleted tag" do
-        expect( subject.word_displayers.first.has_tag? :begindeleted ).to be_true
+        expect( subject.tags_at_index(0) ).to include(:begindeleted)
       end
 
       it "should have its last word have an end-deleted tag" do
-        expect( subject.word_displayers.last.has_tag? :enddeleted ).to be_true
+        expect( subject.tags_at_index(-1) ).to include(:enddeleted)
       end
     end
 
@@ -143,11 +143,11 @@ describe Markov::Line do
       subject { basic_line.mark!(:some_tag) }
 
       it "should have its first word have a some_tag" do
-        expect( subject.word_displayers.first.has_tag? :some_tag ).to be_true
+        expect( subject.tags_at_index(0) ).to include(:some_tag)
       end
 
       it "should have its last word have an end-span tag" do
-        expect( subject.word_displayers.last.has_tag? :endspan ).to be_true
+        expect( subject.tags_at_index(-1) ).to include(:endspan)
       end
     end
 
