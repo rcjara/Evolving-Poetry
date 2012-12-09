@@ -1,9 +1,11 @@
 include MarkovHelper
 
 describe Markov::Generator do
-  subject { Markov::Generator.new(language) }
+  let(:generator) { Markov::Generator.new(language) }
 
   describe ".generate_line" do
+    subject { generator }
+
     context "with a real world language" do
       let(:language) { poe_language }
 
@@ -26,39 +28,42 @@ describe Markov::Generator do
   end
 
   describe ".alter_line" do
+    let(:language) { Markov::Language.new.add_snippet(text) }
+    let(:line)     { generator.generate_line }
+    subject        { generator.alter_line(line) }
+
     context "with a contrived language" do
-      let(:generator) { Markov::Generator.new(language) }
-      let(:text)      { 'A a b. A a c. A b c.' }
-      let(:language)  { Markov::Language.new.add_snippet(text) }
-
-      let(:line) do
-        line = Markov::Line.new
-        while Markov::Generator.alterable_indices(line) ==
-              Markov::Generator::NoAvailableIndicesForAltering
-          line = generator.generate_line
-        end
-
-        line
-      end
-
-      subject { generator.alter_line(line) }
+      let(:text)      { 'A b c. A b d.' }
 
       it { should_not be_empty }
       its(:num_chars) { should be > 0 }
       its(:num_chars) { should be <= language.limit }
 
+      it "should show that the line was altered" do
+        #should create a better way to test that the line was altered
+        expect( subject.tags_at_index(2) ).to  include(:beginalteredtext)
+        expect( subject.tags_at_index(-1) ).to include(:endspan)
+      end
+
       it "should not have the same words as the old line" do
         old_words = line.word_displayers.map(&:word)
-        10.times do
+        3.times do
           new_words = generator.alter_line(line)
                                .word_displayers
                                .map(&:word)
           expect(new_words).to_not eq(old_words)
         end
       end
-
     end
 
+    context "with a language that is impossible to alter" do
+      let(:text) { 'a b c d.' }
+
+      it "should return that there are no available indices for altering" do
+        expect( subject ).to eq(Markov::Generator::NoAvailableIndicesForAltering)
+      end
+
+    end
   end
 
   describe "#alterable_indices" do
