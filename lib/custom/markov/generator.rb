@@ -13,48 +13,72 @@ module Markov
     end
 
     def generate_line
-      continue_line(language.fetch(:__begin__), Line.new)
+      continue_line([:__begin__], Line.new)
     end
 
     def alter_line(line)
-      indices = self.class.alterable_indices(line)
-      return NoAvailableIndicesForAltering if indices == NoAvailableIndicesForAltering
+      indices = alterable_indices(line, :forward)
+      return NoAvailableIndicesForAltering if indices.empty?
 
       index = indices.sample
-      word_displayers       = line.word_displayers[0..index]
-      word_to_continue_from = line.word_at(index)
-      word_to_avoid         = line.word_at(index + 1)
+      word_displayers  = line.word_displayers[0..index]
+      to_continue_from = line.tokens[index]
+      to_avoid         = line.tokens[index + 1]
 
       old_line = Line.new(word_displayers)
-      continue_line(word_to_continue_from, old_line, Set.new([word_to_avoid]))
+      continue_line([to_continue_from], old_line, :forward, Set.new.add(to_avoid))
                    .mark_as_altered!(index + 1, -1)
     end
 
-    def self.alterable_indices(indices)
-      indices.multiple_children_indices.reject { |i| i == 0 }.tap do |new_line|
-        return NoAvailableIndicesForAltering if new_line.empty?
+    def alterable_indices(line, direction)
+      indices = line.tokens.map { |t| language.multiple_children_for?([t], direction) }
+                           .map.with_index { |bool, i| [bool, i] }
+                           .select { |bool, _| bool }
+                           .map { |_, i| i }
+
+      if direction == :forward
+        indices.reject { |i| i == 0 }
+      elsif direction == :backward
+        indices.reject { |i| i == line.tokens.length - 1 }
       end
     end
 
     private
 
-    def continue_line(prev_word, prev_line, excluding = Set.new)
+    def continue_line(prev_tokens, prev_line, set = :forward, excluding = Set.new)
       return BadContinueLineResult if prev_line.num_chars > language.limit
-      return prev_line             if prev_word.sentence_end?
+      return prev_line             if criteria_met?(prev_tokens)
 
       new_line  = BadContinueLineResult
 
+      tokens = trim_tokens(prev_tokens)
       while new_line == BadContinueLineResult
-        word = prev_word.get_random_child(excluding)
-        excluding << word
+        token = language.fetch_random_child_for(tokens, set, excluding)
 
-        return BadContinueLineResult if word.nil?
+        return BadContinueLineResult if token.nil?
 
-        line = prev_line + WordDisplayer.new_with_rand_tags(word)
-        new_line = continue_line(word, line)
+        excluding << token
+        word = language.fetch(token)
+
+        new_line = prev_line + WordDisplayer.new_with_rand_tags(word)
+        new_tokens = prev_tokens + [token]
+        new_line = continue_line(new_tokens, new_line, set)
       end
 
       new_line
+    end
+
+    def trim_tokens(tokens)
+      if tokens.length > language.highest_order
+        tokens.drop(tokens.length - language.highest_order)
+      else
+        tokens
+      end
+    end
+
+    def criteria_met?(prev_tokens)
+      word = language.fetch(prev_tokens.last)
+      prev_tokens.length > 1 && word.sentence_end?
     end
   end
 end

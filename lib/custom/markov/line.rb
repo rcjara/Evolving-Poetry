@@ -15,6 +15,11 @@ module Markov
       word_displayers[i].word
     end
 
+    def tokens
+      word_displayers.map(&:word)
+                     .map(&:identifier)
+    end
+
     def tags_at_index(i)
       word_displayers[i].tags
     end
@@ -70,29 +75,21 @@ module Markov
       word_displayers.empty?
     end
 
-    def unwrapped_sentence(sentence_begin = true)
+    def unwrapped_sentence
       ends = word_displayers.collect(&:sentence_end?)
-      beginnings = [sentence_begin] + ends[0...-1]
+      beginnings = [true] + ends[0...-1]
       word_displayers.zip(beginnings)
                      .collect { |w, b| w.display(b) }
                      .join
                      .strip
     end
 
-    def display(sentence_begin = true)
-      "<p>" + unwrapped_sentence(sentence_begin) + "</p>"
+    def display
+      "<p>" + unwrapped_sentence + "</p>"
     end
 
     def to_prog_text
       word_displayers.collect(&:to_prog_text).join(' ')
-    end
-
-    def multiple_children_indices
-      indices :has_multiple_children?
-    end
-
-    def multiple_parents_indices
-      indices :has_multiple_parents?
     end
 
     def self.new_from_prog_text(text, lang)
@@ -113,12 +110,6 @@ module Markov
     end
 
     private
-
-    def indices(method)
-      word_displayers.zip(0...length)
-                     .select { |word, _| word.send(method) }
-                     .map    { |_, i| i }
-    end
 
     def mark_indices!(first_tag, second_tag, first_i, second_i)
       raise MarkEmptyLineException.new if empty?

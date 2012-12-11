@@ -28,9 +28,10 @@ describe Markov::Generator do
   end
 
   describe ".alter_line" do
-    let(:language) { Markov::Language.new.add_snippet(text) }
-    let(:line)     { generator.generate_line }
-    subject        { generator.alter_line(line) }
+    let(:language)  { Markov::Language.new.add_snippet(text) }
+    let(:line)      { Markov::Line.new_from_prog_text('a b c .', language)  }
+    let(:generator) { Markov::Generator.new(language) }
+    subject         { generator.alter_line(line) }
 
     context "with a contrived language" do
       let(:text)      { 'A b c. A b d.' }
@@ -38,6 +39,15 @@ describe Markov::Generator do
       it { should_not be_empty }
       its(:num_chars) { should be > 0 }
       its(:num_chars) { should be <= language.limit }
+
+      it "sanity check on the line" do
+        expect( generator.alterable_indices(line, :forward) ).to eq([1])
+      end
+
+      it "should show that b has multiple children" do
+        expect( language.multiple_children_for?(['b']) ).to be_true
+      end
+
 
       it "should show that the line was altered" do
         #should create a better way to test that the line was altered
@@ -66,22 +76,27 @@ describe Markov::Generator do
     end
   end
 
-  describe "#alterable_indices" do
-    it "should exclude 0 indices" do
-      line = double('indices', multiple_children_indices: [0, 2, 4])
-      expect( Markov::Generator.alterable_indices(line) ).to eq([2, 4])
+  describe ".alterable_indices" do
+    subject { generator }
+
+    let(:language) { Markov::Language.new.add_snippet(text) }
+    let(:text)     { 'a a b' }
+    let(:line)     { double(tokens: %w[a a a b b a]) }
+
+    it "should get the right indices forward" do
+      expect( subject.alterable_indices(line, :forward) ).to eq([1, 2, 5])
     end
 
-    it "should send multiple_children_indices to the line" do
-      line = double
-      line.should_receive(:multiple_children_indices).and_return([])
-      Markov::Generator.alterable_indices(line)
+    it "should get the right indices backward" do
+      expect( subject.alterable_indices(line, :backward) ).to eq([0, 1, 2])
     end
 
-    it "should return NoAvailableIndicesForAltering if indices is empty" do
-      line = double('indices', multiple_children_indices: [])
-      expect( Markov::Generator.alterable_indices(line) )
-        .to eq(Markov::Generator::NoAvailableIndicesForAltering)
+    it "should work backwards for 'a'" do
+      expect( language.multiple_children_for?(['a'], :backward) ).to be_true
+    end
+
+    it "should work backwards for 'b'" do
+      expect( language.multiple_children_for?(['b'], :backward) ).to be_false
     end
   end
 end

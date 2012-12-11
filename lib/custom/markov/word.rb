@@ -9,12 +9,10 @@ module Markov
       @identifier     = Word.identifier_for(ident)
       @punctuation    = Word.is_punctuation_test?(ident)
       @sentence_end   = Word.is_sentence_end_test?(ident)
-      @sentence_begin = false
       @begin          = ident == :__begin__
+      @end            = ident == :__end__
 
       @count = @shout_count = 0
-      @parents    = Counter.new
-      @children   = Counter.new
 
       @proper     = true
 
@@ -46,35 +44,6 @@ module Markov
       self
     end
 
-    def add_parent(parent)
-      @sentence_begin ||= parent.begin? || parent.sentence_begin?
-      parents.add_item( parent )
-
-      self
-    end
-
-    def add_child(child)
-      children.add_item(child)
-
-      self
-    end
-
-    def get_random_child(excluding)
-      children.get_random_item(excluding)
-    end
-
-    def get_random_parent(excluding)
-      parents.get_random_item(excluding)
-    end
-
-    def has_multiple_parents?
-      parents.length > 1
-    end
-
-    def has_multiple_children?
-      children.length > 1
-    end
-
     class << self
       def identifier_for(ident)
         if ident && !ident.is_a?(Symbol)
@@ -97,10 +66,6 @@ module Markov
         return false unless word =~ SENTENCE_END_REGEX
         return false if word =~ /\.\.+/  #this is for ellipses, e.g. "...."
         true
-      end
-
-      def is_sentence_begin_test?(prev_word)
-        prev_word.is_begin? || Word.is_sentence_end_test?(prev_word)
       end
 
       def is_punctuation_test?(word)
@@ -135,9 +100,8 @@ module Markov
       @begin
     end
 
-    def sentence_begin?
-      @sentence_begin
+    def end?
+      @end
     end
-
   end
 end

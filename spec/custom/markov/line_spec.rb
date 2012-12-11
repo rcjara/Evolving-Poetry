@@ -4,7 +4,7 @@ describe Markov::Line do
   let(:snippet) { "Take this kiss upon the brow!" }
   let(:lang)    { Markov::Language.new.add_snippet(snippet) }
   let(:basic_line) do
-    lang.words[0..5].inject(Markov::Line.new) do |line, word_text|
+    lang.tokens[0..7].inject(Markov::Line.new) do |line, word_text|
       markov_word = lang.fetch(word_text)
       line + Markov::WordDisplayer.new(markov_word)
     end
@@ -67,7 +67,7 @@ describe Markov::Line do
 
       it "should have more characters after adding" do
         old_length  = subject.num_chars
-        markov_word = lang.fetch(lang.words[6])
+        markov_word = lang.fetch(lang.tokens[6])
         new_line    = subject + Markov::WordDisplayer.new(markov_word)
         expect( new_line.num_chars).to be > old_length
       end
@@ -128,7 +128,7 @@ describe Markov::Line do
 
     context "a sentence with just one word" do
       subject do
-        markov_word    = lang.fetch(lang.words.first)
+        markov_word    = lang.fetch(lang.tokens.first)
         word_displayer = Markov::WordDisplayer.new(markov_word)
         line           = Markov::Line.new([word_displayer])
         line.mark_as_deleted!
@@ -172,21 +172,10 @@ describe Markov::Line do
     end
   end
 
-
-  describe ".multiple_children_indices" do
-    let(:multi_word) { double('multi_word', dup: double(has_multiple_children?: true)) }
-    let(:uni_word)   { double('uni_word',   dup: double(has_multiple_children?: false)) }
-    subject { Markov::Line.new([multi_word, uni_word, uni_word, multi_word, multi_word, uni_word]) }
-
-    its(:multiple_children_indices) { should eq([0, 3, 4]) }
-  end
-
-  describe ".multiple_parents_indices" do
-    let(:multi_word) { double('multi_word', dup: double(has_multiple_parents?: true)) }
-    let(:uni_word)   { double('uni_word',   dup: double(has_multiple_parents?: false)) }
-    subject { Markov::Line.new([multi_word, uni_word, multi_word, uni_word, uni_word, multi_word]) }
-
-    its(:multiple_parents_indices) { should eq([0, 2, 5]) }
+  describe ".tokens" do
+    it "should get the correct tokens for the basic line" do
+      expect( basic_line.tokens ).to eq( %w{take this kiss upon the brow !} )
+    end
   end
 
   describe "tag regex" do

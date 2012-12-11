@@ -1,8 +1,10 @@
 describe Markov::WordDisplayer do
   let(:default_word_attributes) do
-    { identifier: "word",
+    {
+      identifier: "word",
       proper?: false,
-      punctuation?: false }
+      punctuation?: false
+    }
   end
 
   let(:word) { double(default_word_attributes) }
