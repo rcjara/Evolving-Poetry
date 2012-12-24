@@ -22,6 +22,12 @@ module Markov
       continue_line([:__begin__], Line.new)
     end
 
+    def generate_poem(num_lines = nil)
+      num_lines ||= (rand(3) + 1) + (rand(4) + 1)
+      lines = num_lines.times.collect { generate_line }
+      Poem.new(lines)
+    end
+
     def alter_line(line)
       indices = alterable_indices(line, :forward)
       return NoAvailableIndicesForAltering if indices.empty?

@@ -27,6 +27,34 @@ describe Markov::Generator do
     end
   end
 
+  describe ".generate_poem" do
+    context "with a contrived language" do
+      let(:language)  { Markov::Language.new.add_snippet(text) }
+      let(:text) { 'A b c. A b d. A c d.' }
+
+      it "the poem's length should be more than one" do
+        3.times do
+          poem = generator.generate_poem
+          expect( poem.length ).to be > 1
+        end
+      end
+
+      it "the poem's length should be less than eight" do
+        3.times do
+          poem = generator.generate_poem
+          expect( poem.length ).to be < 8
+        end
+      end
+
+      it "should be able to generate a poem with a set number of lines" do
+        poem = generator.generate_poem(6)
+        expect( poem.length ).to eq(6)
+      end
+
+    end
+  end
+
+
   describe ".alter_line" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
     let(:generator) { Markov::Generator.new(language) }
