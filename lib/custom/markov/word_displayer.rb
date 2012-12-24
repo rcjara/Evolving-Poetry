@@ -30,12 +30,18 @@ module Markov
     end
 
     def display(new_sentence = false, use_tags = true)
-      word.identifier.to_s.dup.tap do |dw|
+      return '' if nondisplayer?
+
+      word.identifier.dup.tap do |dw|
         dw.capitalize!    if word.proper? || new_sentence
         dw.insert(0, ' ') unless word.punctuation?
 
         tags.each { |tag| execute_tag(tag, dw) } if use_tags
       end
+    end
+
+    def nondisplayer?
+      word.identifier.class == Symbol
     end
 
     def execute_tag(tag, display_word)

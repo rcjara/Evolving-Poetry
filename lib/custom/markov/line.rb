@@ -8,11 +8,8 @@ module Markov
     attr_reader :word_displayers
 
     def initialize(word_displayers = [])
-      @word_displayers = word_displayers.collect { |wd| wd.dup }
-    end
-
-    def word_at(i)
-      word_displayers[i].word
+      @word_displayers = word_displayers.reject(&:nondisplayer?)
+                                        .collect { |wd| wd.dup }
     end
 
     def tokens
@@ -20,12 +17,16 @@ module Markov
                      .map(&:identifier)
     end
 
+    def reverse
+      self.class.new(word_displayers.reverse)
+    end
+
     def tags_at_index(i)
       word_displayers[i].tags
     end
 
     def +(word_displayer)
-      self.class.new(@word_displayers + [word_displayer])
+      self.class.new(word_displayers + [word_displayer])
     end
 
     def <<(word_displayer)
@@ -33,8 +34,9 @@ module Markov
     end
 
     def num_chars
-      raw_chars = word_displayers.map(&:num_chars).inject(0, :+)
-      raw_chars > 0 ? raw_chars - 1 : raw_chars
+      return 0 if empty?
+
+      word_displayers.map(&:num_chars).inject(0, :+) - 1
     end
 
     def length
@@ -93,20 +95,21 @@ module Markov
     end
 
     def self.new_from_prog_text(text, lang)
-      Line.new.tap do |line|
-        tags = []
+      line = Line.new
+      tags = []
 
-        text.split(" ").each do |word|
-          if word =~ TAG_REGEX
-            tags << word.downcase.to_sym
-          else
-            markov_word = lang.fetch(word)
-            raise "Word not found: '#{word}'" unless markov_word
-            line << WordDisplayer.new(markov_word, tags)
-            tags = []
-          end
+      text.split(" ").each do |word|
+        if word =~ TAG_REGEX
+          tags << word.downcase.to_sym
+        else
+          markov_word = lang.fetch(word)
+          raise "Word not found: '#{word}'" unless markov_word
+          line += WordDisplayer.new(markov_word, tags)
+          tags = []
         end
       end
+
+      line
     end
 
     private

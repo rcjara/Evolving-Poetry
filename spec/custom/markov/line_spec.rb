@@ -20,8 +20,8 @@ describe Markov::Line do
     end
 
     context "non-empty line" do
-      let(:wd1) { double('word_displayer 1') }
-      let(:wd2) { double('word_displayer 2') }
+      let(:wd1) { double('word_displayer 1', nondisplayer?: false) }
+      let(:wd2) { double('word_displayer 2', nondisplayer?: false) }
 
       it "should duplicate its items" do
         wd1.should_receive(:dup).and_return double()
@@ -33,18 +33,6 @@ describe Markov::Line do
 
   end
 
-  describe ".word_at" do
-    let(:word) { double('word') }
-    let(:word_displayer) { double(dup: double('word_displayer', word: word)) }
-
-    subject { Markov::Line.new([word_displayer]) }
-
-    it "should be able to grab the word from the double" do
-      expect( subject.word_at(0)).to eq(word)
-    end
-  end
-
-
   describe "#new_from_prog_text" do
     let(:text) { "take this SHOUT kiss upon SHOUT the brow !" }
     subject { Markov::Line.new_from_prog_text(text, lang) }
@@ -55,7 +43,7 @@ describe Markov::Line do
   describe ".+" do
     it "should be able to + a WordDisplayer" do
       line = Markov::Line.new
-      line += double()
+      line += double(nondisplayer?: false)
       expect(line.length).to eq(1)
     end
 
@@ -176,6 +164,20 @@ describe Markov::Line do
     it "should get the correct tokens for the basic line" do
       expect( basic_line.tokens ).to eq( %w{take this kiss upon the brow !} )
     end
+  end
+
+  describe ".reverse" do
+    let(:reversed_line) { Markov::Line.new_from_prog_text("! brow the upon kiss this take", lang) }
+    subject { reversed_line.reverse }
+
+    it "should have the same number of characters forwards and backwards" do
+      expect( subject.num_chars ).to eq(reversed_line.num_chars)
+    end
+
+    it "should be able to display itself properly after being reversed" do
+      expect( subject.unwrapped_sentence ).to eq("Take this kiss upon the brow!")
+    end
+
   end
 
   describe "tag regex" do

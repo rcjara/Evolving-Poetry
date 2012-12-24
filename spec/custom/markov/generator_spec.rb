@@ -9,7 +9,7 @@ describe Markov::Generator do
     context "with a real world language" do
       let(:language) { poe_language }
 
-      it "should be able to generate a line multiple characters" do
+      it "should be able to generate a line with multiple characters" do
         expect( subject.generate_line.num_chars ).to be > 0
       end
     end
@@ -29,25 +29,17 @@ describe Markov::Generator do
 
   describe ".alter_line" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
-    let(:line)      { Markov::Line.new_from_prog_text('a b c .', language)  }
     let(:generator) { Markov::Generator.new(language) }
-    subject         { generator.alter_line(line) }
+
+    subject { generator.alter_line(line) }
 
     context "with a contrived language" do
       let(:text)      { 'A b c. A b d.' }
+      let(:line)      { Markov::Line.new_from_prog_text('a b c .', language)  }
 
       it { should_not be_empty }
       its(:num_chars) { should be > 0 }
       its(:num_chars) { should be <= language.limit }
-
-      it "sanity check on the line" do
-        expect( generator.alterable_indices(line, :forward) ).to eq([1])
-      end
-
-      it "should show that b has multiple children" do
-        expect( language.multiple_children_for?(['b']) ).to be_true
-      end
-
 
       it "should show that the line was altered" do
         #should create a better way to test that the line was altered
@@ -68,11 +60,47 @@ describe Markov::Generator do
 
     context "with a language that is impossible to alter" do
       let(:text) { 'a b c d.' }
+      let(:line) { Markov::Line.new_from_prog_text('a b c .', language)  }
 
       it "should return that there are no available indices for altering" do
         expect( subject ).to eq(Markov::Generator::NoAvailableIndicesForAltering)
       end
+    end
+  end
 
+  describe ".alter_beginning" do
+    let(:language)  { Markov::Language.new.add_snippet(text) }
+    let(:generator) { Markov::Generator.new(language) }
+    subject { generator.alter_beginning(line) }
+
+    context "with a contrived language" do
+      let(:line)      { Markov::Line.new_from_prog_text('a c d .', language)  }
+      let(:text)      { 'A b d. A c d.' }
+
+      it { should_not be_empty }
+      its(:num_chars) { should be > 0 }
+      its(:num_chars) { should be <= language.limit }
+
+      it "sanity check for alterable indices" do
+        expect( generator.alterable_indices(line, :backward) ).to eq([2])
+      end
+
+
+      it "should show that the line was altered" do
+        #should create a better way to test that the line was altered
+        expect( subject.tags_at_index(0) ).to include(:beginalteredtext)
+        expect( subject.tags_at_index(1) ).to include(:endspan)
+      end
+
+      it "should not have the same words as the old line" do
+        old_words = line.word_displayers.map(&:word)
+        3.times do
+          new_words = generator.alter_beginning(line)
+                               .word_displayers
+                               .map(&:word)
+          expect(new_words).to_not eq(old_words)
+        end
+      end
     end
   end
 

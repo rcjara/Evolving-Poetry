@@ -2,11 +2,17 @@ module Markov
   class Generator
     attr_reader :language
 
-    COMMAND_SETS = { children: [:get_random_child, :sentence_end?],
-                     parents:  [:get_random_parent, :sentence_begin?] }
+    BadContinueLineResult = Object.new.tap do |obj|
+      obj.define_singleton_method(:inspect) do
+        '<BadContinueLineResult>'
+      end
+    end
 
-    BadContinueLineResult = Object.new
-    NoAvailableIndicesForAltering = Object.new
+    NoAvailableIndicesForAltering = Object.new.tap do |obj|
+      obj.define_singleton_method(:inspect) do
+        '<NoAvailableIndicesForAltering>'
+      end
+    end
 
     def initialize(language)
       @language = language
@@ -21,13 +27,26 @@ module Markov
       return NoAvailableIndicesForAltering if indices.empty?
 
       index = indices.sample
-      word_displayers  = line.word_displayers[0..index]
-      to_continue_from = line.tokens[index]
-      to_avoid         = line.tokens[index + 1]
+      to_avoid        = line.tokens[index + 1]
+      kept_line       = Line.new(line.word_displayers[0..index])
+      prev_tokens     = kept_line.tokens
 
-      old_line = Line.new(word_displayers)
-      continue_line([to_continue_from], old_line, :forward, Set.new.add(to_avoid))
+      continue_line(prev_tokens, kept_line, :forward, Set.new.add(to_avoid))
                    .mark_as_altered!(index + 1, -1)
+    end
+
+    def alter_beginning(line)
+      indices = alterable_indices(line, :backward)
+      return NoAvailableIndicesForAltering if indices.empty?
+
+      index = indices.sample
+      to_avoid        = line.tokens[index - 1]
+      kept_line       = Line.new(line.word_displayers[index..-1].reverse)
+      prev_tokens     = kept_line.tokens
+
+      continue_line(prev_tokens, kept_line, :backward, Set.new.add(to_avoid))
+                   .reverse
+                   .mark_as_altered!(0, -(index +1))
     end
 
     def alterable_indices(line, direction)
@@ -47,7 +66,7 @@ module Markov
 
     def continue_line(prev_tokens, prev_line, set = :forward, excluding = Set.new)
       return BadContinueLineResult if prev_line.num_chars > language.limit
-      return prev_line             if criteria_met?(prev_tokens)
+      return prev_line             if criteria_met?(prev_tokens, set)
 
       new_line  = BadContinueLineResult
 
@@ -76,9 +95,9 @@ module Markov
       end
     end
 
-    def criteria_met?(prev_tokens)
+    def criteria_met?(prev_tokens, set)
       word = language.fetch(prev_tokens.last)
-      prev_tokens.length > 1 && word.sentence_end?
+      (set == :forward && word.end?) || (set == :backward && word.begin?)
     end
   end
 end
