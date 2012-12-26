@@ -167,11 +167,11 @@ describe Markov::Line do
   end
 
   describe ".reverse" do
-    let(:reversed_line) { Markov::Line.new_from_prog_text("! brow the upon kiss this take", lang) }
-    subject { reversed_line.reverse }
+    let(:backwards_line) { Markov::Line.new_from_prog_text("! brow the upon kiss this take", lang) }
+    subject { backwards_line.reverse }
 
     it "should have the same number of characters forwards and backwards" do
-      expect( subject.num_chars ).to eq(reversed_line.num_chars)
+      expect( subject.num_chars ).to eq(backwards_line.num_chars)
     end
 
     it "should be able to display itself properly after being reversed" do
