@@ -9,19 +9,19 @@ module Markov
     end
 
     def length
-      @lines.length
+      lines.length
     end
 
     def to_prog_text
-      @lines.collect(&:to_prog_text).join(" BREAK ")
+      lines.collect(&:to_prog_text).join(" BREAK ")
     end
 
     def display
-      @lines.collect(&:display).join("\n")
+      lines.collect(&:display).join("\n")
     end
 
     def undeleted_lines
-      @lines.inject(0) do |sum, line|
+      lines.inject(0) do |sum, line|
         line.deleted? ? sum : sum + 1
       end
     end
@@ -30,51 +30,52 @@ module Markov
     # Evolution methods #
     #####################
 
-    def mutate!(lang)
+    def mutate!(generator)
       max_mutate_num = undeleted_lines > 1 ? 4 : 3
       case rand(max_mutate_num)
       when 0
-        add_line!(lang)
+        add_line!(generator)
       when 1
-        alter_a_tail!(lang)
+        alter_a_tail!(generator)
       when 2
-        alter_a_front!(lang)
+        alter_a_front!(generator)
       when 3
         delete_line!
       end
     end
 
-    def add_line!(lang)
-      new_line = lang.gen_line
+    def add_line(generator)
+      new_line = generator.generate_line
       new_line.mark_as_new!
 
-      index = rand(length + 1)
-      @lines.insert(index, new_line)
+      i = rand(length + 1)
+
+      Poem.new(lines[0, i] + [new_line] + lines[i, length - i])
     end
 
     def delete_line!
       orig_undeleted_lines = undeleted_lines
       return nil if orig_undeleted_lines < 2
       while undeleted_lines == orig_undeleted_lines
-        line = @lines[rand(length)]
+        line = lines[rand(length)]
         line.mark_as_deleted! unless line.deleted?
       end
     end
 
-    def alter_a_tail!(lang)
-      alter!(lang, :alter_tail!)
+    def alter_a_tail!(generator)
+      alter!(generator, :alter_tail!)
     end
 
     def alter_a_front!(lang)
-      alter!(lang, :alter_front!)
+      alter!(generator, :alter_front!)
     end
 
-    def alter!(lang, method = :alter_front!)
+    def alter!(generator, method = :alter_front!)
       success = false
       attempts = 0
 
       until success || attempts > Constants::MAX_ALTERING_ATTEMPTS
-        line = @lines[rand(@lines.length)]
+        line = lines[rand(lines.length)]
         success = line.send(method, lang)
         attempts += 1
       end
@@ -102,7 +103,7 @@ module Markov
       new_lines += self_lines + other_lines
       which_tag_array += ([true] * self_lines.length) + ([false] * other_lines.length)
 
-      new_poem = self.class.from_prog_text(new_lines.join(" BREAK "), lang, :strip => true)
+      new_poem = self.class.new_from_prog_text(new_lines.join(" BREAK "), lang, :strip => true)
 
       #mark which lines came from which parent
       which_tag_array.each_with_index do |first_parent, i|
@@ -118,9 +119,9 @@ module Markov
 
     def half_lines(include_deleted = false)
       potential_lines = if include_deleted
-        @lines
+        lines
       else
-        @lines.select{ |l| !l.deleted? }
+        lines.reject(&:deleted?)
       end
 
       indices = (0...potential_lines.length).to_a.sample(length / 2).sort
@@ -132,10 +133,10 @@ module Markov
     # Class Methods #
     #################
 
-    def self.from_prog_text(pre_text, lang, options = {})
+    def self.new_from_prog_text(pre_text, lang, options = {})
       text = options[:strip] ? strip_tags(pre_text) : pre_text
       lines = text.split(/\sBREAK\s/)
-        .collect { |t| Line.line_from_prog_text(t, lang) }
+        .collect { |t| Line.new_from_prog_text(t, lang) }
         .reject(&:empty?)
       Poem.new(lines)
     end

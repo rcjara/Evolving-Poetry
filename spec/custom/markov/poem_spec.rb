@@ -1,251 +1,192 @@
+include MarkovHelper
+
 describe Markov::Poem do
-  before(:all) do
-    @lang = poe_language
-  end
+  let(:text) { 'Take this kiss upon the brow! And then the raven.' }
+  let(:lang) { Markov::Language.new.add_snippet(text) }
+  let(:generator) { Markov::Generator.new(lang) }
 
   describe "new text tags" do
-    before(:each) do
-      @text_with_span_tags = "BEGINNEWTEXT take this ENDSPAN kiss upon the brow !"
-    end
+    let(:prog_text) { "BEGINNEWTEXT take this ENDSPAN kiss upon the brow !" }
 
     describe "without stripping tags" do
-      before(:each) do
-        @p = Markov::Poem.from_prog_text(@text_with_span_tags, @lang)
-      end
+      let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang) }
 
       it "should display properly" do
-        @p.display.should == display_line(%{<span class="new-text"> Take this kiss</span> upon the brow!})
+        poem.display.should == display_line(%{<span class="new-text"> Take this kiss</span> upon the brow!})
       end
 
       it "should have the right programmatic text" do
-        @p.to_prog_text.should == @text_with_span_tags
+        poem.to_prog_text.should == prog_text
       end
 
     end
 
     describe "with stripping out tags" do
-      before(:each) do
-        @p = Markov::Poem.from_prog_text(@text_with_span_tags, @lang, {:strip => true})
-      end
+      let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang, {:strip => true}) }
 
       it "should display properly" do
-        @p.display.should == display_line(%{Take this kiss upon the brow!})
+        poem.display.should == display_line(%{Take this kiss upon the brow!})
       end
 
       it "should have the right programmatic text" do
-        @p.to_prog_text.should == "take this kiss upon the brow !"
+        poem.to_prog_text.should == "take this kiss upon the brow !"
       end
 
     end
   end
 
   describe "deleted text tags" do
-    before(:each) do
-      @text_with_deleted_tags = "BEGINDELETED take ENDDELETED this BREAK kiss upon the brow !"
-    end
+    let(:prog_text) { "BEGINDELETED take ENDDELETED this BREAK kiss upon the brow !" }
 
     describe "without stripping tags" do
-      before(:each) do
-        @p = Markov::Poem.from_prog_text(@text_with_deleted_tags, @lang)
-      end
+      let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang) }
 
       it "should display properly" do
-        @p.display.should == %{<p><span class="deleted-text"> Take this</span></p>\n<p>Kiss upon the brow!</p>}
+        poem.display.should == %{<p><span class="deleted-text"> Take this</span></p>\n<p>Kiss upon the brow!</p>}
       end
 
       it "should have the right programmatic text" do
-        @p.to_prog_text.should == @text_with_deleted_tags
+        poem.to_prog_text.should == prog_text
       end
-
     end
 
     describe "with stripping out tags" do
-      before(:each) do
-        @p = Markov::Poem.from_prog_text(@text_with_deleted_tags, @lang, :strip => true)
-      end
+      let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang, :strip => true) }
 
       it "should display properly" do
-        @p.display.should == display_line(%{Kiss upon the brow!})
+        poem.display.should == display_line(%{Kiss upon the brow!})
       end
 
       it "should have the right programmatic text" do
-        @p.to_prog_text.should == "kiss upon the brow !"
+        poem.to_prog_text.should == "kiss upon the brow !"
       end
-
     end
   end
 
   describe "sexual reproduction" do
-    before(:each) do
-      @p1 = @lang.gen_poem(6)
-      @p2 = @lang.gen_poem(4)
-      @new_poem = @p1.sexually_reproduce_with(@p2, @lang)
-    end
+    let(:poem1) { generator.generate_poem(6) }
+    let(:poem2) { generator.generate_poem(4) }
+    let(:child) { poem1.sexually_reproduce_with(poem2, lang) }
 
-    describe "@p1.half_lines" do
+    describe "poem1.half_lines" do
       it "should have 3 lines" do
-        @p1.half_lines.length.should == 3
+        poem1.half_lines.length.should == 3
       end
     end
 
-    describe "@p2.half_lines" do
+    describe "poem2.half_lines" do
       it "should have 2 lines" do
-        @p2.half_lines.length.should == 2
+        poem2.half_lines.length.should == 2
       end
     end
 
     it "should have 5 lines" do
-      @new_poem.length.should == 5
+      child.length.should == 5
     end
 
     it "should have 3 lines from p1 in its programmatic text" do
-      @new_poem.to_prog_text.scan(/FROMFIRSTPARENT/).length.should == 3
+      child.to_prog_text.scan(/FROMFIRSTPARENT/).length.should == 3
     end
 
     it "should have 3 lines from p1 in its display text" do
-      @new_poem.display.scan(/\<span class\=\"from-first-parent\"\>/).length.should == 3
+      child.display.scan(/\<span class\=\"from-first-parent\"\>/).length.should == 3
     end
 
     it "should have 2 lines from p2 in its programmatic text" do
-      @new_poem.to_prog_text.scan(/FROMSECONDPARENT/).length.should == 2
+      child.to_prog_text.scan(/FROMSECONDPARENT/).length.should == 2
     end
 
     it "should have 2 lines from p2 in its display text" do
-      @new_poem.display.scan(/\<span class\=\"from-second-parent\"\>/).length.should == 2
+      child.display.scan(/\<span class\=\"from-second-parent\"\>/).length.should == 2
     end
 
   end
 
 
   describe "multiline stripping" do
-    before(:each) do
-      @text_to_strip = "take BEGINDELETED this kiss ENDDELETED upon BREAK BEGINDELETED the brow ENDDELETED BREAK BEGINNEWTEXT and ENDSPAN raven !"
-      @p = Markov::Poem.from_prog_text(@text_to_strip, @lang, :strip => true)
-    end
+    let(:prog_text) { "take BEGINDELETED this kiss ENDDELETED upon BREAK BEGINDELETED the brow ENDDELETED BREAK BEGINNEWTEXT and ENDSPAN raven !" }
+    let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang, :strip => true) }
 
     it "should have the right programmatic text" do
-      @p.to_prog_text.should == "take BREAK and raven !"
+      poem.to_prog_text.should == "take BREAK and raven !"
     end
 
     it "should display properly" do
-      @p.display.should == %{<p>Take</p>\n<p>And raven!</p>}
+      poem.display.should == %{<p>Take</p>\n<p>And raven!</p>}
     end
 
   end
 
-  describe "a five line poem" do
-    before(:each) do
-      @p = @lang.gen_poem(5)
-    end
+  describe ".add_line" do
+    subject { poem.add_line(generator) }
 
-    it "should not contain any beginnewtext tags" do
-      @p.display.should_not =~ /\<span class\="new-text"\>/
-    end
-
-    it "should have 5 lines" do
-      @p.length.should == 5
-    end
-
-
-    describe "now add the line" do
-      before(:each) do
-        @p.add_line!(@lang)
-      end
+    context "a five line poem" do
+      let(:poem) { generator.generate_poem(5) }
 
       it "should include a new text tag" do
-        @p.display.should =~ /\<span class\="new-text"\>/
+        expect( subject.display).to match(/\<span class\="new-text"\>/)
       end
 
-      it "should have 6 lines" do
-        @p.length.should == 6
-      end
+      its(:length) { should eq(6) }
     end
-
-    describe "on deleting a line" do
-      before(:each) do
-        @p.delete_line!
-      end
-
-      it "should still have 5 lines" do
-        @p.length.should == 5
-      end
-
-      it "should have 4 undeleted lines" do
-        @p.undeleted_lines.should == 4
-      end
-
-
-      it "should have some deleted text" do
-        @p.to_prog_text.should =~ /BEGINDELETED.*?ENDDELETED/
-      end
-
-      describe "and then stripping out tags" do
-        before(:each) do
-          @p = Markov::Poem.from_prog_text(@p.to_prog_text, @lang, :strip => true)
-        end
-
-        it "should be back to 4 lines" do
-          @p.length.should == 4
-        end
-
-        it "should have 4 undeleted lines" do
-          @p.undeleted_lines.should == 4
-        end
-
-        it "should not have deleted text anymore" do
-          @p.to_prog_text.should_not =~ /BEGINDELETED.*?ENDDELETED/
-        end
-
-      end
-
-
-    end
-
   end
 
-  describe "altering the tail of a line" do
-    before(:each) do
-      @p = @lang.gen_poem 1
-      @pre_display = @p.display
-      @first_word = @p.to_prog_text.split(/\s/).first
-      @p.alter_a_tail!(@lang)
-    end
+  #describe ".delete_line" do
+  #  context "a five line poem" do
+  #    subject { poem.delete_line }
 
-    it "should not look like it used to" do
-      @p.display.should_not == @pre_display
-    end
+  #    its(:length)          { should eq(5) }
+  #    its(:undeleted_lines) { should eq(4) }
 
-    it "should still have the first word in common" do
-      @p.to_prog_text.split(/\s/).first.should == @first_word
-    end
-
-    it "should still have a length of one" do
-      @p.length.should == 1
-    end
-
-  end
-
-  describe "altering the front of a line" do
-    before(:each) do
-      @p = @lang.gen_poem 1
-      @pre_display = @p.display
-      @last_word = @p.to_prog_text.split(/\s/).last
-      @p.alter_a_front!(@lang)
-    end
-
-    it "should not look like it used to" do
-      @p.display.should_not == @pre_display
-    end
-
-    it "should still have the last word in common" do
-      @p.to_prog_text.split(/\s/).last.should == @last_word
-    end
-
-    it "should still have a length of one" do
-      @p.length.should == 1
-    end
-
-  end
+  #    it "should have some deleted text" do
+  #      expect( subject.to_prog_text ).to match(/BEGINDELETED.*?ENDDELETED/)
+  #    end
+  #  end
+  #
+  #end
+#  describe "altering the tail of a line" do
+#    before(:each) do
+#      poem = generator.generate_poem 1
+#      poemre_display = poem.display
+#      @first_word = poem.to_prog_text.split(/\s/).first
+#      poem.alter_a_tail!(lang)
+#    end
+#
+#    it "should not look like it used to" do
+#      poem.display.should_not == poemre_display
+#    end
+#
+#    it "should still have the first word in common" do
+#      poem.to_prog_text.split(/\s/).first.should == @first_word
+#    end
+#
+#    it "should still have a length of one" do
+#      poem.length.should == 1
+#    end
+#
+#  end
+#
+#  describe "altering the front of a line" do
+#    before(:each) do
+#      poem = generator.generate_poem 1
+#      poemre_display = poem.display
+#      @last_word = poem.to_prog_text.split(/\s/).last
+#      poem.alter_a_front!(lang)
+#    end
+#
+#    it "should not look like it used to" do
+#      poem.display.should_not == poemre_display
+#    end
+#
+#    it "should still have the last word in common" do
+#      poem.to_prog_text.split(/\s/).last.should == @last_word
+#    end
+#
+#    it "should still have a length of one" do
+#      poem.length.should == 1
+#    end
+#
+#  end
 
 end
 
