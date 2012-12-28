@@ -12,11 +12,12 @@ describe Markov::Poem do
       let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang) }
 
       it "should display properly" do
-        poem.display.should == display_line(%{<span class="new-text"> Take this kiss</span> upon the brow!})
+        expect( poem.display ).to eq(
+                display_line(%{<span class="new-text"> Take this kiss</span> upon the brow!}))
       end
 
       it "should have the right programmatic text" do
-        poem.to_prog_text.should == prog_text
+        expect( poem.to_prog_text ).to eq(prog_text)
       end
 
     end
@@ -25,11 +26,11 @@ describe Markov::Poem do
       let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang, {:strip => true}) }
 
       it "should display properly" do
-        poem.display.should == display_line(%{Take this kiss upon the brow!})
+        expect( poem.display ).to eq(display_line(%{Take this kiss upon the brow!}))
       end
 
       it "should have the right programmatic text" do
-        poem.to_prog_text.should == "take this kiss upon the brow !"
+        expect( poem.to_prog_text ).to eq("take this kiss upon the brow !")
       end
 
     end
@@ -42,11 +43,12 @@ describe Markov::Poem do
       let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang) }
 
       it "should display properly" do
-        poem.display.should == %{<p><span class="deleted-text"> Take this</span></p>\n<p>Kiss upon the brow!</p>}
+        expect( poem.display ).to eq(
+            %{<p><span class="deleted-text"> Take this</span></p>\n<p>Kiss upon the brow!</p>})
       end
 
       it "should have the right programmatic text" do
-        poem.to_prog_text.should == prog_text
+        expect( poem.to_prog_text ).to eq(prog_text)
       end
     end
 
@@ -54,11 +56,11 @@ describe Markov::Poem do
       let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang, :strip => true) }
 
       it "should display properly" do
-        poem.display.should == display_line(%{Kiss upon the brow!})
+        expect( poem.display ).to eq(display_line(%{Kiss upon the brow!}))
       end
 
       it "should have the right programmatic text" do
-        poem.to_prog_text.should == "kiss upon the brow !"
+        expect( poem.to_prog_text ).to eq("kiss upon the brow !")
       end
     end
   end
@@ -70,34 +72,34 @@ describe Markov::Poem do
 
     describe "poem1.half_lines" do
       it "should have 3 lines" do
-        poem1.half_lines.length.should == 3
+        expect( poem1.half_lines.length ).to eq(3)
       end
     end
 
     describe "poem2.half_lines" do
       it "should have 2 lines" do
-        poem2.half_lines.length.should == 2
+        expect( poem2.half_lines.length ).to eq(2)
       end
     end
 
     it "should have 5 lines" do
-      child.length.should == 5
+      expect( child.length ).to eq(5)
     end
 
     it "should have 3 lines from p1 in its programmatic text" do
-      child.to_prog_text.scan(/FROMFIRSTPARENT/).length.should == 3
+      expect( child.to_prog_text.scan(/FROMFIRSTPARENT/).length ).to eq(3)
     end
 
     it "should have 3 lines from p1 in its display text" do
-      child.display.scan(/\<span class\=\"from-first-parent\"\>/).length.should == 3
+      expect( child.display.scan(/\<span class\=\"from-first-parent\"\>/).length ).to eq(3)
     end
 
     it "should have 2 lines from p2 in its programmatic text" do
-      child.to_prog_text.scan(/FROMSECONDPARENT/).length.should == 2
+      expect( child.to_prog_text.scan(/FROMSECONDPARENT/).length ).to eq(2)
     end
 
     it "should have 2 lines from p2 in its display text" do
-      child.display.scan(/\<span class\=\"from-second-parent\"\>/).length.should == 2
+      expect( child.display.scan(/\<span class\=\"from-second-parent\"\>/).length ).to eq(2)
     end
 
   end
@@ -108,11 +110,11 @@ describe Markov::Poem do
     let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang, :strip => true) }
 
     it "should have the right programmatic text" do
-      poem.to_prog_text.should == "take BREAK and raven !"
+      expect( poem.to_prog_text ).to eq("take BREAK and raven !")
     end
 
     it "should display properly" do
-      poem.display.should == %{<p>Take</p>\n<p>And raven!</p>}
+      expect( poem.display ).to eq(%{<p>Take</p>\n<p>And raven!</p>})
     end
 
   end
