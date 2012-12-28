@@ -38,7 +38,7 @@ module Markov
       prev_tokens     = kept_line.tokens
 
       continue_line(prev_tokens, kept_line, :forward, Set.new.add(to_avoid))
-                   .mark_as_altered!(index + 1, -1)
+                   .mark_as_altered(index + 1, -1)
     end
 
     def alter_beginning(line)
@@ -52,7 +52,7 @@ module Markov
 
       continue_line(prev_tokens, kept_line, :backward, Set.new.add(to_avoid))
                    .reverse
-                   .mark_as_altered!(0, -(index +1))
+                   .mark_as_altered(0, -(index +1))
     end
 
     def alterable_indices(line, direction)

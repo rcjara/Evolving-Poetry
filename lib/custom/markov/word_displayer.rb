@@ -18,13 +18,13 @@ module Markov
 
     attr_reader :word, :tags
 
-    def initialize(word, tags = [])
+    def initialize(word, tags = Set.new)
       @word = word
       @tags = tags
     end
 
     def self.new_with_rand_tags(word)
-      tags = []
+      tags = Set.new
       tags << :shout if rand < word_shout_prob(word)
       self.new(word, tags)
     end
@@ -65,7 +65,7 @@ module Markov
     end
 
     def add_tag(tag)
-      tags << tag
+      WordDisplayer.new(word, tags + [tag])
     end
 
     def has_tag?(tag)

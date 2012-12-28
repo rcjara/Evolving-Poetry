@@ -127,23 +127,27 @@ describe Markov::Poem do
         expect( subject.display).to match(/\<span class\="new-text"\>/)
       end
 
-      its(:length) { should eq(6) }
+      its(:length) { should == 6 }
     end
   end
 
-  #describe ".delete_line" do
-  #  context "a five line poem" do
-  #    subject { poem.delete_line }
+  describe ".delete_line" do
+    context "a five line poem" do
+      let(:poem) { generator.generate_poem(5) }
 
-  #    its(:length)          { should eq(5) }
-  #    its(:undeleted_lines) { should eq(4) }
+      describe "delete a single line" do
+        subject { poem.delete_line }
 
-  #    it "should have some deleted text" do
-  #      expect( subject.to_prog_text ).to match(/BEGINDELETED.*?ENDDELETED/)
-  #    end
-  #  end
-  #
-  #end
+        its(:length)          { should == 5 }
+        its(:undeleted_lines) { should == 4 }
+
+        it "should have some deleted text" do
+          expect( subject.to_prog_text ).to match(/BEGINDELETED.*?ENDDELETED/)
+        end
+      end
+    end
+  end
+
 #  describe "altering the tail of a line" do
 #    before(:each) do
 #      poem = generator.generate_poem 1

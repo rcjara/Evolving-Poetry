@@ -45,21 +45,25 @@ module Markov
     end
 
     def add_line(generator)
-      new_line = generator.generate_line
-      new_line.mark_as_new!
+      new_line = generator.generate_line.mark_as_new
 
       i = rand(length + 1)
 
       Poem.new(lines[0, i] + [new_line] + lines[i, length - i])
     end
 
-    def delete_line!
-      orig_undeleted_lines = undeleted_lines
-      return nil if orig_undeleted_lines < 2
-      while undeleted_lines == orig_undeleted_lines
-        line = lines[rand(length)]
-        line.mark_as_deleted! unless line.deleted?
-      end
+    def delete_line
+      return nil if undeleted_lines < 2
+
+      deletable_indices = lines.zip(0..length)
+                               .reject { |line, _| line.deleted? }
+                               .map    { |_, i| i }
+
+      i = deletable_indices.sample
+      new_lines = lines.dup
+      new_lines[i] = new_lines[i].mark_as_deleted
+
+      Poem.new(new_lines)
     end
 
     def alter_a_tail!(generator)
@@ -103,18 +107,17 @@ module Markov
       new_lines += self_lines + other_lines
       which_tag_array += ([true] * self_lines.length) + ([false] * other_lines.length)
 
-      new_poem = self.class.new_from_prog_text(new_lines.join(" BREAK "), lang, :strip => true)
-
       #mark which lines came from which parent
-      which_tag_array.each_with_index do |first_parent, i|
-        if first_parent
-          new_poem.lines[i].mark_as_from_first_parent!
+      marked_lines = which_tag_array.collect.with_index do |from_first_parent, i|
+        line = new_lines[i]
+        if from_first_parent
+          line.mark_as_from_first_parent
         else
-          new_poem.lines[i].mark_as_from_second_parent!
+          line.mark_as_from_second_parent
         end
       end
 
-      new_poem
+      Poem.new(marked_lines)
     end
 
     def half_lines(include_deleted = false)
@@ -124,8 +127,9 @@ module Markov
         lines.reject(&:deleted?)
       end
 
-      indices = (0...potential_lines.length).to_a.sample(length / 2).sort
-      indices.collect{ |i| potential_lines[i].to_prog_text }
+      potential_indices = (0...potential_lines.length).to_a
+      indices           = potential_indices.sample(length / 2).sort
+      indices.collect{ |i| potential_lines[i] }
     end
 
 

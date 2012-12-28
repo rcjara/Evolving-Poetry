@@ -82,8 +82,8 @@ describe Markov::WordDisplayer do
 
   describe ".add_tag" do
     it "should be able to receive a tag" do
-      subject.add_tag(:beginnewtext)
-      expect(subject.has_tag? :beginnewtext).to be_true
+      new_wd = subject.add_tag(:beginnewtext)
+      expect(new_wd.has_tag? :beginnewtext).to be_true
     end
   end
 

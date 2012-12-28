@@ -49,28 +49,28 @@ module Markov
               word_displayers.last.has_tag?(:enddeleted)
     end
 
-    def mark!(begin_tag, end_tag = :endspan)
-      mark_indices!(begin_tag, end_tag, 0, -1)
+    def mark(begin_tag, end_tag = :endspan)
+      mark_indices(begin_tag, end_tag, 0, -1)
     end
 
-    def mark_as_new!
-      mark!(:beginnewtext)
+    def mark_as_new
+      mark(:beginnewtext)
     end
 
-    def mark_as_deleted!
-      mark!(:begindeleted, :enddeleted)
+    def mark_as_deleted
+      mark(:begindeleted, :enddeleted)
     end
 
-    def mark_as_altered!(start_i, end_i)
-      mark_indices!(:beginalteredtext, :endspan, start_i, end_i)
+    def mark_as_altered(start_i, end_i)
+      mark_indices(:beginalteredtext, :endspan, start_i, end_i)
     end
 
-    def mark_as_from_first_parent!
-      mark!(:fromfirstparent)
+    def mark_as_from_first_parent
+      mark(:fromfirstparent)
     end
 
-    def mark_as_from_second_parent!
-      mark!(:fromsecondparent)
+    def mark_as_from_second_parent
+      mark(:fromsecondparent)
     end
 
     def empty?
@@ -114,13 +114,14 @@ module Markov
 
     private
 
-    def mark_indices!(first_tag, second_tag, first_i, second_i)
+    def mark_indices(tag1, tag2, i1, i2)
       raise MarkEmptyLineException.new if empty?
-      word_displayers[first_i].add_tag  first_tag
-      word_displayers[second_i].add_tag second_tag
 
-      self
+      new_wds = word_displayers.dup
+      new_wds[i1] = new_wds[i1].add_tag tag1
+      new_wds[i2] = new_wds[i2].add_tag tag2
 
+      Line.new new_wds
     end
   end
 end

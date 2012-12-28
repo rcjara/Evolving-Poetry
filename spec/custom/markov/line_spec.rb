@@ -87,7 +87,7 @@ describe Markov::Line do
     end
   end
 
-  describe ".mark_as_deleted!" do
+  describe ".mark_as_deleted" do
     shared_examples_for "a deleted sentence" do
       it { should be_deleted }
 
@@ -104,12 +104,12 @@ describe Markov::Line do
       subject { Markov::Line.new }
 
       it "should raise an error" do
-        expect { subject.mark_as_deleted! }.to raise_error(Markov::MarkEmptyLineException)
+        expect { subject.mark_as_deleted }.to raise_error(Markov::MarkEmptyLineException)
       end
     end
 
     context "basic line" do
-      subject { basic_line.mark_as_deleted! }
+      subject { basic_line.mark_as_deleted }
 
       it_should_behave_like "a deleted sentence"
     end
@@ -119,16 +119,21 @@ describe Markov::Line do
         markov_word    = lang.fetch(lang.tokens.first)
         word_displayer = Markov::WordDisplayer.new(markov_word)
         line           = Markov::Line.new([word_displayer])
-        line.mark_as_deleted!
+        line.mark_as_deleted
       end
 
       it_should_behave_like "a deleted sentence"
     end
   end
 
-  describe ".mark!" do
+  describe ".mark" do
     context "basic line" do
-      subject { basic_line.mark!(:some_tag) }
+      subject { basic_line.mark(:some_tag) }
+
+      it "should not affect the original line" do
+        expect( basic_line.tags_at_index(0) ).to_not include(:some_tag)
+      end
+
 
       it "should have its first word have a some_tag" do
         expect( subject.tags_at_index(0) ).to include(:some_tag)
@@ -143,13 +148,13 @@ describe Markov::Line do
       subject { Markov::Line.new }
 
       it "should raise an error" do
-        expect { subject.mark!(:some_tag) }.to raise_error(Markov::MarkEmptyLineException)
+        expect { subject.mark(:some_tag) }.to raise_error(Markov::MarkEmptyLineException)
       end
     end
   end
 
-  describe ".mark_as_altered!" do
-    subject { basic_line.mark_as_altered!(1, 3) }
+  describe ".mark_as_altered" do
+    subject { basic_line.mark_as_altered(1, 3) }
 
     it "should have begin-altered-text tag at index 1" do
       expect( subject.tags_at_index(1) ).to include(:beginalteredtext)
