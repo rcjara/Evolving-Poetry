@@ -30,17 +30,17 @@ module Markov
     # Evolution methods #
     #####################
 
-    def mutate!(generator)
+    def mutate(generator)
       max_mutate_num = undeleted_lines > 1 ? 4 : 3
       case rand(max_mutate_num)
       when 0
-        add_line!(generator)
+        add_line(generator)
       when 1
-        alter_a_tail!(generator)
+        alter_a_tail(generator)
       when 2
-        alter_a_front!(generator)
+        alter_a_front(generator)
       when 3
-        delete_line!
+        delete_line
       end
     end
 
@@ -66,26 +66,33 @@ module Markov
       Poem.new(new_lines)
     end
 
-    def alter_a_tail!(generator)
-      alter!(generator, :alter_tail!)
+    def alter_a_tail(generator)
+      alter(generator, :alter_line)
     end
 
-    def alter_a_front!(lang)
-      alter!(generator, :alter_front!)
+    def alter_a_front(generator)
+      alter(generator, :alter_beginning)
     end
 
-    def alter!(generator, method = :alter_front!)
-      success = false
-      attempts = 0
-
-      until success || attempts > Constants::MAX_ALTERING_ATTEMPTS
-        line = lines[rand(lines.length)]
-        success = line.send(method, lang)
-        attempts += 1
+    def alter(generator, method = :alter_beginning)
+      attempt = 0
+      new_line = Generator::NoAvailableIndicesForAltering
+      while new_line == Generator::NoAvailableIndicesForAltering &&
+            attempt < Constants::MAX_ALTERING_ATTEMPTS
+        attempt    += 1
+        line_index = rand(length)
+        line       = lines[line_index]
+        new_line   = generator.send(method, line)
       end
+
+      return self if new_line == Generator::NoAvailableIndicesForAltering
+
+      new_lines = lines.dup
+      new_lines[line_index] = new_line
+      Poem.new(new_lines)
     end
 
-    def sexually_reproduce_with(other_poem, lang)
+    def sexually_reproduce_with(other_poem, language)
       self_lines = half_lines
       other_lines = other_poem.half_lines
       prob = self_lines.length
@@ -108,8 +115,8 @@ module Markov
       which_tag_array += ([true] * self_lines.length) + ([false] * other_lines.length)
 
       #mark which lines came from which parent
-      marked_lines = which_tag_array.collect.with_index do |from_first_parent, i|
-        line = new_lines[i]
+      marked_lines = new_lines.zip(which_tag_array)
+                              .collect do |line, from_first_parent|
         if from_first_parent
           line.mark_as_from_first_parent
         else
@@ -137,10 +144,10 @@ module Markov
     # Class Methods #
     #################
 
-    def self.new_from_prog_text(pre_text, lang, options = {})
+    def self.new_from_prog_text(pre_text, language, options = {})
       text = options[:strip] ? strip_tags(pre_text) : pre_text
       lines = text.split(/\sBREAK\s/)
-        .collect { |t| Line.new_from_prog_text(t, lang) }
+        .collect { |t| Line.new_from_prog_text(t, language) }
         .reject(&:empty?)
       Poem.new(lines)
     end

@@ -148,49 +148,42 @@ describe Markov::Poem do
     end
   end
 
-#  describe "altering the tail of a line" do
-#    before(:each) do
-#      poem = generator.generate_poem 1
-#      poemre_display = poem.display
-#      @first_word = poem.to_prog_text.split(/\s/).first
-#      poem.alter_a_tail!(lang)
-#    end
-#
-#    it "should not look like it used to" do
-#      poem.display.should_not == poemre_display
-#    end
-#
-#    it "should still have the first word in common" do
-#      poem.to_prog_text.split(/\s/).first.should == @first_word
-#    end
-#
-#    it "should still have a length of one" do
-#      poem.length.should == 1
-#    end
-#
-#  end
-#
-#  describe "altering the front of a line" do
-#    before(:each) do
-#      poem = generator.generate_poem 1
-#      poemre_display = poem.display
-#      @last_word = poem.to_prog_text.split(/\s/).last
-#      poem.alter_a_front!(lang)
-#    end
-#
-#    it "should not look like it used to" do
-#      poem.display.should_not == poemre_display
-#    end
-#
-#    it "should still have the last word in common" do
-#      poem.to_prog_text.split(/\s/).last.should == @last_word
-#    end
-#
-#    it "should still have a length of one" do
-#      poem.length.should == 1
-#    end
-#
-#  end
+  describe "altering the tail of a line" do
+    let(:poem) { generator.generate_poem 1 }
+    subject { poem.alter_a_tail(generator) }
+
+    it "should not look like it used to" do
+      expect( subject.display ).to_not eq(poem.display)
+    end
+
+    it "should still have the last word in common" do
+      first_word = poem.to_prog_text.split(/\s/).first
+      expect( subject.to_prog_text.split(/\s/).first ).to eq(first_word)
+    end
+
+    it "should still have a length of one" do
+      expect( subject.length ).to eq(1)
+    end
+  end
+
+  describe "altering the front of a line" do
+    let(:poem) { generator.generate_poem 1 }
+    subject { poem.alter_a_front(generator) }
+
+    it "should not look like it used to" do
+      expect( subject.display ).to_not eq(poem.display)
+    end
+
+    it "should still have the last word in common" do
+      last_word = poem.to_prog_text.split(/\s/).last
+      expect( subject.to_prog_text.split(/\s/).last ).to eq(last_word)
+    end
+
+    it "should still have a length of one" do
+      expect( subject.length ).to eq(1)
+    end
+
+  end
 
 end
 
