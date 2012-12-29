@@ -66,8 +66,8 @@ describe Markov::Poem do
   end
 
   describe "sexual reproduction" do
-    let(:poem1) { generator.generate_poem(6) }
-    let(:poem2) { generator.generate_poem(4) }
+    let(:poem1) { generator.new_poem(6) }
+    let(:poem2) { generator.new_poem(4) }
     let(:child) { poem1.sexually_reproduce_with(poem2, lang) }
 
     describe "poem1.half_lines" do
@@ -123,7 +123,7 @@ describe Markov::Poem do
     subject { poem.add_line(generator) }
 
     context "a five line poem" do
-      let(:poem) { generator.generate_poem(5) }
+      let(:poem) { generator.new_poem(5) }
 
       it "should include a new text tag" do
         expect( subject.display).to match(/\<span class\="new-text"\>/)
@@ -135,7 +135,7 @@ describe Markov::Poem do
 
   describe ".delete_line" do
     context "a five line poem" do
-      let(:poem) { generator.generate_poem(5) }
+      let(:poem) { generator.new_poem(5) }
 
       describe "delete a single line" do
         subject { poem.delete_line }
@@ -151,7 +151,7 @@ describe Markov::Poem do
   end
 
   describe "altering the tail of a line" do
-    let(:poem) { generator.generate_poem 1 }
+    let(:poem) { generator.new_poem 1 }
     subject { poem.alter_a_tail(generator) }
 
     it "should not look like it used to" do
@@ -169,7 +169,7 @@ describe Markov::Poem do
   end
 
   describe "altering the front of a line" do
-    let(:poem) { generator.generate_poem 1 }
+    let(:poem) { generator.new_poem 1 }
     subject { poem.alter_a_front(generator) }
 
     it "should not look like it used to" do

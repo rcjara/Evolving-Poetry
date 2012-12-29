@@ -18,14 +18,14 @@ module Markov
       @language = language
     end
 
-    def generate_line
+    def new_line
       continue_line([:__begin__], Line.new)
     end
 
-    def generate_poem(num_lines = nil)
+    def new_poem(num_lines = nil)
       num_lines ||= (rand(3) + 1) + (rand(4) + 1)
-      lines = num_lines.times.collect { generate_line }
-      Poem.new(lines)
+      lines = num_lines.times.collect { new_line }
+      Markov::Poem.new(lines)
     end
 
     def alter_line(line)
@@ -34,11 +34,16 @@ module Markov
 
       index = indices.sample
       to_avoid        = line.tokens[index + 1]
-      kept_line       = Line.new(line.word_displayers[0..index])
-      prev_tokens     = kept_line.tokens
+      kept_portion    = Line.new(line.word_displayers[0..index])
+      prev_tokens     = kept_portion.tokens
 
-      continue_line(prev_tokens, kept_line, :forward, Set.new.add(to_avoid))
-                   .mark_as_altered(index + 1, -1)
+      new_line = continue_line(prev_tokens,
+                               kept_portion,
+                               :forward,
+                               Set.new.add(to_avoid))
+
+      return new_line if new_line == BadContinueLineResult
+      new_line.mark_as_altered(index + 1, -1)
     end
 
     def alter_beginning(line)
@@ -47,19 +52,25 @@ module Markov
 
       index = indices.sample
       to_avoid        = line.tokens[index - 1]
-      kept_line       = Line.new(line.word_displayers[index..-1].reverse)
-      prev_tokens     = kept_line.tokens
+      kept_portion    = Line.new(line.word_displayers[index..-1].reverse)
+      prev_tokens     = kept_portion.tokens
 
-      continue_line(prev_tokens, kept_line, :backward, Set.new.add(to_avoid))
-                   .reverse
-                   .mark_as_altered(0, -(index +1))
+      new_line = continue_line(prev_tokens,
+                               kept_portion,
+                               :backward,
+                               Set.new.add(to_avoid))
+
+      return new_line if new_line == BadContinueLineResult
+      new_line.reverse
+              .mark_as_altered(0, -(index +1))
     end
 
     def alterable_indices(line, direction)
-      indices = line.tokens.map { |t| language.multiple_children_for?([t], direction) }
-                           .map.with_index { |bool, i| [bool, i] }
-                           .select { |bool, _| bool }
-                           .map { |_, i| i }
+      indices = line.tokens
+                    .map { |t| language.multiple_children_for?([t], direction) }
+                    .map.with_index { |bool, i| [bool, i] }
+                    .select { |bool, _| bool }
+                    .map { |_, i| i }
 
       if direction == :forward
         indices.reject { |i| i == 0 }

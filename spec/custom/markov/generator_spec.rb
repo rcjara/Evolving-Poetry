@@ -3,14 +3,14 @@ include MarkovHelper
 describe Markov::Generator do
   let(:generator) { Markov::Generator.new(language) }
 
-  describe ".generate_line" do
+  describe ".new_line" do
     subject { generator }
 
     context "with a real world language" do
       let(:language) { poe_language }
 
       it "should be able to generate a line with multiple characters" do
-        expect( subject.generate_line.num_chars ).to be > 0
+        expect( subject.new_line.num_chars ).to be > 0
       end
     end
 
@@ -20,34 +20,34 @@ describe Markov::Generator do
 
       it "should be within the character limit" do
         3.times do
-          expect( subject.generate_line.num_chars ).to be <= language.limit
+          expect( subject.new_line.num_chars ).to be <= language.limit
         end
       end
 
     end
   end
 
-  describe ".generate_poem" do
+  describe ".new_poem" do
     context "with a contrived language" do
       let(:language)  { Markov::Language.new.add_snippet(text) }
       let(:text) { 'A b c. A b d. A c d.' }
 
       it "the poem's length should be more than one" do
         3.times do
-          poem = generator.generate_poem
+          poem = generator.new_poem
           expect( poem.length ).to be > 1
         end
       end
 
       it "the poem's length should be less than eight" do
         3.times do
-          poem = generator.generate_poem
+          poem = generator.new_poem
           expect( poem.length ).to be < 8
         end
       end
 
       it "should be able to generate a poem with a set number of lines" do
-        poem = generator.generate_poem(6)
+        poem = generator.new_poem(6)
         expect( poem.length ).to eq(6)
       end
 
@@ -102,8 +102,8 @@ describe Markov::Generator do
     subject { generator.alter_beginning(line) }
 
     context "with a contrived language" do
-      let(:line)      { Markov::Line.new_from_prog_text('a c d .', language)  }
-      let(:text)      { 'A b d. A c d.' }
+      let(:line) { Markov::Line.new_from_prog_text('a c d .', language)  }
+      let(:text) { 'A b d. A c d.' }
 
       it { should_not be_empty }
       its(:num_chars) { should be > 0 }

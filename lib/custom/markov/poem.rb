@@ -45,7 +45,7 @@ module Markov
     end
 
     def add_line(generator)
-      new_line = generator.generate_line.mark_as_new
+      new_line = generator.new_line.mark_as_new
 
       i = rand(length + 1)
 
