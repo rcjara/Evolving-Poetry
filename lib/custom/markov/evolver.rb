@@ -205,9 +205,9 @@ module Markov
         excluding << token
         word = language.fetch(token)
 
-        new_line = prev_line + WordDisplayer.new_with_rand_tags(word)
+        cur_line = prev_line + WordDisplayer.new_with_rand_tags(word)
         new_tokens = prev_tokens + [token]
-        new_line = continue_line(new_tokens, new_line, set)
+        new_line = continue_line(new_tokens, cur_line, set)
       end
 
       new_line

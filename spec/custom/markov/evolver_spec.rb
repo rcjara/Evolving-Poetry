@@ -48,103 +48,107 @@ describe Markov::Evolver do
   end
 
 
-  describe ".alter_line_tail" do
-    let(:language)  { Markov::Language.new.add_snippet(text) }
+  describe "Line Alteration" do
 
-    subject { evolver.alter_line_tail(line) }
+    describe ".alter_line_tail" do
+      let(:language)  { Markov::Language.new.add_snippet(text) }
 
-    context "with a contrived language" do
-      let(:text)      { 'A b c. A b d.' }
-      let(:line)      { Markov::Line.new_from_prog_text('a b c .', language)  }
+      subject { evolver.alter_line_tail(line) }
 
-      it { should_not be_empty }
-      its(:num_chars) { should be > 0 }
-      its(:num_chars) { should be <= language.limit }
+      context "with a contrived language" do
+        let(:text)      { 'A b c. A b d.' }
+        let(:line)      { Markov::Line.new_from_prog_text('a b c .', language)  }
 
-      it "should show that the line was altered" do
-        #should create a better way to test that the line was altered
-        expect( subject.tags_at_index(2) ).to  include(:beginalteredtext)
-        expect( subject.tags_at_index(-1) ).to include(:endspan)
+        it { should_not be_empty }
+        its(:num_chars) { should be > 0 }
+        its(:num_chars) { should be <= language.limit }
+
+        it "should show that the line was altered" do
+          #should create a better way to test that the line was altered
+          expect( subject.tags_at_index(2) ).to  include(:beginalteredtext)
+          expect( subject.tags_at_index(-1) ).to include(:endspan)
+        end
+
+        it "should not have the same words as the old line" do
+          old_words = line.word_displayers.map(&:word)
+          3.times do
+            new_words = evolver.alter_line_tail(line)
+                                 .word_displayers
+                                 .map(&:word)
+            expect(new_words).to_not eq(old_words)
+          end
+        end
       end
 
-      it "should not have the same words as the old line" do
-        old_words = line.word_displayers.map(&:word)
-        3.times do
-          new_words = evolver.alter_line_tail(line)
-                               .word_displayers
-                               .map(&:word)
-          expect(new_words).to_not eq(old_words)
+      context "with a language that is impossible to alter" do
+        let(:text) { 'a b c d.' }
+        let(:line) { Markov::Line.new_from_prog_text('a b c .', language)  }
+
+        it "should return that there are no available indices for altering" do
+          expect( subject ).to eq(Markov::Evolver::NoAvailableIndicesForAltering)
         end
       end
     end
 
-    context "with a language that is impossible to alter" do
-      let(:text) { 'a b c d.' }
-      let(:line) { Markov::Line.new_from_prog_text('a b c .', language)  }
+    describe ".alter_line_front" do
+      let(:language)  { Markov::Language.new.add_snippet(text) }
+      subject { evolver.alter_line_front(line) }
 
-      it "should return that there are no available indices for altering" do
-        expect( subject ).to eq(Markov::Evolver::NoAvailableIndicesForAltering)
-      end
-    end
-  end
+      context "with a contrived language" do
+        let(:line) { Markov::Line.new_from_prog_text('a c d .', language)  }
+        let(:text) { 'A b d. A c d.' }
 
-  describe ".alter_line_front" do
-    let(:language)  { Markov::Language.new.add_snippet(text) }
-    subject { evolver.alter_line_front(line) }
+        it { should_not be_empty }
+        its(:num_chars) { should be > 0 }
+        its(:num_chars) { should be <= language.limit }
 
-    context "with a contrived language" do
-      let(:line) { Markov::Line.new_from_prog_text('a c d .', language)  }
-      let(:text) { 'A b d. A c d.' }
-
-      it { should_not be_empty }
-      its(:num_chars) { should be > 0 }
-      its(:num_chars) { should be <= language.limit }
-
-      it "sanity check for alterable indices" do
-        expect( evolver.alterable_indices(line, :backward) ).to eq([2])
-      end
+        it "sanity check for alterable indices" do
+          expect( evolver.alterable_indices(line, :backward) ).to eq([2])
+        end
 
 
-      it "should show that the line was altered" do
-        #should create a better way to test that the line was altered
-        expect( subject.tags_at_index(0) ).to include(:beginalteredtext)
-        expect( subject.tags_at_index(1) ).to include(:endspan)
-      end
+        it "should show that the line was altered" do
+          #should create a better way to test that the line was altered
+          expect( subject.tags_at_index(0) ).to include(:beginalteredtext)
+          expect( subject.tags_at_index(1) ).to include(:endspan)
+        end
 
-      it "should not have the same words as the old line" do
-        old_words = line.word_displayers.map(&:word)
-        3.times do
-          new_words = evolver.alter_line_front(line)
-                               .word_displayers
-                               .map(&:word)
-          expect(new_words).to_not eq(old_words)
+        it "should not have the same words as the old line" do
+          old_words = line.word_displayers.map(&:word)
+          3.times do
+            new_words = evolver.alter_line_front(line)
+                                 .word_displayers
+                                 .map(&:word)
+            expect(new_words).to_not eq(old_words)
+          end
         end
       end
     end
-  end
 
-  describe ".alterable_indices" do
-    subject { evolver }
+    describe ".alterable_indices" do
+      subject { evolver }
 
-    let(:language) { Markov::Language.new.add_snippet(text) }
-    let(:text)     { 'a a b' }
-    let(:line)     { double(tokens: %w[a a a b b a]) }
+      let(:language) { Markov::Language.new.add_snippet(text) }
+      let(:text)     { 'a a b' }
+      let(:line)     { double(tokens: %w[a a a b b a]) }
 
-    it "should get the right indices forward" do
-      expect( subject.alterable_indices(line, :forward) ).to eq([1, 2, 5])
+      it "should get the right indices forward" do
+        expect( subject.alterable_indices(line, :forward) ).to eq([1, 2, 5])
+      end
+
+      it "should get the right indices backward" do
+        expect( subject.alterable_indices(line, :backward) ).to eq([0, 1, 2])
+      end
+
+      it "should work backwards for 'a'" do
+        expect( language.multiple_children_for?(['a'], :backward) ).to be_true
+      end
+
+      it "should work backwards for 'b'" do
+        expect( language.multiple_children_for?(['b'], :backward) ).to be_false
+      end
     end
 
-    it "should get the right indices backward" do
-      expect( subject.alterable_indices(line, :backward) ).to eq([0, 1, 2])
-    end
-
-    it "should work backwards for 'a'" do
-      expect( language.multiple_children_for?(['a'], :backward) ).to be_true
-    end
-
-    it "should work backwards for 'b'" do
-      expect( language.multiple_children_for?(['b'], :backward) ).to be_false
-    end
   end
 
   describe "Poem Evolution" do
