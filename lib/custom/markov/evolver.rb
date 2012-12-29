@@ -2,17 +2,8 @@ module Markov
   class Evolver
     attr_reader :language
 
-    BadContinueLineResult = Object.new.tap do |obj|
-      obj.define_singleton_method(:inspect) do
-        '<BadContinueLineResult>'
-      end
-    end
-
-    NoAvailableIndicesForAltering = Object.new.tap do |obj|
-      obj.define_singleton_method(:inspect) do
-        '<NoAvailableIndicesForAltering>'
-      end
-    end
+    BadContinueLineResult = :bad_continue_result
+    NoAvailableIndicesForAltering = :no_indices_availabe
 
     def initialize(language)
       @language = language
@@ -74,7 +65,7 @@ module Markov
       if kept_portion.length == new_line.length
         new_line.reverse
       else
-        new_line.reverse.mark_as_altered(0, -(index +1))
+        new_line.reverse.mark_as_altered(0, -(kept_portion.length + 1))
       end
     end
 
@@ -99,17 +90,18 @@ module Markov
     def mutate(poem)
       return add_line(poem) if poem.unaltered_indices.empty?
 
-      max_mutate_num = poem.unaltered_indices.length > 1 ? 4 : 3
-      case rand(max_mutate_num)
-      when 0
-        add_line_to_poem(poem)
-      when 1
-        alter_a_tail(poem)
-      when 2
-        alter_a_front(poem)
-      when 3
-        delete_line_from_poem(poem)
+      possible_mutations = [ :add_line_to_poem,
+                             :alter_a_tail,
+                             :alter_a_front,
+                             :delete_line_from_poem ]
+      new_poem = nil
+      until new_poem.is_a? Poem
+        mutation = possible_mutations.sample
+        possible_mutations.delete(mutation)
+        new_poem = self.send(mutation, poem)
       end
+
+      new_poem
     end
 
     def mate_poems(poem1, poem2)
@@ -154,6 +146,9 @@ module Markov
 
     def delete_line_from_poem(poem)
       i = poem.unaltered_indices.sample
+
+      return NoAvailableIndicesForAltering if i.nil?
+
       deleted_line = poem.lines[i].mark_as_deleted
       poem.replace_line_at(deleted_line, i)
     end

@@ -165,6 +165,23 @@ describe Markov::Evolver do
         end
       end
 
+      context "when altering / deleting lines isn't working" do
+        let(:bad_evolver) do
+          evolver.stub(:delete_line_from_poem).and_return(:no_indices_available)
+          evolver.stub(:alter_a_front).and_return(:bad_continue_result)
+          evolver.stub(:alter_a_tail).and_return(:bad_continue_result)
+          evolver
+        end
+
+        subject { bad_evolver.mutate(poem) }
+
+        it "should always have one more line than before" do
+          20.times do
+            expect( subject.length ).to eq(poem.length + 1)
+          end
+        end
+      end
+
     end
 
     describe ".mate_poems" do
@@ -201,15 +218,22 @@ describe Markov::Evolver do
     end
 
     describe ".delete_line_from_poem" do
-      context "a five line poem" do
+      subject { evolver.delete_line_from_poem(poem) }
+
+      context "given a five line poem" do
         let(:poem) { evolver.new_poem(5) }
 
-        describe "delete a single line" do
-          subject { evolver.delete_line_from_poem(poem) }
+        its(:length)          { should == 5 }
+        its(:undeleted_lines) { should == 4 }
+      end
 
-          its(:length)          { should == 5 }
-          its(:undeleted_lines) { should == 4 }
+      context "given a poem with no no lines to alter" do
+        let(:poem) { double("unalterable_poem", unaltered_indices: []) }
+
+        it "should return a no available indices for altering result" do
+          expect( subject ).to eq(Markov::Evolver::NoAvailableIndicesForAltering)
         end
+
       end
     end
 
