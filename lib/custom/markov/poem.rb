@@ -21,9 +21,7 @@ module Markov
     end
 
     def undeleted_lines
-      lines.inject(0) do |sum, line|
-        line.deleted? ? sum : sum + 1
-      end
+      lines.inject(0) { |sum, line| line.deleted? ? sum : sum + 1 }
     end
 
     def insert_line_at(new_line, i)
@@ -35,75 +33,10 @@ module Markov
     end
 
     def unaltered_indices
-      lines.map.with_index { |line, i| [line.to_prog_text, i] }
-               .reject     { |line, i| line =~ self.class.strip_tags_regex }
-               .map        { |_, i| i }
-    end
-
-    #####################
-    # Evolution methods #
-    #####################
-
-    def mutate(evolver)
-      max_mutate_num = undeleted_lines > 1 ? 4 : 3
-      case rand(max_mutate_num)
-      when 0
-        add_line(evolver)
-      when 1
-        alter_a_tail(evolver)
-      when 2
-        alter_a_front(evolver)
-      when 3
-        delete_line
-      end
-    end
-
-    def add_line(evolver)
-      new_line = evolver.new_line.mark_as_new
-
-      i = rand(length + 1)
-
-      Poem.new(lines[0, i] + [new_line] + lines[i, length - i])
-    end
-
-    def delete_line
-      return nil if undeleted_lines < 2
-
-      deletable_indices = lines.zip(0..length)
-                               .reject { |line, _| line.deleted? }
-                               .map    { |_, i| i }
-
-      i = deletable_indices.sample
-      new_lines = lines.dup
-      new_lines[i] = new_lines[i].mark_as_deleted
-
-      Poem.new(new_lines)
-    end
-
-    def alter_a_tail(evolver)
-      alter(evolver, :alter_tail)
-    end
-
-    def alter_a_front(evolver)
-      alter(evolver, :alter_front)
-    end
-
-    def alter(evolver, method = :alter_beginning)
-      attempt = 0
-      new_line = Evolver::NoAvailableIndicesForAltering
-      while new_line == Evolver::NoAvailableIndicesForAltering &&
-            attempt < Constants::MAX_ALTERING_ATTEMPTS
-        attempt    += 1
-        line_index = rand(length)
-        line       = lines[line_index]
-        new_line   = evolver.send(method, line)
-      end
-
-      return self if new_line == Evolver::NoAvailableIndicesForAltering
-
-      new_lines = lines.dup
-      new_lines[line_index] = new_line
-      Poem.new(new_lines)
+      @unaltered_indices ||=
+        lines.map.with_index { |line, i| [line.to_prog_text, i] }
+                 .reject     { |line, i| line =~ self.class.strip_tags_regex }
+                 .map        { |_, i| i }
     end
 
     def half_lines(include_deleted = false)

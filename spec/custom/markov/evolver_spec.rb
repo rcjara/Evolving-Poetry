@@ -6,20 +6,13 @@ describe Markov::Evolver do
   describe ".new_line" do
     subject { evolver }
 
-    context "with a real world language" do
-      let(:language) { poe_language }
-
-      it "should be able to generate a line with multiple characters" do
-        expect( subject.new_line.num_chars ).to be > 0
-      end
-    end
-
     context "with a language very unlikely to reach a sentence end" do
       let(:text)     { 'the ' * 1 + 'end.' }
       let(:language) { Markov::Language.new.add_snippet(text) }
 
       it "should be within the character limit" do
         3.times do
+          expect( subject.new_line.num_chars ).to be > 0
           expect( subject.new_line.num_chars ).to be <= language.limit
         end
       end
@@ -29,8 +22,8 @@ describe Markov::Evolver do
 
   describe ".new_poem" do
     context "with a contrived language" do
-      let(:language)  { Markov::Language.new.add_snippet(text) }
       let(:text) { 'A b c. A b d. A c d.' }
+      let(:language)  { Markov::Language.new.add_snippet(text) }
 
       it "the poem's length should be more than one" do
         3.times do
@@ -57,7 +50,6 @@ describe Markov::Evolver do
 
   describe ".alter_line_tail" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
-    let(:evolver) { Markov::Evolver.new(language) }
 
     subject { evolver.alter_line_tail(line) }
 
@@ -98,7 +90,6 @@ describe Markov::Evolver do
 
   describe ".alter_line_front" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
-    let(:evolver) { Markov::Evolver.new(language) }
     subject { evolver.alter_line_front(line) }
 
     context "with a contrived language" do
@@ -154,6 +145,106 @@ describe Markov::Evolver do
     it "should work backwards for 'b'" do
       expect( language.multiple_children_for?(['b'], :backward) ).to be_false
     end
+  end
+
+  describe "Poem Evolution" do
+    let(:text)     { 'a a b b' }
+    let(:language) { Markov::Language.new.add_snippet(text) }
+
+    describe ".mutate" do
+      let(:poem) { evolver.new_poem(3) }
+
+      it "should always alter the poem" do
+        5.times do
+          new_poem = evolver.mutate(poem)
+          expect( new_poem.display ).not_to eq(poem.display)
+        end
+      end
+
+    end
+
+    describe ".mate_poems" do
+      subject { evolver.mate_poems(poem1, poem2) }
+
+      context "from parents with lengths 6 and 4" do
+        let(:poem1)    { evolver.new_poem(6) }
+        let(:poem2)    { evolver.new_poem(4) }
+
+        its(:length) { should == 5 }
+
+        it "should have 3 lines from p1 in its programmatic text" do
+          expect( subject.to_prog_text.scan(/FROMFIRSTPARENT/).length ).to eq(3)
+        end
+
+        it "should have 2 lines from p2 in its programmatic text" do
+          expect( subject.to_prog_text.scan(/FROMSECONDPARENT/).length ).to eq(2)
+        end
+      end
+    end
+
+    describe ".add_line_to_poem" do
+      subject { evolver.add_line_to_poem(poem) }
+
+      context "a five line poem" do
+        let(:poem) { evolver.new_poem(5) }
+
+        it "should include a new text tag" do
+          expect( subject.display).to match(/\<span class\="new-text"\>/)
+        end
+
+        its(:length) { should == 6 }
+      end
+    end
+
+    describe ".delete_line_from_poem" do
+      context "a five line poem" do
+        let(:poem) { evolver.new_poem(5) }
+
+        describe "delete a single line" do
+          subject { evolver.delete_line_from_poem(poem) }
+
+          its(:length)          { should == 5 }
+          its(:undeleted_lines) { should == 4 }
+        end
+      end
+    end
+
+    describe ".alter_a_tail" do
+      let(:poem) { evolver.new_poem 1 }
+      subject { evolver.alter_a_tail(poem) }
+
+      it "should not look like it used to" do
+        expect( subject.display ).to_not eq(poem.display)
+      end
+
+      it "should still have the last word in common" do
+        first_word = poem.to_prog_text.split(/\s/).first
+        expect( subject.to_prog_text.split(/\s/).first ).to eq(first_word)
+      end
+
+      it "should still have a length of one" do
+        expect( subject.length ).to eq(1)
+      end
+    end
+
+    describe ".alter_a_front" do
+      let(:poem) { evolver.new_poem 1 }
+      subject { evolver.alter_a_front(poem) }
+
+      it "should not look like it used to" do
+        expect( subject.display ).to_not eq(poem.display)
+      end
+
+      it "should still have the last word in common" do
+        last_word = poem.to_prog_text.split(/\s/).last
+        expect( subject.to_prog_text.split(/\s/).last ).to eq(last_word)
+      end
+
+      it "should still have a length of one" do
+        expect( subject.length ).to eq(1)
+      end
+    end
+
   end
 end
 

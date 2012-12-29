@@ -28,12 +28,16 @@ module Markov
       Markov::Poem.new(lines)
     end
 
+    ##########################
+    # line evolution methods #
+    ##########################
+
     def alter_line_tail(line)
       indices = alterable_indices(line, :forward)
       return NoAvailableIndicesForAltering if indices.empty?
 
       index = indices.sample
-      to_avoid        = line.tokens[index + 1]
+      to_avoid        = line.tokens[index + 1] || :__end__
       kept_portion    = Line.new(line.word_displayers[0..index])
       prev_tokens     = kept_portion.tokens
 
@@ -43,7 +47,12 @@ module Markov
                                Set.new.add(to_avoid))
 
       return new_line if new_line == BadContinueLineResult
-      new_line.mark_as_altered(index + 1, -1)
+
+      if kept_portion.length == new_line.length
+        new_line
+      else
+        new_line.mark_as_altered(index + 1, -1)
+      end
     end
 
     def alter_line_front(line)
@@ -51,7 +60,7 @@ module Markov
       return NoAvailableIndicesForAltering if indices.empty?
 
       index = indices.sample
-      to_avoid        = line.tokens[index - 1]
+      to_avoid        = index == 0 ? :__begin__ : line.tokens[index - 1]
       kept_portion    = Line.new(line.word_displayers[index..-1].reverse)
       prev_tokens     = kept_portion.tokens
 
@@ -61,8 +70,12 @@ module Markov
                                Set.new.add(to_avoid))
 
       return new_line if new_line == BadContinueLineResult
-      new_line.reverse
-              .mark_as_altered(0, -(index +1))
+
+      if kept_portion.length == new_line.length
+        new_line.reverse
+      else
+        new_line.reverse.mark_as_altered(0, -(index +1))
+      end
     end
 
     def alterable_indices(line, direction)
@@ -79,7 +92,102 @@ module Markov
       end
     end
 
+    ##########################
+    # poem evolution methods #
+    ##########################
+
+    def mutate(poem)
+      return add_line(poem) if poem.unaltered_indices.empty?
+
+      max_mutate_num = poem.unaltered_indices.length > 1 ? 4 : 3
+      case rand(max_mutate_num)
+      when 0
+        add_line_to_poem(poem)
+      when 1
+        alter_a_tail(poem)
+      when 2
+        alter_a_front(poem)
+      when 3
+        delete_line_from_poem(poem)
+      end
+    end
+
+    def mate_poems(poem1, poem2)
+      lines1 = poem1.half_lines
+      lines2 = poem2.half_lines
+      prob = lines1.length
+      out_of = prob + lines2.length
+      child_lines  = []
+      which_parent = []
+
+      #randomly start stacking the lines on top of each other
+      while lines1.length > 0 && lines2.length > 0
+        if rand(out_of) < prob
+          child_lines  << lines1.slice!(0)
+          which_parent << true
+        else
+          child_lines  << lines2.slice!(0)
+          which_parent << false
+        end
+      end
+      #add any lines left to the poem
+      child_lines  += lines1 + lines2
+      which_parent += ([true] * lines1.length) + ([false] * lines2.length)
+
+      #mark which lines came from which parent
+      marked_lines = child_lines.zip(which_parent)
+                                .collect do |line, from_first_parent|
+        if from_first_parent
+          line.mark_as_from_first_parent
+        else
+          line.mark_as_from_second_parent
+        end
+      end
+
+      Poem.new(marked_lines)
+    end
+
+    def add_line_to_poem(poem)
+      i = rand(poem.length + 1)
+      poem.insert_line_at(new_line.mark_as_new, i)
+    end
+
+    def delete_line_from_poem(poem)
+      i = poem.unaltered_indices.sample
+      deleted_line = poem.lines[i].mark_as_deleted
+      poem.replace_line_at(deleted_line, i)
+    end
+
+    def alter_a_tail(poem)
+      indices = alterable_line_indices(poem, :forward)
+      return poem if indices.empty?
+
+      i = indices.sample
+      old_line = poem.lines[i]
+      new_line = alter_line_tail(old_line)
+
+      poem.replace_line_at(new_line, i)
+    end
+
+    def alter_a_front(poem)
+      indices = alterable_line_indices(poem, :backward)
+      return poem if indices.empty?
+
+      i = indices.sample
+      old_line = poem.lines[i]
+      new_line = alter_line_front(old_line)
+
+      poem.replace_line_at(new_line, i)
+    end
+
     private
+
+    def alterable_line_indices(poem, direction)
+      poem.unaltered_indices
+          .map    { |i| [poem.lines[i], i] }
+          .reject { |line, _| alterable_indices(line, direction).empty? }
+          .map    { |_, i| i }
+    end
 
     def continue_line(prev_tokens, prev_line,
                       set = :forward, excluding = Set.new)
@@ -117,6 +225,7 @@ module Markov
       word = language.fetch(prev_tokens.last)
       (set == :forward && word.end?) || (set == :backward && word.begin?)
     end
+
   end
 end
 
