@@ -28,7 +28,7 @@ module Markov
       Markov::Poem.new(lines)
     end
 
-    def alter_line(line)
+    def alter_line_tail(line)
       indices = alterable_indices(line, :forward)
       return NoAvailableIndicesForAltering if indices.empty?
 
@@ -46,7 +46,7 @@ module Markov
       new_line.mark_as_altered(index + 1, -1)
     end
 
-    def alter_beginning(line)
+    def alter_line_front(line)
       indices = alterable_indices(line, :backward)
       return NoAvailableIndicesForAltering if indices.empty?
 
@@ -81,7 +81,8 @@ module Markov
 
     private
 
-    def continue_line(prev_tokens, prev_line, set = :forward, excluding = Set.new)
+    def continue_line(prev_tokens, prev_line,
+                      set = :forward, excluding = Set.new)
       return BadContinueLineResult if prev_line.num_chars > language.limit
       return prev_line             if criteria_met?(prev_tokens, set)
 

@@ -55,11 +55,11 @@ describe Markov::Evolver do
   end
 
 
-  describe ".alter_line" do
+  describe ".alter_line_tail" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
     let(:evolver) { Markov::Evolver.new(language) }
 
-    subject { evolver.alter_line(line) }
+    subject { evolver.alter_line_tail(line) }
 
     context "with a contrived language" do
       let(:text)      { 'A b c. A b d.' }
@@ -78,7 +78,7 @@ describe Markov::Evolver do
       it "should not have the same words as the old line" do
         old_words = line.word_displayers.map(&:word)
         3.times do
-          new_words = evolver.alter_line(line)
+          new_words = evolver.alter_line_tail(line)
                                .word_displayers
                                .map(&:word)
           expect(new_words).to_not eq(old_words)
@@ -96,10 +96,10 @@ describe Markov::Evolver do
     end
   end
 
-  describe ".alter_beginning" do
+  describe ".alter_line_front" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
     let(:evolver) { Markov::Evolver.new(language) }
-    subject { evolver.alter_beginning(line) }
+    subject { evolver.alter_line_front(line) }
 
     context "with a contrived language" do
       let(:line) { Markov::Line.new_from_prog_text('a c d .', language)  }
@@ -123,7 +123,7 @@ describe Markov::Evolver do
       it "should not have the same words as the old line" do
         old_words = line.word_displayers.map(&:word)
         3.times do
-          new_words = evolver.alter_beginning(line)
+          new_words = evolver.alter_line_front(line)
                                .word_displayers
                                .map(&:word)
           expect(new_words).to_not eq(old_words)
