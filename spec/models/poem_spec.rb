@@ -62,23 +62,6 @@ describe Poem do
     @poem.children.should be_empty
   end
 
-
-  describe "programmatic text stuff" do
-    before(:each) do
-      @markov_form = Markov::Poem.from_prog_text(@poem.programmatic_text, @poem.language.markov)
-    end
-
-    it "should be able to recreate the display text from the markov form" do
-      @markov_form.display.should == @poem.full_text
-    end
-
-    it "should have the same programaatic text as the poem" do
-      @markov_form.to_prog_text.should == @poem.programmatic_text
-    end
-
-  end
-
-
   describe "after voting for a poem" do
     before(:each) do
       @poem.vote_for!
@@ -113,8 +96,6 @@ describe Poem do
     it "should still be alive" do
       @poem.alive?.should be_true
     end
-
-
   end
 
   describe "after being voted for then against" do
@@ -133,10 +114,11 @@ describe Poem do
 
   describe "after voting for it enough to reproduce" do
     before(:each) do
-      5.times { @language.gen_poem! }
+      @num_poems = 5
+      @num_poems.times { @language.gen_poem! }
       @language.reload
 
-      @num_poems = @language.poems.length
+
       (1 + Constants::BEAR_CHILD_CUTOFF).times{ @poem.vote_for! }
       @poem.reload
       @language.reload
@@ -153,15 +135,6 @@ describe Poem do
     it "should show that it has a child" do
       @poem.num_children.should == 1
     end
-
-
-    describe "the language" do
-      it "should have one more poem than it did before" do
-        @language.poems.length.should == @num_poems + 1
-      end
-
-    end
-
   end
 
   describe "after voting against a poem so that it is barely alive" do

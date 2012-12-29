@@ -39,7 +39,7 @@ class Language < ActiveRecord::Base
 
   def gen_poem
     num_lines = rand(max_lines - min_lines + 1) + min_lines
-    p = markov.gen_poem(num_lines)
+    p = evolver.new_poem(num_lines)
     from_markov(p)
   end
 
@@ -118,6 +118,10 @@ class Language < ActiveRecord::Base
 
     reload_language
     @@languages[name]
+  end
+
+  def evolver
+    @evolver ||= Markov::Evolver.new(markov)
   end
 
   def gen_line

@@ -90,11 +90,13 @@ class Poem < ActiveRecord::Base
   end
 
   def markov_asexual
-    Markov::Poem.from_prog_text(self.programmatic_text,
-                                self.language.markov,
-                                strip: true).tap do |markov_poem|
-      (rand(Constants::MAX_MUTATIONS) + 1).times{ markov_poem.mutate!(self.language.markov) }
+    markov_poem = Markov::Poem.new_from_prog_text(self.programmatic_text,
+                                                  self.language.markov,
+                                                  strip: true)
+    (rand(Constants::MAX_MUTATIONS) + 1).times do
+      markov_poem = self.language.evolver.mutate(markov_poem)
     end
+    markov_poem
   end
 
   def asexually_reproduce!
@@ -119,7 +121,7 @@ class Poem < ActiveRecord::Base
   end
 
   def sexually_reproduce_with!(other_poem)
-    new_markov_poem = markov_form.sexually_reproduce_with(other_poem.markov_form, self.language.markov)
+    new_markov_poem = language.evolver.mate_poems(markov_form, other_poem.markov_form)
     new_poem = self.children.build :family => self.family,
       :language_id => self.language_id,
       :second_family => other_poem.family,
@@ -143,7 +145,7 @@ class Poem < ActiveRecord::Base
   end
 
   def markov_form
-    Markov::Poem.from_prog_text(self.programmatic_text, self.language.markov)
+    Markov::Poem.new_from_prog_text(self.programmatic_text, self.language.markov)
   end
 
   def family_members
