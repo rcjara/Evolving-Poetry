@@ -26,6 +26,14 @@ module Markov
       end
     end
 
+    def insert_line_at(new_line, i)
+      Poem.new(lines[0...i] + [new_line] + lines[i..-1])
+    end
+
+    def replace_line_at(new_line, i)
+      Poem.new(lines[0...i] + [new_line] + lines[(i + 1)..-1])
+    end
+
     #####################
     # Evolution methods #
     #####################
@@ -67,11 +75,11 @@ module Markov
     end
 
     def alter_a_tail(evolver)
-      alter(evolver, :alter_line)
+      alter(evolver, :alter_tail)
     end
 
     def alter_a_front(evolver)
-      alter(evolver, :alter_beginning)
+      alter(evolver, :alter_front)
     end
 
     def alter(evolver, method = :alter_beginning)
@@ -90,41 +98,6 @@ module Markov
       new_lines = lines.dup
       new_lines[line_index] = new_line
       Poem.new(new_lines)
-    end
-
-    def sexually_reproduce_with(other_poem, language)
-      self_lines = half_lines
-      other_lines = other_poem.half_lines
-      prob = self_lines.length
-      out_of = prob + other_lines.length
-      new_lines = []
-      which_tag_array = []
-
-      #randomly start stacking the lines on top of each other
-      while self_lines.length > 0 && other_lines.length > 0
-        if rand(out_of) < prob
-          new_lines << self_lines.slice!(0)
-          which_tag_array << true
-        else
-          new_lines << other_lines.slice!(0)
-          which_tag_array << false
-        end
-      end
-      #add any lines left to the poem
-      new_lines += self_lines + other_lines
-      which_tag_array += ([true] * self_lines.length) + ([false] * other_lines.length)
-
-      #mark which lines came from which parent
-      marked_lines = new_lines.zip(which_tag_array)
-                              .collect do |line, from_first_parent|
-        if from_first_parent
-          line.mark_as_from_first_parent
-        else
-          line.mark_as_from_second_parent
-        end
-      end
-
-      Poem.new(marked_lines)
     end
 
     def half_lines(include_deleted = false)
