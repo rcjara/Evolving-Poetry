@@ -3,7 +3,7 @@ include MarkovHelper
 describe Markov::Poem do
   let(:text) { 'Take this kiss upon the brow! And then the raven.' }
   let(:lang) { Markov::Language.new.add_snippet(text) }
-  let(:generator) { Markov::Generator.new(lang) }
+  let(:evolver) { Markov::Evolver.new(lang) }
 
   describe "new text tags" do
     let(:prog_text) { "BEGINNEWTEXT take this ENDSPAN kiss upon the brow !" }
@@ -66,8 +66,8 @@ describe Markov::Poem do
   end
 
   describe "sexual reproduction" do
-    let(:poem1) { generator.new_poem(6) }
-    let(:poem2) { generator.new_poem(4) }
+    let(:poem1) { evolver.new_poem(6) }
+    let(:poem2) { evolver.new_poem(4) }
     let(:child) { poem1.sexually_reproduce_with(poem2, lang) }
 
     describe "poem1.half_lines" do
@@ -120,10 +120,10 @@ describe Markov::Poem do
   end
 
   describe ".add_line" do
-    subject { poem.add_line(generator) }
+    subject { poem.add_line(evolver) }
 
     context "a five line poem" do
-      let(:poem) { generator.new_poem(5) }
+      let(:poem) { evolver.new_poem(5) }
 
       it "should include a new text tag" do
         expect( subject.display).to match(/\<span class\="new-text"\>/)
@@ -135,7 +135,7 @@ describe Markov::Poem do
 
   describe ".delete_line" do
     context "a five line poem" do
-      let(:poem) { generator.new_poem(5) }
+      let(:poem) { evolver.new_poem(5) }
 
       describe "delete a single line" do
         subject { poem.delete_line }
@@ -151,8 +151,8 @@ describe Markov::Poem do
   end
 
   describe "altering the tail of a line" do
-    let(:poem) { generator.new_poem 1 }
-    subject { poem.alter_a_tail(generator) }
+    let(:poem) { evolver.new_poem 1 }
+    subject { poem.alter_a_tail(evolver) }
 
     it "should not look like it used to" do
       expect( subject.display ).to_not eq(poem.display)
@@ -169,8 +169,8 @@ describe Markov::Poem do
   end
 
   describe "altering the front of a line" do
-    let(:poem) { generator.new_poem 1 }
-    subject { poem.alter_a_front(generator) }
+    let(:poem) { evolver.new_poem 1 }
+    subject { poem.alter_a_front(evolver) }
 
     it "should not look like it used to" do
       expect( subject.display ).to_not eq(poem.display)

@@ -30,22 +30,22 @@ module Markov
     # Evolution methods #
     #####################
 
-    def mutate(generator)
+    def mutate(evolver)
       max_mutate_num = undeleted_lines > 1 ? 4 : 3
       case rand(max_mutate_num)
       when 0
-        add_line(generator)
+        add_line(evolver)
       when 1
-        alter_a_tail(generator)
+        alter_a_tail(evolver)
       when 2
-        alter_a_front(generator)
+        alter_a_front(evolver)
       when 3
         delete_line
       end
     end
 
-    def add_line(generator)
-      new_line = generator.new_line.mark_as_new
+    def add_line(evolver)
+      new_line = evolver.new_line.mark_as_new
 
       i = rand(length + 1)
 
@@ -66,26 +66,26 @@ module Markov
       Poem.new(new_lines)
     end
 
-    def alter_a_tail(generator)
-      alter(generator, :alter_line)
+    def alter_a_tail(evolver)
+      alter(evolver, :alter_line)
     end
 
-    def alter_a_front(generator)
-      alter(generator, :alter_beginning)
+    def alter_a_front(evolver)
+      alter(evolver, :alter_beginning)
     end
 
-    def alter(generator, method = :alter_beginning)
+    def alter(evolver, method = :alter_beginning)
       attempt = 0
-      new_line = Generator::NoAvailableIndicesForAltering
-      while new_line == Generator::NoAvailableIndicesForAltering &&
+      new_line = Evolver::NoAvailableIndicesForAltering
+      while new_line == Evolver::NoAvailableIndicesForAltering &&
             attempt < Constants::MAX_ALTERING_ATTEMPTS
         attempt    += 1
         line_index = rand(length)
         line       = lines[line_index]
-        new_line   = generator.send(method, line)
+        new_line   = evolver.send(method, line)
       end
 
-      return self if new_line == Generator::NoAvailableIndicesForAltering
+      return self if new_line == Evolver::NoAvailableIndicesForAltering
 
       new_lines = lines.dup
       new_lines[line_index] = new_line

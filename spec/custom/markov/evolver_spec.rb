@@ -1,10 +1,10 @@
 include MarkovHelper
 
-describe Markov::Generator do
-  let(:generator) { Markov::Generator.new(language) }
+describe Markov::Evolver do
+  let(:evolver) { Markov::Evolver.new(language) }
 
   describe ".new_line" do
-    subject { generator }
+    subject { evolver }
 
     context "with a real world language" do
       let(:language) { poe_language }
@@ -34,20 +34,20 @@ describe Markov::Generator do
 
       it "the poem's length should be more than one" do
         3.times do
-          poem = generator.new_poem
+          poem = evolver.new_poem
           expect( poem.length ).to be > 1
         end
       end
 
       it "the poem's length should be less than eight" do
         3.times do
-          poem = generator.new_poem
+          poem = evolver.new_poem
           expect( poem.length ).to be < 8
         end
       end
 
       it "should be able to generate a poem with a set number of lines" do
-        poem = generator.new_poem(6)
+        poem = evolver.new_poem(6)
         expect( poem.length ).to eq(6)
       end
 
@@ -57,9 +57,9 @@ describe Markov::Generator do
 
   describe ".alter_line" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
-    let(:generator) { Markov::Generator.new(language) }
+    let(:evolver) { Markov::Evolver.new(language) }
 
-    subject { generator.alter_line(line) }
+    subject { evolver.alter_line(line) }
 
     context "with a contrived language" do
       let(:text)      { 'A b c. A b d.' }
@@ -78,7 +78,7 @@ describe Markov::Generator do
       it "should not have the same words as the old line" do
         old_words = line.word_displayers.map(&:word)
         3.times do
-          new_words = generator.alter_line(line)
+          new_words = evolver.alter_line(line)
                                .word_displayers
                                .map(&:word)
           expect(new_words).to_not eq(old_words)
@@ -91,15 +91,15 @@ describe Markov::Generator do
       let(:line) { Markov::Line.new_from_prog_text('a b c .', language)  }
 
       it "should return that there are no available indices for altering" do
-        expect( subject ).to eq(Markov::Generator::NoAvailableIndicesForAltering)
+        expect( subject ).to eq(Markov::Evolver::NoAvailableIndicesForAltering)
       end
     end
   end
 
   describe ".alter_beginning" do
     let(:language)  { Markov::Language.new.add_snippet(text) }
-    let(:generator) { Markov::Generator.new(language) }
-    subject { generator.alter_beginning(line) }
+    let(:evolver) { Markov::Evolver.new(language) }
+    subject { evolver.alter_beginning(line) }
 
     context "with a contrived language" do
       let(:line) { Markov::Line.new_from_prog_text('a c d .', language)  }
@@ -110,7 +110,7 @@ describe Markov::Generator do
       its(:num_chars) { should be <= language.limit }
 
       it "sanity check for alterable indices" do
-        expect( generator.alterable_indices(line, :backward) ).to eq([2])
+        expect( evolver.alterable_indices(line, :backward) ).to eq([2])
       end
 
 
@@ -123,7 +123,7 @@ describe Markov::Generator do
       it "should not have the same words as the old line" do
         old_words = line.word_displayers.map(&:word)
         3.times do
-          new_words = generator.alter_beginning(line)
+          new_words = evolver.alter_beginning(line)
                                .word_displayers
                                .map(&:word)
           expect(new_words).to_not eq(old_words)
@@ -133,7 +133,7 @@ describe Markov::Generator do
   end
 
   describe ".alterable_indices" do
-    subject { generator }
+    subject { evolver }
 
     let(:language) { Markov::Language.new.add_snippet(text) }
     let(:text)     { 'a a b' }

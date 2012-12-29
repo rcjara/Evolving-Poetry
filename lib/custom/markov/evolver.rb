@@ -1,5 +1,5 @@
 module Markov
-  class Generator
+  class Evolver
     attr_reader :language
 
     BadContinueLineResult = Object.new.tap do |obj|
