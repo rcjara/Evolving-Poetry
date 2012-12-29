@@ -34,6 +34,12 @@ module Markov
       Poem.new(lines[0...i] + [new_line] + lines[(i + 1)..-1])
     end
 
+    def unaltered_indices
+      lines.map.with_index { |line, i| [line.to_prog_text, i] }
+               .reject     { |line, i| line =~ self.class.strip_tags_regex }
+               .map        { |_, i| i }
+    end
+
     #####################
     # Evolution methods #
     #####################

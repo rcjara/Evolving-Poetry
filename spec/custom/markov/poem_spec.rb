@@ -81,6 +81,25 @@ describe Markov::Poem do
     end
   end
 
+  describe ".unaltered_indices" do
+    let(:prog_text) {
+      [ "take",
+        "BEGINNEWTEXT ENDSPAN take",
+        "BEGINDELETED ENDDELETED take",
+        "take",
+        "FROMFIRSTPARENT ENDSPAN take",
+        "FROMSECONDPARENT ENDSPAN take"
+      ].join(" BREAK ")
+    }
+    let(:poem) { Markov::Poem.new_from_prog_text(prog_text, lang) }
+
+    subject { poem.unaltered_indices }
+
+    it { should == [0, 3] }
+
+  end
+
+
   describe "deleted text tags" do
     let(:prog_text) { "BEGINDELETED take ENDDELETED this BREAK kiss upon the brow !" }
 
