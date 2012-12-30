@@ -85,7 +85,7 @@ describe Markov::Evolver do
         let(:line) { Markov::Line.new_from_prog_text('a b c .', language)  }
 
         it "should return that there are no available indices for altering" do
-          expect( subject ).to eq(Markov::Evolver::NoAvailableIndicesForAltering)
+          expect( subject ).to be_a(Markov::Evolver::BadResult)
         end
       end
     end
@@ -158,18 +158,27 @@ describe Markov::Evolver do
     describe ".mutate" do
       let(:poem) { evolver.new_poem(3) }
 
-      it "should always alter the poem" do
-        5.times do
-          new_poem = evolver.mutate(poem)
-          expect( new_poem.display ).not_to eq(poem.display)
+      context "with a real world language" do
+        let(:language) { poe_language }
+
+        it "should always alter the poem without error" do
+          old_poem = evolver.mutate(poem)
+          5.times do
+            new_poem = evolver.mutate(old_poem)
+            expect( new_poem.display ).not_to eq(old_poem.display)
+            old_poem = new_poem
+          end
         end
       end
 
       context "when altering / deleting lines isn't working" do
         let(:bad_evolver) do
-          evolver.stub(:delete_line_from_poem).and_return(:no_indices_available)
-          evolver.stub(:alter_a_front).and_return(:bad_continue_result)
-          evolver.stub(:alter_a_tail).and_return(:bad_continue_result)
+          evolver.stub(:delete_line_from_poem)
+                 .and_return(Markov::Evolver::NoAvailableIndicesForAltering)
+          evolver.stub(:alter_a_front)
+                 .and_return(Markov::Evolver::BadContinueLineResult)
+          evolver.stub(:alter_a_tail)
+                 .and_return(Markov::Evolver::BadContinueLineResult)
           evolver
         end
 
@@ -231,7 +240,7 @@ describe Markov::Evolver do
         let(:poem) { double("unalterable_poem", unaltered_indices: []) }
 
         it "should return a no available indices for altering result" do
-          expect( subject ).to eq(Markov::Evolver::NoAvailableIndicesForAltering)
+          expect( subject ).to be_a(Markov::Evolver::BadResult)
         end
 
       end

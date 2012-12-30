@@ -2,8 +2,18 @@ module Markov
   class Evolver
     attr_reader :language
 
-    BadContinueLineResult = :bad_continue_result
-    NoAvailableIndicesForAltering = :no_indices_availabe
+    class BadResult
+      def initialize(message)
+        @message = message
+      end
+
+      def inspect
+        "<Markov::Evolver::BadResult - #{@message}>"
+      end
+    end
+
+    BadContinueLineResult = BadResult.new('Could not continue line')
+    NoAvailableIndicesForAltering = BadResult.new('There were no indices available for altering')
 
     def initialize(language)
       @language = language
@@ -88,7 +98,7 @@ module Markov
     ##########################
 
     def mutate(poem)
-      return add_line(poem) if poem.unaltered_indices.empty?
+      return add_line_to_poem(poem) if poem.unaltered_indices.empty?
 
       possible_mutations = [ :add_line_to_poem,
                              :alter_a_tail,
@@ -160,6 +170,8 @@ module Markov
       i = indices.sample
       old_line = poem.lines[i]
       new_line = alter_line_tail(old_line)
+      return new_line if new_line == BadContinueLineResult ||
+                         new_line == NoAvailableIndicesForAltering
 
       poem.replace_line_at(new_line, i)
     end
@@ -171,6 +183,8 @@ module Markov
       i = indices.sample
       old_line = poem.lines[i]
       new_line = alter_line_front(old_line)
+      return new_line if new_line == BadContinueLineResult ||
+                         new_line == NoAvailableIndicesForAltering
 
       poem.replace_line_at(new_line, i)
     end
