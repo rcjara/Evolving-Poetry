@@ -133,19 +133,12 @@ class Language < ActiveRecord::Base
 
     authors.each do |author|
       author.works.each do |work|
-        lines = work.content.split(/\n/)
-        lines.each do |line|
-          text = line.to_s
-          text.gsub!(/"/, " ")
-          text.gsub!(/\s'|'\s/, " ")
-          text.gsub!(/[\[\]\(\)\{\}]/, "")
-          @@languages[name].add_snippet(text)
-        end
+        text = work.content
+                   .gsub(/"/, " ")
+                   .gsub(/\s'|'\s/, " ")
+                   .gsub(/[\[\]\(\)\{\}]/, "")
+        @@languages[name].add_snippet(text)
       end
     end
   end
-
-  private
-
-
 end
