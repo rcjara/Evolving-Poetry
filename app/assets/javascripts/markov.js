@@ -6,23 +6,45 @@ nonsenseEngine.markov = ( function() {
   var word = function(_attr) {
     var attr = _attr;
 
-    var getChild = function(excluding) {
+    return {
+      identifier: function() { return attr.identifier; },
+      attr:       function() { return attr; }
+    };
+  };
+
+  var counter = function(_attr) {
+    var numItems,
+        attr = _attr;
+
+    var initialize = function() {
+      //calculate numItems
+      var i = 0;
+      for(var key in attr.items) {
+        i += 1;
+      }
+      numItems = i;
+    };
+
+    var getRandomItem = function(excluding) {
       var target,
           outOf = 0,
-          tempChildren = {},
+          availableItems = {},
           i = 0;
 
-      for(var key in attr.children) {
+      // Construct an object of the items without the
+      // excluded member.
+      for(var key in attr.items) {
         if(key !== excluding && key !== "__proto__") {
-          tempChildren[key] = attr.children[key];
-          outOf += tempChildren[key];
+          availableItems[key] = attr.items[key];
+          outOf += availableItems[key];
         }
       }
 
+      // Select one of these items
       target = rand(outOf);
 
-      for(var key in tempChildren) {
-        i += tempChildren[key]
+      for(var key in availableItems) {
+        i += availableItems[key]
         if(i >= target) {
           return key;
         }
@@ -31,15 +53,27 @@ nonsenseEngine.markov = ( function() {
       return null;
     };
 
+    initialize();
+
     return {
-      attr:     function() { return attr; },
-      getChild: getChild
-    };
+      numItems:      function() { return numItems; },
+      getRandomItem: getRandomItem
+    }
   };
 
   var language = function() {
-    var additionalCallback, words,
+    var additionalCallback,
+        words,
+        counts,
         wordArray = [];
+
+    var keyForIdentifier = function(key) {
+      if(key === "__begin__" || key === "__end__") {
+        return '[:' + key + ']';
+      } else {
+        return '["' + key + '"]';
+      }
+    };
 
 
     var genWords = function(curIdent, minLength, exclude) {
@@ -56,13 +90,15 @@ nonsenseEngine.markov = ( function() {
         if(curWord.attr().sentence_end && wordArray.length > minLength + 1) {
           return theseWords;
         }
-        curIdent = curWord.getChild(exclude);
-        if(!curIdent) {
+        curIdent = counts[keyForIdentifier(curIdent)].getRandomItem(exclude);
+        if(!curIdent || curIdent == "__end__") {
           curIdent = "__begin__";
         }
+
         exclude = null;
-        curWord = words[curIdent];
-        if(curIdent != "__begin__") {
+
+        if(curIdent != "__begin__" && curIdent != "__end__") {
+          curWord = words[curIdent];
           theseWords.push(curWord);
           wordArray.push(curWord);
         }
@@ -78,27 +114,26 @@ nonsenseEngine.markov = ( function() {
     };
 
     var walkBackIndex = function(minBack) {
-      var calcNumChildren = function(obj) {
-        var i = 0;
-        for(var key in obj) {
-          i += 1;
-        }
-        return i;
+      var numItemsForIndex = function(i) {
+        var key = keyForIdentifier(wordArray[i].identifier());
+        return counts[key].numItems();
       };
 
       if(!minBack) { minBack = 2; }
+
       var i = wordArray.length - 1,
-          numChildren = 0,
+          numItems = 0,
           dist = 0;
+
       while(dist <= minBack) {
         dist += 1;
         i -= 1;
       }
 
-      numChildren = calcNumChildren(wordArray[i].attr().children);
-      while(i > 0 && numChildren < 3) {
+      numItems = numItemsForIndex(i);
+      while(i > 0 && numItems < 3) {
         i -= 1;
-        numChildren = calcNumChildren(wordArray[i].attr().children);
+        numItems = numItemsForIndex(i);
       }
 
       return i;
@@ -115,10 +150,19 @@ nonsenseEngine.markov = ( function() {
     };
 
     var initialize = function(data) {
+
+      //initialize words
       words = {};
       for(var key in data.words) {
         words[key] = nonsenseEngine.markov.word( data.words[key] );
       }
+
+      //initialize counts
+      counts = {};
+      for(var key in data.counts.forward) {
+        counts[key] = nonsenseEngine.markov.counter( data.counts.forward[key] )
+      }
+
       if(additionalCallback) {
         additionalCallback(__interface__);
       }
@@ -147,6 +191,7 @@ nonsenseEngine.markov = ( function() {
 
     var __interface__ = {
       words:          function() { return words; },
+      counts:         function() { return counts; },
       length:         function() { return wordArray.length; },
       lastWord:       lastWord,
       lastMarkovWord: lastMarkovWord,
@@ -206,7 +251,6 @@ nonsenseEngine.markov = ( function() {
 
       display.walkBack(walkBackIndex);
 
-      console.log("Expanding - last word: " + language.lastWord() );
       words = language.genWords(language.lastWord(),
         maxLength, exclude);
 
@@ -330,6 +374,7 @@ nonsenseEngine.markov = ( function() {
   return {
     language:   language,
     word:       word,
+    counter:    counter,
     controller: controller,
     display:    display
   };
