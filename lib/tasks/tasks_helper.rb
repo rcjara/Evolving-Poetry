@@ -5,7 +5,10 @@ module TasksHelper
   end
 
   def self.create_mega_language
-    lang = Language.create!(:name => "All authors", :description => "An amalgamation of all the authors.")
+    lang = Language.create!(:name => "All authors",
+                            :description => "An amalgamation of all the authors.",
+                            :min_lines => 3,
+                            :max_lines => 5)
     puts "Creating language for all authors"
     Author.visible.each do |auth|
       lang.add_author!(auth)
@@ -15,7 +18,10 @@ module TasksHelper
   def self.create_small_languages
     Author.order("id").each do |auth|
       puts "Creating language for #{auth.full_name}"
-      lang = Language.create!(:name => "#{auth.full_name}'s Language", :description => "A language of #{auth.full_name}'s own.")
+      lang = Language.create!(:name => "#{auth.full_name}'s Language",
+                              :description => "A language of #{auth.full_name}'s own.",
+                              :min_lines => 3,
+                              :max_lines => 5)
       lang.add_author!(auth)
     end
 
