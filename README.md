@@ -1,26 +1,15 @@
-# Hello Hungry Academy!
+# About
 
-## What it is
-
-This is a rails project that generates poems using Markov chains.
-Users select the poems that they prefer. The poems that no one
-selects die off. The ones that lots of people select will have
-children, either through sexual reproduction or through asexual
-reproduction with mutation. This will hopefully lead to the poems
-evolving.
-
-## Why I am proud
-
-Not because it is the cleanest or best code (though it certainly
-isn't the worst). Or even because it is completed (it’s not.
-I’m still working on it). But basically I am proud because I
-am entirely self taught. I taught myself enough rails, css, and
-javascript to do this while working a full time job. I think that
-shows a certain level of commitment and talent. My skills will
-only improve when I am given actual instruction, guidance, and
-permission to work on rails between the hours of 8 and 5.
-
-The site is still in progress, but even so, it doesn't look
-terrible in a webkit browser. Check out a live version at
+This is a Rails project which allows visitors to guide the "evolution" of poetry generated using markov chains.  As of the last check-in, this site is live at
 www.nonsenseengine.com.
+
+The about page on the site itself (www.nonsenseengine.com/about) has a much better explanation of what the site is going for.
+
+It was made to scratch my own itch and as a learning experience, so I've only really tested it in Safari.  Apologies other browser users.
+
+# Notes
+
+Most of the interesting code involved with actually generating poetry is found in lib/custom/markov.
+
+Most of the code in the app/ directory is in need of a good refactoring, which is at the top of my todo list.
 
