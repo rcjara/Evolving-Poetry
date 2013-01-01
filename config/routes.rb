@@ -6,8 +6,6 @@ EvolvingPoetry::Application.routes.draw do
   resources :authors,           :only => [:index]
   resources :evolution_chamber, :only => [:show]
   resources :works,             :only => [:show]
-  resources :user_sessions,     :only => [:new, :create, :destroy]
-  resources :users
 
   get "pages/home"
 
@@ -16,11 +14,6 @@ EvolvingPoetry::Application.routes.draw do
   post "evolution_chamber/vote"
 
   root :to => 'pages#home'
-
-
-  match "/signup",  :to => 'users#new'
-  match "/signin",  :to => 'user_sessions#new'
-  match "/signout", :to => 'user_sessions#destroy'
 
   match "/quick_evolution/start/:id", :to => 'quick_evolution#new'
   match "/quick_evolution/continue/:id", :to => 'quick_evolution#continue'
