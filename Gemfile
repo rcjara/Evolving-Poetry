@@ -15,7 +15,7 @@ gem 'will_paginate', '~> 3.0.2'
 gem 'faker'
 
 group :assets do
-  gem 'sass-rails'
+  gem 'sass-rails', '3.1.4'
   gem 'coffee-rails'
   gem 'uglifier'
 end
