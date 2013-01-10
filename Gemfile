@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.3'
+gem 'rails', '3.1.10'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -36,7 +36,7 @@ end
 
 group :test do
   gem 'jasmine'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: false
   gem 'simplecov', '>= 0.4.2'
   gem 'spork-rails'
   gem 'rspec-rails'
